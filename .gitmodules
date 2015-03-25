@@ -1,0 +1,3 @@
+[submodule "lib/sdl"]
+	path = lib/sdl
+	url = https://github.com/native-toolkit/sdl.git

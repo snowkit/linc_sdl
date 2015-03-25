@@ -1,0 +1,28 @@
+-main Test.hx
+-cpp cpp/
+-cp ../
+-cmd cpp/Test
+
+# currently, you must set this to the lib/ folder,
+# relative to your cpp build output folder or absolute path
+
+-D SNOWKIT_SDL_LIB_PATH=../../lib
+
+# pick a target
+
+-D mac
+#-D windows
+#-D linux
+#-D ios
+#-D android
+
+# To build 32 or 64 bit
+#(if not using the default for your platform):
+
+#-D HXCPP_M64
+#-D HXCPP_M32
+
+# For android/ios you have these and more:
+#-D HXCPP_ARMV7
+#-D HXCPP_ARMV6
+#-D HXCPP_ARM64
