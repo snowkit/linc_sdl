@@ -36,7 +36,8 @@ class Test {
         //so in some apps this is delivered when closing
         //rather than "inline". If run from a terminal or with
         //mixed/redirected std io, it would be ordered.
-        SDL.log('init');
+        //Also, -Wformat-security is complaining because the fmt string is used.
+        // SDL.log('init');
     }
 
     static function versions() {
