@@ -37,8 +37,9 @@ extern class SDL {
     @:native('SDL_SetError')
     static function setError( error:String ):Int;
 
-    @:native('snowkit_sdl::getError')
-    static function getError() : String;
+    @:native("SDL_GetError")
+    private static function _getError() : cpp.ConstCharStar;
+    static inline function getError() : String return cast _getError();
 
     @:native('SDL_clearError')
     static function clearError() : Void;
@@ -108,8 +109,9 @@ extern class SDL {
     @:native('SDL_COMPILEDVERSION')
     static function COMPILEDVERSION(): Int;
 
-    @:native('snowkit_sdl::getRevision')
-    static function getRevision(): String;
+    @:native("SDL_GetRevision")
+    private static function _getRevision() : cpp.ConstCharStar;
+    static inline function getRevision() : String return cast _getRevision();
 
     @:native('SDL_GetRevisionNumber')
     static function getRevisionNumber(): Int;
@@ -306,8 +308,47 @@ extern class SDL {
     // static function updateYUVTexture():Void;
 
 
-//
+//SDL_cpuinfo.h
 
+    @:native('SDL_GetCPUCacheLineSize')
+    static function getCPUCacheLineSize():Int;
+    @:native('SDL_GetCPUCount')
+    static function getCPUCount():Int;
+    @:native('SDL_GetSystemRAM')
+    static function getSystemRAM():Int;
+    @:native('SDL_Has3DNow')
+    static function has3DNow():Bool;
+    @:native('SDL_HasAVX')
+    static function hasAVX():Bool;
+    @:native('SDL_HasAVX2')
+    static function hasAVX2():Bool;
+    @:native('SDL_HasAltiVec')
+    static function hasAltiVec():Bool;
+    @:native('SDL_HasMMX')
+    static function hasMMX():Bool;
+    @:native('SDL_HasRDTSC')
+    static function hasRDTSC():Bool;
+    @:native('SDL_HasSSE')
+    static function hasSSE():Bool;
+    @:native('SDL_HasSSE2')
+    static function hasSSE2():Bool;
+    @:native('SDL_HasSSE3')
+    static function hasSSE3():Bool;
+    @:native('SDL_HasSSE41')
+    static function hasSSE41():Bool;
+    @:native('SDL_HasSSE42')
+    static function hasSSE42():Bool;
+
+//SDL_bits.h
+
+    @:native('SDL_MostSignificantBitIndex32')
+    static function mostSignificantBitIndex32(x:UInt):Int;
+
+//SDL_platform.h
+
+    @:native("SDL_GetPlatform")
+    private static function _getPlatform() : cpp.ConstCharStar;
+    static inline function getPlatform() : String return cast _getPlatform();
 
     @:native('SDL_CreateWindow')
     static function createWindow(title:String, x:Int, y:Int, w:Int, h:Int, flags:SDLWindowFlags):Window;

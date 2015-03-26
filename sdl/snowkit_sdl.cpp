@@ -79,20 +79,6 @@ namespace snowkit_sdl {
 
     } //getVersion
 
-        // needed because:
-        //hxcpp : error: no viable conversion from 'const char *' to '::String'
-    ::String getRevision() {
-
-        return ::String(SDL_GetRevision());
-
-    } //getRevision
-
-    ::String getError() {
-
-        return ::String(SDL_GetError());
-
-    } //getRevision
-
 
         //return { texw:Float, texh:Float }
     Dynamic GL_BindTexture(SDL_Texture* texture) {

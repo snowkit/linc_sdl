@@ -85,6 +85,10 @@ class Test {
 
             SDL.renderPresent(state.renderer);
 
+        //I know
+
+            trace('errors: `' + SDL.getError() + '`');
+
         //give us time to see it
 
             Sys.sleep(2);
@@ -101,6 +105,7 @@ class Test {
 
         trace('State:');
         trace('    - $state');
+        trace('    - platform: ' + SDL.getPlatform());
         //note this doesn't land in stdout specifically,
         //so in some apps this is delivered when closing
         //rather than "inline". If run from a terminal or with
