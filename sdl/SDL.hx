@@ -3,8 +3,10 @@ package sdl;
 import sdl.Renderer;
 import sdl.Surface;
 import sdl.Texture;
+import sdl.Joystick;
 import sdl.Window;
 import sdl.Thread;
+import sdl.Haptic;
 
 @:include('./snowkit_sdl.cpp')
 @:buildXml("<include name='${SNOWKIT_SDL_LIB_PATH}/../sdl/snowkit_sdl.xml'/>")
@@ -378,6 +380,99 @@ extern class SDL {
 
     @:native("snowkit_sdl::getPrefPath")
     static function getPrefPath(org:String, app:String) : String;
+
+//SDL_haptic.h
+
+    @:native('SDL_HapticClose')
+    static function hapticClose(haptic:Haptic):Void;
+
+    @:native('SDL_HapticDestroyEffect')
+    static function hapticDestroyEffect(haptic:Haptic, effect:Int):Void;
+
+    @:native('SDL_HapticEffectSupported')
+    static function hapticEffectSupported(haptic:Haptic, effect:HapticEffect):Int;
+
+    @:native('SDL_HapticGetEffectStatus')
+    static function hapticGetEffectStatus(haptic:Haptic, effect:Int):Int;
+
+    @:native('SDL_HapticIndex')
+    static function hapticIndex(haptic:Haptic):Int;
+
+    @:native('SDL_HapticName')
+    private static function _hapticName(device_index:Int) : cpp.ConstCharStar;
+    static inline function hapticName(device_index:Int):String return cast _hapticName(device_index);
+
+    @:native('SDL_HapticNewEffect')
+    static function hapticNewEffect(haptic:Haptic, effect:HapticEffect):Int;
+
+    @:native('SDL_HapticNumAxes')
+    static function hapticNumAxes(haptic:Haptic):Int;
+
+    @:native('SDL_HapticNumEffects')
+    static function hapticNumEffects(haptic:Haptic):Int;
+
+    @:native('SDL_HapticNumEffectsPlaying')
+    static function hapticNumEffectsPlaying(haptic:Haptic):Int;
+
+    @:native('SDL_HapticOpen')
+    static function hapticOpen(device_index:Int):Haptic;
+
+    @:native('SDL_HapticOpenFromJoystick')
+    static function hapticOpenFromJoystick(joystick:Joystick):Haptic;
+
+    @:native('SDL_HapticOpenFromMouse')
+    static function hapticOpenFromMouse():Haptic;
+
+    @:native('SDL_HapticOpened')
+    static function hapticOpened(device_index:Int):Int;
+
+    @:native('SDL_HapticPause')
+    static function hapticPause(haptic:Haptic):Int;
+
+    @:native('SDL_HapticQuery')
+    static function hapticQuery(haptic:Haptic):UInt;
+
+    @:native('SDL_HapticRumbleInit')
+    static function hapticRumbleInit(haptic:Haptic):Int;
+
+    @:native('SDL_HapticRumblePlay')
+    static function hapticRumblePlay(haptic:Haptic, strength:Float, length:UInt):Int;
+
+    @:native('SDL_HapticRumbleStop')
+    static function hapticRumbleStop(haptic:Haptic):Int;
+
+    @:native('SDL_HapticRumbleSupported')
+    static function hapticRumbleSupported(haptic:Haptic):Int;
+
+    @:native('SDL_HapticRunEffect')
+    static function hapticRunEffect(haptic:Haptic, effect:Int, iterations:UInt):Int;
+
+    @:native('SDL_HapticSetAutocenter')
+    static function hapticSetAutocenter(haptic:Haptic, value:Int):Int;
+
+    @:native('SDL_HapticSetGain')
+    static function hapticSetGain(haptic:Haptic, gain:Int):Int;
+
+    @:native('SDL_HapticStopAll')
+    static function hapticStopAll(haptic:Haptic):Int;
+
+    @:native('SDL_HapticStopEffect')
+    static function hapticStopEffect(haptic:Haptic, effect:Int):Int;
+
+    @:native('SDL_HapticUnpause')
+    static function hapticUnpause(haptic:Haptic):Int;
+
+    @:native('SDL_HapticUpdateEffect')
+    static function hapticUpdateEffect(haptic:Haptic, effect:Int, data:HapticEffect):Int;
+
+    @:native('SDL_JoystickIsHaptic')
+    static function joystickIsHaptic(joystick:Joystick):Int;
+
+    @:native('SDL_MouseIsHaptic')
+    static function mouseIsHaptic():Int;
+
+    @:native('SDL_NumHaptics')
+    static function numHaptics():Int;
 
 
 //SDL_thread.h
