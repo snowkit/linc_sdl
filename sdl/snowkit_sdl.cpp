@@ -79,6 +79,34 @@ namespace snowkit_sdl {
 
     } //getVersion
 
+    ::String getBasePath() {
+
+        char *base_path = SDL_GetBasePath();
+
+        if (base_path) {
+            ::String res(base_path);
+            SDL_free(base_path);
+            return res;
+        }
+
+        return null();
+
+    } //getBasePath
+
+    ::String getPrefPath(::String org, ::String app) {
+
+        char *pref_path = SDL_GetPrefPath(org.c_str(), app.c_str());
+
+        if (pref_path) {
+            ::String res(pref_path);
+            SDL_free(pref_path);
+            return res;
+        }
+
+        return null();
+
+    } //getPrefPath
+
 
         //return { texw:Float, texh:Float }
     Dynamic GL_BindTexture(SDL_Texture* texture) {

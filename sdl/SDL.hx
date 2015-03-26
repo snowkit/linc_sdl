@@ -350,11 +350,42 @@ extern class SDL {
     private static function _getPlatform() : cpp.ConstCharStar;
     static inline function getPlatform() : String return cast _getPlatform();
 
+//SDL_timer.h
+
+    // @:native('SDL_AddTimer')
+    // static function addTimer():Void;
+
+    // @:native('SDL_RemoveTimer')
+    // static function removeTimer():Void;
+
+    @:native('SDL_Delay')
+    static function delay(ms:UInt): Void;
+
+    @:native('SDL_GetTicks')
+    static function getTicks(): UInt;
+
+    @:native('SDL_GetPerformanceCounter')
+    static function getPerformanceCounter(): cpp.UInt64;
+
+    @:native('SDL_GetPerformanceFrequency')
+    static function getPerformanceFrequency(): cpp.UInt64;
+
+//SDL_filesystem.h
+
+    @:native("snowkit_sdl::getBasePath")
+    static function getBasePath() : String;
+
+    @:native("snowkit_sdl::getPrefPath")
+    static function getPrefPath(org:String, app:String) : String;
+
+
+
     @:native('SDL_CreateWindow')
     static function createWindow(title:String, x:Int, y:Int, w:Int, h:Int, flags:SDLWindowFlags):Window;
 
     @:native('SDL_DestroyWindow')
     static function destroyWindow(window:Window):Void;
+
 
 
 }

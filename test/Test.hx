@@ -91,7 +91,7 @@ class Test {
 
         //give us time to see it
 
-            Sys.sleep(2);
+            SDL.delay(1000);
 
         //get out while we still can
 
@@ -106,6 +106,16 @@ class Test {
         trace('State:');
         trace('    - $state');
         trace('    - platform: ' + SDL.getPlatform());
+        trace('    - base path: ' + SDL.getBasePath());
+        trace('    - pref path: ' + SDL.getPrefPath('org.snowkit','sdl_test'));
+        trace('    - timer ticks: ' + SDL.getTicks());
+
+            //:todo: This breaks on hxcpp cos
+            //error: conversion from '::cpp::UInt64' (aka 'unsigned long long') to 'Dynamic' is ambiguous
+        // trace('    - perf counter: ' + SDL.getPerformanceCounter());
+        // trace('    - perf freq: ' + SDL.getPerformanceFrequency());
+
+
         //note this doesn't land in stdout specifically,
         //so in some apps this is delivered when closing
         //rather than "inline". If run from a terminal or with
