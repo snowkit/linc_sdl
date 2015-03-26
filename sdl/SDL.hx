@@ -39,13 +39,14 @@ extern class SDL {
 
 //SDL_event.h
 
-    // @:native('snowkit_sdl::pollEvent')
     static inline function pollEvent() : Event {
+
         var event:Event;
         event = untyped __cpp__('(SDL_Event)event');
         untyped SDL_PollEvent( untyped __cpp__('&event') );
         return event;
-    }
+
+    } //pollEvent
 
 //SDL_error.h
 
