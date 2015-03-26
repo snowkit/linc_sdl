@@ -43,7 +43,8 @@ extern class SDL {
 
         var event:Event;
         event = untyped __cpp__('(SDL_Event)event');
-        untyped SDL_PollEvent( untyped __cpp__('&event') );
+        var res = cast untyped SDL_PollEvent( untyped __cpp__('&event') );
+
         return event;
 
     } //pollEvent
@@ -813,6 +814,43 @@ from Int to Int {
     var SDL_THREAD_PRIORITY_NORMAL = 1;
     var SDL_THREAD_PRIORITY_HIGH = 2;
 } //SDLThreadPriority
+
+
+
+@:enum
+abstract SDLHatValue(Int)
+from Int to Int {
+    var SDL_HAT_CENTERED =    0x00;
+    var SDL_HAT_UP =          0x01;
+    var SDL_HAT_RIGHT =       0x02;
+    var SDL_HAT_DOWN =        0x04;
+    var SDL_HAT_LEFT =        0x08;
+    var SDL_HAT_RIGHTUP =     0x02|0x01;
+    var SDL_HAT_RIGHTDOWN =   0x02|0x04;
+    var SDL_HAT_LEFTUP =      0x08|0x01;
+    var SDL_HAT_LEFTDOWN =    0x08|0x04;
+} //SDLHatValue
+
+
+@:enum
+abstract SDLWindowEventID(Int)
+from Int to Int {
+    var SDL_WINDOWEVENT_NONE          = 0;/**< Never used */
+    var SDL_WINDOWEVENT_SHOWN         = 1;/**< Window has been shown */
+    var SDL_WINDOWEVENT_HIDDEN        = 2;/**< Window has been hidden */
+    var SDL_WINDOWEVENT_EXPOSED       = 3;/**< Window has been exposed and should be redrawn */
+    var SDL_WINDOWEVENT_MOVED         = 4;/**< Window has been moved to data1, data2 */
+    var SDL_WINDOWEVENT_RESIZED       = 5;/**< Window has been resized to data1xdata2 */
+    var SDL_WINDOWEVENT_SIZE_CHANGED  = 6;/**< The window size has changed, either as a result of an API call or through the system or user changing the window size. */
+    var SDL_WINDOWEVENT_MINIMIZED     = 7;/**< Window has been minimized */
+    var SDL_WINDOWEVENT_MAXIMIZED     = 8;/**< Window has been maximized */
+    var SDL_WINDOWEVENT_RESTORED      = 9;/**< Window has been restored to normal size and position */
+    var SDL_WINDOWEVENT_ENTER         = 10;/**< Window has gained mouse focus */
+    var SDL_WINDOWEVENT_LEAVE         = 11;/**< Window has lost mouse focus */
+    var SDL_WINDOWEVENT_FOCUS_GAINED  = 12;/**< Window has gained keyboard focus */
+    var SDL_WINDOWEVENT_FOCUS_LOST    = 13;/**< Window has lost keyboard focus */
+    var SDL_WINDOWEVENT_CLOSE         = 14;/**< The window manager requests that the window be closed */
+} //SDLWindowEventID
 
 @:enum
 abstract SDLEventType(UInt)

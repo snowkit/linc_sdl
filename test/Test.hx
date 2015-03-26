@@ -131,10 +131,30 @@ class Test {
 
         while(true) {
             var e = SDL.pollEvent();
+
             if(e.type == SDL_QUIT) {
                 trace("Program quit after ticks: " + SDL.getTicks());
                 break;
             }
+
+            if(e.type == SDL_KEYDOWN) {
+                if(e.key.keysym.sym == 27) {
+                    trace("Program quit with escape after ticks: " + SDL.getTicks());
+                    break;
+                }
+            }
+
+            if(e.type == SDLEventType.SDL_MOUSEMOTION) {
+                trace('motion ' + e.motion.x + ',' + e.motion.y);
+            }
+            if(e.type == SDLEventType.SDL_MOUSEBUTTONDOWN) {
+                trace('mouse button down: ' + e.button.button);
+            }
+
+            if(e.type == SDLEventType.SDL_MOUSEBUTTONUP) {
+                trace('mouse button up: ' + e.button.button);
+            }
+
             Sys.sleep(0.25/60);
         }
     }
