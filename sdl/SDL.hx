@@ -4,6 +4,7 @@ import sdl.Renderer;
 import sdl.Surface;
 import sdl.Texture;
 import sdl.Window;
+import sdl.Thread;
 
 @:include('./snowkit_sdl.cpp')
 @:buildXml("<include name='${SNOWKIT_SDL_LIB_PATH}/../sdl/snowkit_sdl.xml'/>")
@@ -379,6 +380,101 @@ extern class SDL {
     static function getPrefPath(org:String, app:String) : String;
 
 
+//SDL_thread.h
+
+ //management
+    // @:native('SDL_CreateThread')
+    // static function createThread(fn:Dynamic->Void, name:String, data:Dynamic) : Thread;
+
+    @:native('SDL_DetachThread')
+    static function detachThread(thread:Thread) : Void;
+
+    @:native('SDL_GetThreadID')
+    static function getThreadID(thread:Thread) : ThreadID;
+
+    @:native('SDL_GetThreadName')
+    private static function _getThreadName(thread:Thread) : cpp.ConstCharStar;
+    static inline function getThreadName(thread:Thread) : String return cast _getThreadName(thread);
+
+    @:native('SDL_SetThreadPriority')
+    static function setThreadPriority(priority:SDLThreadPriority) : Int;
+
+    @:native('SDL_TLSCreate')
+    static function TLSCreate() : TLSID;
+
+    @:native('SDL_TLSGet')
+    static function TLSGet(id:TLSID) : Dynamic;
+
+    // @:native('SDL_TLSSet')
+    // static function TLSSet(id:TLSID, value:Dynamic, destructor:Dynamic->Void) : Int;
+
+    @:native('SDL_ThreadID')
+    static function threadID() : ThreadID;
+
+    static inline function waitThread(thread:Thread) : Int {
+        var result:Int = -1;
+        untyped SDL_WaitThread(thread, untyped __cpp__(' &result'));
+        return result;
+    } //waitThread
+
+ //sync primitives
+
+    @:native('SDL_CondBroadcast')
+    static function CondBroadcast(cond:Cond) : Int;
+
+    @:native('SDL_CondSignal')
+    static function CondSignal(cond:Cond) : Int;
+
+    @:native('SDL_CondWait')
+    static function CondWait(cond:Cond, mutex:Mutex) : Int;
+
+    @:native('SDL_CondWaitTimeout')
+    static function CondWaitTimeout(cond:Cond, mutex:Mutex, ms:UInt) : Int;
+
+    @:native('SDL_CreateCond')
+    static function CreateCond() : Cond;
+
+    @:native('SDL_CreateMutex')
+    static function CreateMutex() : Mutex;
+
+    @:native('SDL_CreateSemaphore')
+    static function CreateSemaphore(initial_value:UInt) : Sem;
+
+    @:native('SDL_DestroyCond')
+    static function DestroyCond(cond:Cond) : Void;
+
+    @:native('SDL_DestroyMutex')
+    static function DestroyMutex(mutex:Mutex) : Void;
+
+    @:native('SDL_DestroySemaphore')
+    static function DestroySemaphore(sem:Sem) : Void;
+
+    @:native('SDL_LockMutex')
+    static function LockMutex(mutex:Mutex) : Int;
+
+    @:native('SDL_SemPost')
+    static function SemPost(sem:Sem) : Int;
+
+    @:native('SDL_SemTryWait')
+    static function SemTryWait(sem:Sem) : Int;
+
+    @:native('SDL_SemValue')
+    static function SemValue(sem:Sem) : UInt;
+
+    @:native('SDL_SemWait')
+    static function SemWait(sem:Sem) : Int;
+
+    @:native('SDL_SemWaitTimeout')
+    static function SemWaitTimeout(sem:Sem, ms:UInt) : Int;
+
+    @:native('SDL_TryLockMutex')
+    static function TryLockMutex(mutex:Mutex) : Int;
+
+    @:native('SDL_UnlockMutex')
+    static function UnlockMutex(mutex:Mutex) : Int;
+
+
+
 
     @:native('SDL_CreateWindow')
     static function createWindow(title:String, x:Int, y:Int, w:Int, h:Int, flags:SDLWindowFlags):Window;
@@ -494,7 +590,7 @@ from Int to Int {
     var SDL_BLENDMODE_MOD = 0x00000004;      /**< color modulate
                                               dstRGB = srcRGB * dstRGB
                                               dstA = dstA */
-}
+} //SDLBlendMode
 
 @:enum
 abstract SDLPixelFormat(Int)
@@ -545,7 +641,16 @@ from Int to Int {
     var SDL_TEXTUREACCESS_STATIC    = 0;  /**< Changes rarely, not lockable */
     var SDL_TEXTUREACCESS_STREAMING = 1;  /**< Changes frequently, lockable */
     var SDL_TEXTUREACCESS_TARGET    = 2;  /**< Texture can be used as a render target */
-}
+} //SDLTextureAccess
+
+
+@:enum
+abstract SDLThreadPriority(Int)
+from Int to Int {
+    var SDL_THREAD_PRIORITY_LOW = 0;
+    var SDL_THREAD_PRIORITY_NORMAL = 1;
+    var SDL_THREAD_PRIORITY_HIGH = 2;
+} //SDLThreadPriority
 
 @:enum
 abstract SDLWindowFlags(Int)
@@ -567,5 +672,3 @@ from Int to Int {
     var SDL_WINDOW_ALLOW_HIGHDPI        = 0x00002000;       /**< window should be created in high-DPI mode if supported */
     var SDL_WINDOW_MOUSE_CAPTURE        = 0x00004000;       /**< window has mouse captured (unrelated to INPUT_GRABBED) */
 } //SDLWindowFlags
-
-class L {}
