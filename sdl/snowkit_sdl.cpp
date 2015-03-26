@@ -273,6 +273,12 @@ namespace snowkit_sdl {
 
     } //renderSetViewport
 
+    SDL_Cursor* createSystemCursor(int id) {
+
+        return SDL_CreateSystemCursor((SDL_SystemCursor)id);
+
+    } //createSystemCursor
+
     namespace convert {
 
             // return {

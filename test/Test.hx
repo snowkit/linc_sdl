@@ -7,6 +7,7 @@ import sdl.Renderer;
 class Test {
 
     static var state : { window:Window, renderer:Renderer };
+    static var cursor : sdl.Cursor;
 
     static function main() {
 
@@ -14,6 +15,9 @@ class Test {
         versions();
         renderinfo();
         blends();
+
+        cursor = SDL.createSystemCursor(SDL_SYSTEM_CURSOR_HAND);
+        SDL.setCursor(cursor);
 
         //clear to white
             SDL.setRenderDrawColor(state.renderer, 255,255,255,255);
@@ -91,7 +95,7 @@ class Test {
 
         //give us time to see it
 
-            SDL.delay(1000);
+            loop();
 
         //get out while we still can
 
@@ -115,13 +119,24 @@ class Test {
         // trace('    - perf counter: ' + SDL.getPerformanceCounter());
         // trace('    - perf freq: ' + SDL.getPerformanceFrequency());
 
-
         //note this doesn't land in stdout specifically,
         //so in some apps this is delivered when closing
         //rather than "inline". If run from a terminal or with
         //mixed/redirected std io, it would be ordered.
         //Also, -Wformat-security is complaining because the fmt string is used.
         // SDL.log('init');
+    }
+
+    static function loop() {
+
+        while(true) {
+            var e = SDL.pollEvent();
+            if(e.type == SDL_QUIT) {
+                trace("Program quit after ticks: " + SDL.getTicks());
+                break;
+            }
+            Sys.sleep(0.25/60);
+        }
     }
 
     static function versions() {

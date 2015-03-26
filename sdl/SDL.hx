@@ -1,7 +1,9 @@
 package sdl;
 
+import haxe.io.Bytes;
 import sdl.Renderer;
 import sdl.Surface;
+import sdl.Cursor;
 import sdl.Texture;
 import sdl.Joystick;
 import sdl.Window;
@@ -34,6 +36,16 @@ extern class SDL {
 
     @:native('SDL_Quit')
     static function quit():Void;
+
+//SDL_event.h
+
+    // @:native('snowkit_sdl::pollEvent')
+    static inline function pollEvent() : Event {
+        var event:Event;
+        event = untyped __cpp__('(SDL_Event)event');
+        untyped SDL_PollEvent( untyped __cpp__('&event') );
+        return event;
+    }
 
 //SDL_error.h
 
@@ -381,6 +393,60 @@ extern class SDL {
     @:native("snowkit_sdl::getPrefPath")
     static function getPrefPath(org:String, app:String) : String;
 
+//SDL_mouse.h
+
+    @:native('SDL_CaptureMouse')
+    static function captureMouse(enabled:Bool):Int;
+
+    @:native('SDL_CreateColorCursor')
+    static function createColorCursor(surface:Surface, hot_x:Int, hot_y:Int): Cursor;
+
+    @:native('SDL_CreateCursor')
+    static function createCursor(data:Bytes, mask:Bytes, w:Int, h:Int, hot_x:Int, hot_y:Int):Cursor;
+
+    @:native('snowkit_sdl::createSystemCursor')
+    static function createSystemCursor(id:SDLSystemCursor):Cursor;
+
+    @:native('SDL_FreeCursor')
+    static function freeCursor(cursor:Cursor):Void;
+
+    @:native('SDL_GetCursor')
+    static function getCursor():Cursor;
+
+    @:native('SDL_GetDefaultCursor')
+    static function getDefaultCursor():Cursor;
+
+    // @:native('SDL_GetGlobalMouseState')
+    // static function getGlobalMouseState():Int;
+
+    @:native('SDL_GetMouseFocus')
+    static function getMouseFocus():Window;
+
+    // @:native('SDL_GetMouseState')
+    // static function getMouseState():Int;
+
+    @:native('SDL_GetRelativeMouseMode')
+    static function getRelativeMouseMode():Bool;
+
+    // @:native('SDL_GetRelativeMouseState')
+    // static function getRelativeMouseState():Int;
+
+    @:native('SDL_SetCursor')
+    static function setCursor(cursor:Cursor):Void;
+
+    @:native('SDL_SetRelativeMouseMode')
+    static function setRelativeMouseMode(enabled:Bool):Int;
+
+    @:native('SDL_ShowCursor')
+    static function showCursor(toggle:Int):Int;
+
+    @:native('SDL_WarpMouseGlobal')
+    static function warpMouseGlobal(x:Int, y:Int):Void;
+
+    @:native('SDL_WarpMouseInWindow')
+    static function warpMouseInWindow(window:Window, x:Int, y:Int):Void;
+
+
 //SDL_haptic.h
 
     @:native('SDL_HapticClose')
@@ -644,16 +710,16 @@ from Int to Int {
     var SDL_LOG_CATEGORY_RENDER      = 6;
     var SDL_LOG_CATEGORY_INPUT       = 7;
     var SDL_LOG_CATEGORY_TEST        = 8;
-    // SDL_LOG_CATEGORY_RESERVED1    = 9
-    // SDL_LOG_CATEGORY_RESERVED2    = 10
-    // SDL_LOG_CATEGORY_RESERVED3    = 11
-    // SDL_LOG_CATEGORY_RESERVED4    = 12
-    // SDL_LOG_CATEGORY_RESERVED5    = 13
-    // SDL_LOG_CATEGORY_RESERVED6    = 14
-    // SDL_LOG_CATEGORY_RESERVED7    = 15
-    // SDL_LOG_CATEGORY_RESERVED8    = 16
-    // SDL_LOG_CATEGORY_RESERVED9    = 17
-    // SDL_LOG_CATEGORY_RESERVED10   = 18
+    // SDL_LOG_CATEGORY_RESERVED1    = 9;
+    // SDL_LOG_CATEGORY_RESERVED2    = 10;
+    // SDL_LOG_CATEGORY_RESERVED3    = 11;
+    // SDL_LOG_CATEGORY_RESERVED4    = 12;
+    // SDL_LOG_CATEGORY_RESERVED5    = 13;
+    // SDL_LOG_CATEGORY_RESERVED6    = 14;
+    // SDL_LOG_CATEGORY_RESERVED7    = 15;
+    // SDL_LOG_CATEGORY_RESERVED8    = 16;
+    // SDL_LOG_CATEGORY_RESERVED9    = 17;
+    // SDL_LOG_CATEGORY_RESERVED10   = 18;
     var SDL_LOG_CATEGORY_CUSTOM      = 19;
 } //SDLLogCategory
 
@@ -746,6 +812,124 @@ from Int to Int {
     var SDL_THREAD_PRIORITY_NORMAL = 1;
     var SDL_THREAD_PRIORITY_HIGH = 2;
 } //SDLThreadPriority
+
+@:enum
+abstract SDLEventType(UInt)
+from UInt to UInt {
+    var SDL_FIRSTEVENT     = 0;     /**< Unused (do not remove) */
+
+    /* Application events */
+    var SDL_QUIT            = 0x100; /**< User-requested quit */
+
+    /* These application events have special meaning on iOS, see README-ios.md for details */
+    var SDL_APP_TERMINATING = 0x101;        /**< The application is being terminated by the OS
+                                     Called on iOS in applicationWillTerminate()
+                                     Called on Android in onDestroy()
+                                */
+    var SDL_APP_LOWMEMORY   = 0x102;          /**< The application is low on memory, free memory if possible.
+                                     Called on iOS in applicationDidReceiveMemoryWarning()
+                                     Called on Android in onLowMemory()
+                                */
+    var SDL_APP_WILLENTERBACKGROUND = 0x103; /**< The application is about to enter the background
+                                     Called on iOS in applicationWillResignActive()
+                                     Called on Android in onPause()
+                                */
+    var SDL_APP_DIDENTERBACKGROUND = 0x104; /**< The application did enter the background and may not get CPU for some time
+                                     Called on iOS in applicationDidEnterBackground()
+                                     Called on Android in onPause()
+                                */
+    var SDL_APP_WILLENTERFOREGROUND = 0x105; /**< The application is about to enter the foreground
+                                     Called on iOS in applicationWillEnterForeground()
+                                     Called on Android in onResume()
+                                */
+    var SDL_APP_DIDENTERFOREGROUND = 0x106; /**< The application is now interactive
+                                     Called on iOS in applicationDidBecomeActive()
+                                     Called on Android in onResume()
+                                */
+
+    /* Window events */
+    var SDL_WINDOWEVENT    = 0x200; /**< Window state change */
+    var SDL_SYSWMEVENT     = 0x201; /**< System specific event */
+
+    /* Keyboard events */
+    var SDL_KEYDOWN         = 0x300;  /**< Key pressed */
+    var SDL_KEYUP           = 0x301; /**< Key released */
+    var SDL_TEXTEDITING     = 0x302; /**< Keyboard text editing (composition) */
+    var SDL_TEXTINPUT       = 0x303; /**< Keyboard text input */
+
+    /* Mouse events */
+    var SDL_MOUSEMOTION     = 0x400; /**< Mouse moved */
+    var SDL_MOUSEBUTTONDOWN = 0x401; /**< Mouse button pressed */
+    var SDL_MOUSEBUTTONUP   = 0x402; /**< Mouse button released */
+    var SDL_MOUSEWHEEL      = 0x403; /**< Mouse wheel motion */
+
+    /* Joystick events */
+    var SDL_JOYAXISMOTION    = 0x600; /**< Joystick axis motion */
+    var SDL_JOYBALLMOTION    = 0x601; /**< Joystick trackball motion */
+    var SDL_JOYHATMOTION     = 0x602; /**< Joystick hat position change */
+    var SDL_JOYBUTTONDOWN    = 0x603; /**< Joystick button pressed */
+    var SDL_JOYBUTTONUP      = 0x604; /**< Joystick button released */
+    var SDL_JOYDEVICEADDED   = 0x605; /**< A new joystick has been inserted into the system */
+    var SDL_JOYDEVICEREMOVED = 0x606; /**< An opened joystick has been removed */
+
+    /* Game controller events */
+    var SDL_CONTROLLERAXISMOTION  = 0x650; /**< Game controller axis motion */
+    var SDL_CONTROLLERBUTTONDOWN  = 0x651;          /**< Game controller button pressed */
+    var SDL_CONTROLLERBUTTONUP    = 0x652;            /**< Game controller button released */
+    var SDL_CONTROLLERDEVICEADDED = 0x653;         /**< A new Game controller has been inserted into the system */
+    var SDL_CONTROLLERDEVICEREMOVED = 0x654;       /**< An opened Game controller has been removed */
+    var SDL_CONTROLLERDEVICEREMAPPED = 0x655;      /**< The controller mapping was updated */
+
+    /* Touch events */
+    var SDL_FINGERDOWN      = 0x700;
+    var SDL_FINGERUP        = 0x701;
+    var SDL_FINGERMOTION    = 0x702;
+
+    /* Gesture events */
+    var SDL_DOLLARGESTURE   = 0x800;
+    var SDL_DOLLARRECORD    = 0x801;
+    var SDL_MULTIGESTURE    = 0x802;
+
+    /* Clipboard events */
+    var SDL_CLIPBOARDUPDATE = 0x900; /**< The clipboard changed */
+
+    /* Drag and drop events */
+    var SDL_DROPFILE        = 0x1000; /**< The system requests a file open */
+
+    /* Render events */
+    var SDL_RENDER_TARGETS_RESET = 0x2000; /**< The render targets have been reset and their contents need to be updated */
+    var SDL_RENDER_DEVICE_RESET  = 0x2001; /**< The device has been reset and all textures need to be recreated */
+
+    /** Events ::SDL_USEREVENT through ::SDL_LASTEVENT are for your use,
+     *  and should be allocated with SDL_RegisterEvents()
+     */
+    var SDL_USEREVENT    = 0x8000;
+
+    /**
+     *  This last event is only for bounding internal arrays
+     */
+    var SDL_LASTEVENT    = 0xFFFF;
+
+} //SDLEventType
+
+
+@:enum
+abstract SDLSystemCursor(Int)
+from Int to Int {
+    var SDL_SYSTEM_CURSOR_ARROW     = 0;   /**< Arrow */
+    var SDL_SYSTEM_CURSOR_IBEAM     = 1;   /**< I-beam */
+    var SDL_SYSTEM_CURSOR_WAIT      = 2;   /**< Wait */
+    var SDL_SYSTEM_CURSOR_CROSSHAIR = 3;   /**< Crosshair */
+    var SDL_SYSTEM_CURSOR_WAITARROW = 4;   /**< Small wait cursor (or Wait if not available) */
+    var SDL_SYSTEM_CURSOR_SIZENWSE  = 5;   /**< Double arrow pointing northwest and southeast */
+    var SDL_SYSTEM_CURSOR_SIZENESW  = 6;   /**< Double arrow pointing northeast and southwest */
+    var SDL_SYSTEM_CURSOR_SIZEWE    = 7;   /**< Double arrow pointing west and east */
+    var SDL_SYSTEM_CURSOR_SIZENS    = 8;   /**< Double arrow pointing north and south */
+    var SDL_SYSTEM_CURSOR_SIZEALL   = 9;   /**< Four pointed arrow pointing north, south, east, and west */
+    var SDL_SYSTEM_CURSOR_NO        = 10;  /**< Slashed circle or crossbones */
+    var SDL_SYSTEM_CURSOR_HAND      = 11;  /**< Hand */
+    var SDL_NUM_SYSTEM_CURSORS      = 12;
+} //SDLSystemCursor
 
 @:enum
 abstract SDLWindowFlags(Int)
