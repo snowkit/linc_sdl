@@ -1,17 +1,13 @@
 package sdl;
 
-@:native("SDL_Window")
-@:include('./snowkit_sdl.h')
-extern class SDL_Window {}
-typedef Window = cpp.Pointer<SDL_Window>;
-
-@:native("SDL_Renderer")
-@:include('./snowkit_sdl.h')
-extern class SDL_Renderer {}
-typedef Renderer = cpp.Pointer<SDL_Renderer>;
+import sdl.Renderer;
+import sdl.Surface;
+import sdl.Texture;
+import sdl.Window;
 
 @:include('./snowkit_sdl.cpp')
 @:buildXml("<include name='${SNOWKIT_SDL_LIB_PATH}/../sdl/snowkit_sdl.xml'/>")
+@:keep
 extern class SDL {
 
 
@@ -41,7 +37,7 @@ extern class SDL {
     @:native('SDL_SetError')
     static function setError( error:String ):Int;
 
-    @:native('SDL_GetError')
+    @:native('snowkit_sdl::getError')
     static function getError() : String;
 
     @:native('SDL_clearError')
@@ -135,39 +131,209 @@ extern class SDL {
 
 
 
-//SDL_.h
+//SDL_render.h
+
+    @:native('SDL_CreateRenderer')
+    static function createRenderer(window:Window, index:Int, flags:SDLRendererFlags):Renderer;
+
+    @:native('SDL_CreateSoftwareRenderer')
+    static function createSoftwareRenderer(surface:Surface):Renderer;
+
+    @:native('SDL_CreateTexture')
+    static function createTexture(renderer:Renderer, format:SDLPixelFormat, access:SDLTextureAccess, w:Int, h:Int): Texture;
+
+    @:native('SDL_CreateTextureFromSurface')
+    static function createTextureFromSurface():Void;
+
+    @:native('snowkit_sdl::createWindowAndRenderer')
+    static function createWindowAndRenderer(w:Int, h:Int, flags:SDLWindowFlags) : { window:Window, renderer:Renderer };
+
+    @:native('SDL_DestroyRenderer')
+    static function destroyRenderer(renderer:Renderer):Void;
+
+    @:native('SDL_DestroyTexture')
+    static function destroyTexture(texture:Texture):Void;
+
+    @:native('snowkit_sdl::GL_BindTexture')
+    static function GL_BindTexture(texture:Texture): { texw:Float, texh:Float };
+
+    @:native('SDL_GL_UnbindTexture')
+    static function GL_UnbindTexture(texture:Texture):Void;
+
+    @:native('SDL_GetNumRenderDrivers')
+    static function getNumRenderDrivers():Int;
+
+    @:native('snowkit_sdl::getRenderDrawBlendMode')
+    static function getRenderDrawBlendMode(renderer:Renderer):SDLBlendMode;
+
+    @:native('snowkit_sdl::getRenderDrawColor')
+    static function getRenderDrawColor(renderer:Renderer, into:SDLColor) : SDLColor;
+
+    @:native('snowkit_sdl::getRenderDriverInfo')
+    static function getRenderDriverInfo(index:Int):SDLRendererInfo;
+
+    @:native('SDL_GetRenderTarget')
+    static function getRenderTarget(renderer:Renderer):Texture;
+
+    @:native('SDL_GetRenderer')
+    static function getRenderer(window:Window):Renderer;
+
+    @:native('snowkit_sdl::getRendererInfo')
+    static function getRendererInfo(renderer:Renderer):SDLRendererInfo;
+
+    @:native('snowkit_sdl::getRendererOutputSize')
+    static function getRendererOutputSize(renderer:Renderer, into:SDLSize):SDLSize;
+
+    @:native('snowkit_sdl::getTextureAlphaMod')
+    static function getTextureAlphaMod(texture:Texture):Int;
+
+    @:native('snowkit_sdl::getTextureBlendMode')
+    static function getTextureBlendMode(texture:Texture):SDLBlendMode;
+
+    @:native('snowkit_sdl::getTextureColorMod')
+    static function getTextureColorMod(texture:Texture, into:SDLColor):SDLColor;
+
+    // @:native('SDL_LockTexture')
+    // static function lockTexture():Void;
+
+    // @:native('SDL_QueryTexture')
+    // static function queryTexture():Void;
+
+    @:native('SDL_RenderClear')
+    static function renderClear(renderer:Renderer):Int;
+
+    // @:native('SDL_RenderCopy')
+    // static function renderCopy():Void;
+
+    // @:native('SDL_RenderCopyEx')
+    // static function renderCopyEx():Void;
+
+    @:native('SDL_RenderDrawLine')
+    static function renderDrawLine(renderer:Renderer, x1:Int, y1:Int, x2:Int, y2:Int):Int;
+
+    static inline function renderDrawLines(renderer:Renderer, points:Array<SDLPoint>):Void {
+        if(points.length % 2 != 0) throw "points not divisible by 2!";
+        var half = Std.int(points.length/2);
+        for(i in 0 ... half) {
+            var cur = points[i*2+0];
+            var nxt = points[i*2+1];
+            renderDrawLine(renderer, cur.x, cur.y, nxt.x, nxt.y);
+        }
+    } //renderDrawLines
+
+    @:native('SDL_RenderDrawPoint')
+    static function renderDrawPoint(renderer:Renderer, x:Int, y:Int):Int;
+
+    static inline function renderDrawPoints(renderer:Renderer, points:Array<SDLPoint>):Void {
+        for(p in points) renderDrawPoint(renderer, p.x, p.y);
+    } //renderDrawPoints
+
+    @:native('snowkit_sdl::renderDrawRect')
+    static function renderDrawRect(renderer:Renderer, rect:SDLRect):Int;
+
+    static inline function renderDrawRects(renderer:Renderer, rects:Array<SDLRect>):Void {
+        for(r in rects) renderDrawRect(renderer, r);
+    }
+
+    @:native('snowkit_sdl::renderFillRect')
+    static function renderFillRect(renderer:Renderer, rect:SDLRect):Void;
+
+    static inline function renderFillRects(renderer:Renderer, rects:Array<SDLRect>):Void {
+        for(r in rects) renderFillRect(renderer, r);
+    }
+
+    @:native('snowkit_sdl::renderGetClipRect')
+    static function renderGetClipRect(renderer:Renderer, into:SDLRect):SDLRect;
+
+    @:native('snowkit_sdl::renderGetLogicalSize')
+    static function renderGetLogicalSize(renderer:Renderer, into:SDLSize):SDLSize;
+
+    @:native('snowkit_sdl::renderGetScale')
+    static function renderGetScale(renderer:Renderer, into:SDLScale):SDLScale;
+
+    @:native('snowkit_sdl::renderGetViewport')
+    static function renderGetViewport(renderer:Renderer, into:SDLRect):SDLRect;
+
+    @:native('SDL_RenderIsClipEnabled')
+    static function renderIsClipEnabled(renderer:Renderer):Bool;
+
+    @:native('SDL_RenderPresent')
+    static function renderPresent(renderer:Renderer):Int;
+
+    // @:native('SDL_RenderReadPixels')
+    // static function renderReadPixels():Void;
+
+    @:native('snowkit_sdl::renderSetClipRect')
+    static function renderSetClipRect(renderer:Renderer, rect:SDLRect):Int;
+
+    @:native('SDL_RenderSetLogicalSize')
+    static function renderSetLogicalSize(renderer:Renderer, w:Int, h:Int):Int;
+
+    @:native('SDL_RenderSetScale')
+    static function renderSetScale(renderer:Renderer, x:Float, y:Float):Int;
+
+    @:native('snowkit_sdl::renderSetViewport')
+    static function renderSetViewport(renderer:Renderer, rect:SDLRect):Int;
+
+    @:native('SDL_RenderTargetSupported')
+    static function renderTargetSupported(renderer:Renderer):Bool;
+
+    @:native('snowkit_sdl::setRenderDrawBlendMode')
+    static function setRenderDrawBlendMode(renderer:Renderer, mode:SDLBlendMode):Int;
+
+    @:native('SDL_SetRenderDrawColor')
+    static function setRenderDrawColor(renderer:Renderer, r:UInt, g:UInt, b:UInt, a:UInt):Int;
+
+    @:native('SDL_SetRenderTarget')
+    static function setRenderTarget(renderer:Renderer, target:Texture):Int;
+
+    @:native('SDL_SetTextureAlphaMod')
+    static function setTextureAlphaMod(texture:Texture, alpha:UInt):Int;
+
+    @:native('SDL_SetTextureBlendMode')
+    static function setTextureBlendMode(texture:Texture, mode:SDLBlendMode):Int;
+
+    @:native('SDL_SetTextureColorMod')
+    static function setTextureColorMod(texture:Texture, r:UInt, g:UInt, b:UInt):Int;
+
+    @:native('SDL_UnlockTexture')
+    static function unlockTexture(texture:Texture):Void;
+
+    // @:native('SDL_UpdateTexture')
+    // static function updateTexture():Void;
+
+    // @:native('SDL_UpdateYUVTexture')
+    // static function updateYUVTexture():Void;
+
+
+//
 
 
     @:native('SDL_CreateWindow')
     static function createWindow(title:String, x:Int, y:Int, w:Int, h:Int, flags:SDLWindowFlags):Window;
 
-    @:native('snowkit_sdl::createWindowAndRenderer')
-    static function createWindowAndRenderer(w:Int, h:Int, flags:SDLWindowFlags) : { window:Window, renderer:Renderer };
-
     @:native('SDL_DestroyWindow')
     static function destroyWindow(window:Window):Void;
-
-    @:native('SDL_DestroyRenderer')
-    static function destroyRenderer(renderer:Renderer):Void;
-
-    @:native('SDL_RenderDrawLine')
-    static function renderDrawLine(renderer:Renderer, x1:Int, y1:Int, x2:Int, y2:Int):Int;
-
-    @:native('SDL_RenderClear')
-    static function renderClear(renderer:Renderer):Int;
-    @:native('SDL_RenderPresent')
-    static function renderPresent(renderer:Renderer):Int;
-
-    @:native('SDL_SetRenderDrawBlendMode')
-    static function setRenderDrawBlendMode(renderer:Renderer, blend:SDLBlendMode):Int;
-
-    @:native('SDL_SetRenderDrawColor')
-    static function setRenderDrawColor(renderer:Renderer, r:UInt, g:UInt, b:UInt, a:UInt):Int;
 
 
 }
 
+typedef SDLColor = { r:UInt, g:UInt, b:UInt, a:UInt };
+typedef SDLPoint = { x:Int, y:Int };
+typedef SDLSize = { w:Int, h:Int };
+typedef SDLScale = { x:Float, y:Float };
+typedef SDLRect = { > SDLPoint, > SDLSize, } //comma is required at the end
+
 typedef SDLVersion = { major:UInt, minor:UInt, patch:UInt };
+typedef SDLRendererInfo = {
+    var name:String;
+    var flags:UInt;
+    var num_texture_formats:UInt;
+    var texture_formats:Array<UInt>;
+    var max_texture_width:Int;
+    var max_texture_height:Int;
+}
+
 
 @:enum
 abstract SDLInitFlags(Int)
@@ -229,6 +395,19 @@ from Int to Int {
 } //SDLLogCategory
 
 @:enum
+abstract SDLRendererFlags(Int)
+from Int to Int {
+
+    var SDL_RENDERER_SOFTWARE       = 0x00000001;       /**< The renderer is a software fallback */
+    var SDL_RENDERER_ACCELERATED    = 0x00000002;       /**< The renderer uses hardware
+                                                          acceleration */
+    var SDL_RENDERER_PRESENTVSYNC   = 0x00000004;       /**< Present is synchronized
+                                                          with the refresh rate */
+    var SDL_RENDERER_TARGETTEXTURE  = 0x00000008;       /**< The renderer supports
+                                                          rendering to texture */
+} //SDLRendererFlags
+
+@:enum
 abstract SDLBlendMode(Int)
 from Int to Int {
 
@@ -243,6 +422,57 @@ from Int to Int {
     var SDL_BLENDMODE_MOD = 0x00000004;      /**< color modulate
                                               dstRGB = srcRGB * dstRGB
                                               dstA = dstA */
+}
+
+@:enum
+abstract SDLPixelFormat(Int)
+from Int to Int {
+    var SDL_PIXELFORMAT_UNKNOWN     = 0x00000000;
+    var SDL_PIXELFORMAT_INDEX1LSB   = 0x11100100;
+    var SDL_PIXELFORMAT_INDEX1MSB   = 0x11200100;
+    var SDL_PIXELFORMAT_INDEX4LSB   = 0x12100400;
+    var SDL_PIXELFORMAT_INDEX4MSB   = 0x12200400;
+    var SDL_PIXELFORMAT_INDEX8      = 0x13000801;
+    var SDL_PIXELFORMAT_RGB332      = 0x14110801;
+    var SDL_PIXELFORMAT_RGB444      = 0x15120C02;
+    var SDL_PIXELFORMAT_RGB555      = 0x15130F02;
+    var SDL_PIXELFORMAT_BGR555      = 0x15530F02;
+    var SDL_PIXELFORMAT_ARGB4444    = 0x15321002;
+    var SDL_PIXELFORMAT_RGBA4444    = 0x15421002;
+    var SDL_PIXELFORMAT_ABGR4444    = 0x15721002;
+    var SDL_PIXELFORMAT_BGRA4444    = 0x15821002;
+    var SDL_PIXELFORMAT_ARGB1555    = 0x15331002;
+    var SDL_PIXELFORMAT_RGBA5551    = 0x15441002;
+    var SDL_PIXELFORMAT_ABGR1555    = 0x15731002;
+    var SDL_PIXELFORMAT_BGRA5551    = 0x15841002;
+    var SDL_PIXELFORMAT_RGB565      = 0x15151002;
+    var SDL_PIXELFORMAT_BGR565      = 0x15551002;
+    var SDL_PIXELFORMAT_RGB24       = 0x17101803;
+    var SDL_PIXELFORMAT_BGR24       = 0x17401803;
+    var SDL_PIXELFORMAT_RGB888      = 0x16161804;
+    var SDL_PIXELFORMAT_RGBX8888    = 0x16261804;
+    var SDL_PIXELFORMAT_BGR888      = 0x16561804;
+    var SDL_PIXELFORMAT_BGRX8888    = 0x16661804;
+    var SDL_PIXELFORMAT_ARGB8888    = 0x16362004;
+    var SDL_PIXELFORMAT_RGBA8888    = 0x16462004;
+    var SDL_PIXELFORMAT_ABGR8888    = 0x16762004;
+    var SDL_PIXELFORMAT_BGRA8888    = 0x16862004;
+    var SDL_PIXELFORMAT_ARGB2101010 = 0x16372004;
+    var SDL_PIXELFORMAT_YV12        = 0x32315659;
+    var SDL_PIXELFORMAT_IYUV        = 0x56555949;
+    var SDL_PIXELFORMAT_YUY2        = 0x32595559;
+    var SDL_PIXELFORMAT_UYVY        = 0x59565955;
+    var SDL_PIXELFORMAT_YVYU        = 0x55595659;
+    var SDL_PIXELFORMAT_NV12        = 0x3231564E;
+    var SDL_PIXELFORMAT_NV21        = 0x3132564E;
+} //SDLPixelFormat
+
+@:enum
+abstract SDLTextureAccess(Int)
+from Int to Int {
+    var SDL_TEXTUREACCESS_STATIC    = 0;  /**< Changes rarely, not lockable */
+    var SDL_TEXTUREACCESS_STREAMING = 1;  /**< Changes frequently, lockable */
+    var SDL_TEXTUREACCESS_TARGET    = 2;  /**< Texture can be used as a render target */
 }
 
 @:enum
@@ -266,3 +496,4 @@ from Int to Int {
     var SDL_WINDOW_MOUSE_CAPTURE        = 0x00004000;       /**< window has mouse captured (unrelated to INPUT_GRABBED) */
 } //SDLWindowFlags
 
+class L {}
