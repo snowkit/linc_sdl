@@ -65,7 +65,12 @@ extern class SDL {
 
             //:portability: this requires C99
             //this makes sure the memory is zeroed because
-            //otherwise it can hold bogus event values
+            //otherwise it can hold bogus event values.
+            //since type=0 would be "invalid" as above,
+            //it would be acceptable to only do type = 0
+            //if pollevent returned null, but at least during
+            //heavy development the chance of error should be slimmed
+            //down as much as possible - therefore the entire struct is cleared.
         var event:Event = untyped __cpp__('(const union SDL_Event){0}');
         untyped SDL_PollEvent( untyped __cpp__('&event') );
 
