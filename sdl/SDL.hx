@@ -37,7 +37,40 @@ extern class SDL {
     @:native('SDL_Quit')
     static function quit():Void;
 
-//SDL_event.h
+//SDL_events.h
+
+
+    //void SDL_AddEventWatch(SDL_EventFilter filter,
+    //                       void*           userdata)
+
+    //void SDL_DelEventWatch(SDL_EventFilter filter,
+    //                       void*           userdata)
+
+    @:native('SDL_EventState')
+    static function eventState( type:SDLEventType, state:SDLEventState ) : UInt;
+
+    //void SDL_FilterEvents(SDL_EventFilter filter, void* userdata)
+
+    @:native('SDL_FlushEvent')
+    static function flushEvent( type:SDLEventType ) : Void;
+
+    @:native('SDL_FlushEvents')
+    static function flushEvents( min:SDLEventType, max:SDLEventType ) : Void;
+
+    //SDL_bool SDL_GetEventFilter(SDL_EventFilter* filter,
+    //                            void**           userdata)
+
+    @:native('SDL_GetNumTouchDevices')
+    static function getNumTouchDevices() : Int;
+
+    @:native('SDL_GetNumTouchFingers')
+    static function getNumTouchFingers(touchId:cpp.Int64) : Int;
+
+    @:native('SDL_GetTouchDevice')
+    static function getTouchDevice(index:Int) : cpp.Int64;
+
+    //SDL_Finger* SDL_GetTouchFinger(SDL_TouchID touchID,
+    //                               int         index)
 
         //:note: Not SDL API, this was added to work
         //better against pollEvent, see the comments there.
@@ -51,6 +84,16 @@ extern class SDL {
 
     @:native('SDL_HasEvents')
     static function hasEvents( min:SDLEventType, max:SDLEventType ) : Bool;
+
+    //int SDL_LoadDollarTemplates(SDL_TouchID touchId,
+    //                             SDL_RWops*  src)
+
+    //int SDL_PeepEvents(SDL_Event*      events,
+                   // int             numevents,
+                   // SDL_eventaction action,
+                   // Uint32          minType,
+                   // Uint32          maxType
+
 
     @:native('SDL_PumpEvents')
     static function pumpEvents():Void;
@@ -71,12 +114,42 @@ extern class SDL {
             //if pollevent returned null, but at least during
             //heavy development the chance of error should be slimmed
             //down as much as possible - therefore the entire struct is cleared.
+            //I would use SDL_zero(event), however haxe requires assignment on a local
         var event:Event = untyped __cpp__('(const union SDL_Event){0}');
         untyped SDL_PollEvent( untyped __cpp__('&event') );
 
         return event;
 
     } //pollEvent
+
+
+    // int SDL_PushEvent(SDL_Event* event)
+
+    @:native('SDL_QuitRequested')
+    static function quitRequested(): Bool;
+
+    @:native('SDL_RecordGesture')
+    static function recordGesture(touchId:cpp.UInt64): Int;
+
+    @:native('SDL_RegisterEvents')
+    static function registerEvents(numevents:Int):UInt;
+
+    // int SDL_SaveAllDollarTemplates(SDL_RWops* dst)
+
+    //void SDL_SetEventFilter(SDL_EventFilter filter,
+    //                        void*           userdata)
+
+    static inline function waitEvent() : Event {
+        var event:Event = untyped __cpp__('(const union SDL_Event){0}');
+        untyped SDL_WaitEvent( untyped __cpp__('&event') );
+        return event;
+    }
+
+    static inline function waitEventTimeout(timeout_ms:Int) : Event {
+        var event:Event = untyped __cpp__('(const union SDL_Event){0}');
+        untyped SDL_WaitEventTimeout( untyped __cpp__('&event'), untyped timeout_ms );
+        return event;
+    }
 
 //SDL_error.h
 
@@ -843,6 +916,17 @@ from Int to Int {
     var SDL_THREAD_PRIORITY_NORMAL = 1;
     var SDL_THREAD_PRIORITY_HIGH = 2;
 } //SDLThreadPriority
+
+
+
+@:enum
+abstract SDLEventState(Int)
+from Int to Int {
+    var SDL_QUERY = -1;
+    var SDL_IGNORE = 0;
+    var SDL_DISABLE = 0;
+    var SDL_ENABLE = 1;
+} //SDLEventState
 
 
 

@@ -145,6 +145,10 @@ class Test {
                     reason = 'escape key';
                     return false;
                 }
+                if(e.key.keysym.sym == 32) {
+                    var a = SDL.waitEvent();
+                    trace('next event was SDL_TEXTINPUT:' + (a.type == SDL_TEXTINPUT));
+                }
             }
 
             if(e.type == SDLEventType.SDL_MOUSEMOTION) trace('motion ' + e.motion.x + ',' + e.motion.y);
