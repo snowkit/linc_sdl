@@ -1,6 +1,7 @@
 -main Test.hx
 -cpp cpp/
 -cp ../
+-D no-debug
 -cmd cpp/Test
 
 # currently, you must set this to the lib/ folder,
