@@ -39,11 +39,35 @@ extern class SDL {
 
 //SDL_event.h
 
+        //:note: Not SDL API, this was added to work
+        //better against pollEvent, see the comments there.
+    static inline function hasAnEvent():Bool  {
+        pumpEvents();
+        return hasEvents( SDL_FIRSTEVENT, SDL_LASTEVENT );
+    }
+
+    @:native('SDL_HasEvent')
+    static function hasEvent( type:SDLEventType ) : Bool;
+
+    @:native('SDL_HasEvents')
+    static function hasEvents( min:SDLEventType, max:SDLEventType ) : Bool;
+
+    @:native('SDL_PumpEvents')
+    static function pumpEvents():Void;
+
+        //usually, pollEvent returns 0 in C, so that
+        //while(SDL_PollEvent(&event)) is used on a stack variable,
+        //however this notion in haxe doesn't apply, but we
+        //can still keep the variable on the stack,
+        //use hasAnEvent() to know if this is worth calling,
+        //or call it and if event.type is 0 the queue was empty
     static inline function pollEvent() : Event {
 
-        var event:Event;
-        event = untyped __cpp__('(SDL_Event)event');
-        var res = cast untyped SDL_PollEvent( untyped __cpp__('&event') );
+            //:portability: this requires C99
+            //this makes sure the memory is zeroed because
+            //otherwise it can hold bogus event values
+        var event:Event = untyped __cpp__('(const union SDL_Event){0}');
+        untyped SDL_PollEvent( untyped __cpp__('&event') );
 
         return event;
 
