@@ -94,6 +94,8 @@ extern class SDL {
                    // Uint32          minType,
                    // Uint32          maxType
 
+    // static inline function peepEvents(numevents:Int, action:SDLEventAction, min:SDLEventType, max:SDLEventType) : Array<Event> {
+    // } //peepEvents
 
     @:native('SDL_PumpEvents')
     static function pumpEvents():Void;
@@ -551,6 +553,72 @@ extern class SDL {
     static function warpMouseInWindow(window:Window, x:Int, y:Int):Void;
 
 
+//SDL_Joystick.h
+
+    @:native('SDL_JoystickClose')
+    static function joystickClose(joystick:Joystick):Void;
+
+    @:native('SDL_JoystickEventState')
+    static function joystickEventState(state:SDLEventState):Int;
+
+    @:native('SDL_JoystickGetAttached')
+    static function joystickGetAttached(joystick:Joystick):Bool;
+
+    @:native('SDL_JoystickGetAxis')
+    static function joystickGetAxis(joystick:Joystick, axis:Int):cpp.Int64;
+
+    // @:native('SDL_JoystickGetBall')
+    // static function joystickGetBall(joystick:Joystick):Int;
+
+    @:native('SDL_JoystickGetButton')
+    static function joystickGetButton(joystick:Joystick, button:Int):UInt;
+
+    @:native('SDL_JoystickGetDeviceGUID')
+    static function joystickGetDeviceGUID(device_index:Int):String;
+
+    @:native('SDL_JoystickGetGUID')
+    static function joystickGetGUID(joystick:Joystick):String;
+
+    // @:native('SDL_JoystickGetGUIDFromString')
+    // static function joystickGetGUIDFromString(pchGUID:String):String;
+
+    // @:native('SDL_JoystickGetGUIDString')
+    // static function joystickGetGUIDString():Int;
+
+    @:native('SDL_JoystickGetHat')
+    static function joystickGetHat(joystick:Joystick, hat:SDLHatValue):Int;
+
+    @:native('SDL_JoystickInstanceID')
+    static function joystickInstanceID(joystick:Joystick):UInt;
+
+    // @:native('SDL_JoystickName')
+    // static function joystickName(joystick:Joystick):String;
+
+    // @:native('SDL_JoystickNameForIndex')
+    // static function joystickNameForIndex(device_index:Int):String;
+
+    @:native('SDL_JoystickNumAxes')
+    static function joystickNumAxes(joystick:Joystick):Int;
+
+    @:native('SDL_JoystickNumBalls')
+    static function joystickNumBalls(joystick:Joystick):Int;
+
+    @:native('SDL_JoystickNumButtons')
+    static function joystickNumButtons(joystick:Joystick):Int;
+
+    @:native('SDL_JoystickNumHats')
+    static function joystickNumHats(joystick:Joystick):Int;
+
+    @:native('SDL_JoystickOpen')
+    static function joystickOpen(device_index:Int):Joystick;
+
+    @:native('SDL_JoystickUpdate')
+    static function joystickUpdate():Void;
+
+    @:native('SDL_NumJoysticks')
+    static function numJoysticks():Int;
+
+
 //SDL_haptic.h
 
     @:native('SDL_HapticClose')
@@ -927,6 +995,15 @@ from Int to Int {
     var SDL_DISABLE = 0;
     var SDL_ENABLE = 1;
 } //SDLEventState
+
+
+@:enum
+abstract SDLEventAction(Int)
+from Int to Int {
+    var SDL_ADDEVENT  = 0;
+    var SDL_PEEKEVENT = 1;
+    var SDL_GETEVENT  = 2;
+} //SDLEventAction
 
 
 
