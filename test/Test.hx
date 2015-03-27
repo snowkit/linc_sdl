@@ -172,7 +172,7 @@ class Test {
             //give os time
             SDL.delay(4);
 
-        }
+        } //while(updating)
 
     } //loop
 

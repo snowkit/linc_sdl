@@ -69,8 +69,8 @@ extern class SDL {
     @:native('SDL_GetTouchDevice')
     static function getTouchDevice(index:Int) : cpp.Int64;
 
-    //SDL_Finger* SDL_GetTouchFinger(SDL_TouchID touchID,
-    //                               int         index)
+    @:native('SDL_GetTouchFinger')
+    static function getTouchFinger(touchID:cpp.Int64, index:Int): sdl.Event.Finger;
 
         //:note: Not SDL API, this was added to work
         //better against pollEvent, see the comments there.
@@ -129,7 +129,7 @@ extern class SDL {
     static function quitRequested(): Bool;
 
     @:native('SDL_RecordGesture')
-    static function recordGesture(touchId:cpp.UInt64): Int;
+    static function recordGesture(touchId:cpp.Int64): Int;
 
     @:native('SDL_RegisterEvents')
     static function registerEvents(numevents:Int):UInt;

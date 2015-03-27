@@ -2,35 +2,48 @@ package sdl;
 
 import sdl.SDL.SDLEventType;
 
+@:native("SDL_Finger")
+@:include('./snowkit_sdl.h')
+@:structAccess
+@:unreflective
+extern private class SDL_Finger {
+    var id:cpp.Int64;
+    var x:Float;
+    var y:Float;
+    var pressure:Float;
+}
+typedef Finger = cpp.Pointer<SDL_Finger>;
+
+
 @:include('./snowkit_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_Event")
 extern class Event {
-    public var type:SDLEventType;
-    public var window:WindowEvent;
-    public var key:KeyboardEvent;
-    public var edit:TextEditingEvent;
-    public var text:TextInputEvent;
-    public var motion:MouseMotionEvent;
-    public var button:MouseButtonEvent;
-    public var wheel:MouseWheelEvent;
-    public var jaxis:JoyAxisEvent;
-    public var jball:JoyBallEvent;
-    public var jhat:JoyHatEvent;
-    public var jbutton:JoyButtonEvent;
-    public var jdevice:JoyDeviceEvent;
-    public var caxis:ControllerAxisEvent;
-    public var cbutton:ControllerButtonEvent;
-    public var cdevice:ControllerDeviceEvent;
-    public var adevice:AudioDeviceEvent;
-    public var quit:QuitEvent;
-    // public var user:UserEvent;
-    // public var syswm:SysWMEvent;
-    public var tfinger:TouchFingerEvent;
-    public var mgesture:MultiGestureEvent;
-    public var dgesture:DollarGestureEvent;
-    public var drop:DropEvent;
+    var type:SDLEventType;
+    var window:WindowEvent;
+    var key:KeyboardEvent;
+    var edit:TextEditingEvent;
+    var text:TextInputEvent;
+    var motion:MouseMotionEvent;
+    var button:MouseButtonEvent;
+    var wheel:MouseWheelEvent;
+    var jaxis:JoyAxisEvent;
+    var jball:JoyBallEvent;
+    var jhat:JoyHatEvent;
+    var jbutton:JoyButtonEvent;
+    var jdevice:JoyDeviceEvent;
+    var caxis:ControllerAxisEvent;
+    var cbutton:ControllerButtonEvent;
+    var cdevice:ControllerDeviceEvent;
+    var adevice:AudioDeviceEvent;
+    var quit:QuitEvent;
+    // var user:UserEvent;
+    // var syswm:SysWMEvent;
+    var tfinger:TouchFingerEvent;
+    var mgesture:MultiGestureEvent;
+    var dgesture:DollarGestureEvent;
+    var drop:DropEvent;
 }
 
 
@@ -39,8 +52,8 @@ extern class Event {
 @:unreflective
 @:native("SDL_QuitEvent")
 extern class QuitEvent {
-    public var type: SDLEventType;
-    public var timestamp: UInt;
+    var type: SDLEventType;
+    var timestamp: UInt;
 }
 
 @:include('./snowkit_sdl.h')
@@ -48,9 +61,9 @@ extern class QuitEvent {
 @:unreflective
 @:native("SDL_DropEvent")
 extern class DropEvent {
-    public var type: SDLEventType;
-    public var timestamp: UInt;
-    public var file: cpp.ConstCharStar;
+    var type: SDLEventType;
+    var timestamp: UInt;
+    var file: cpp.ConstCharStar;
 }
 
 @:include('./snowkit_sdl.h')
@@ -58,12 +71,12 @@ extern class DropEvent {
 @:unreflective
 @:native("SDL_TextEditingEvent")
 extern class TextEditingEvent {
-    public var type: SDLEventType;
-    public var timestamp: UInt;
-    public var windowID: UInt;
-    public var text: cpp.ConstCharStar;
-    public var start: cpp.Int64;
-    public var end: cpp.Int64;
+    var type: SDLEventType;
+    var timestamp: UInt;
+    var windowID: UInt;
+    var text: cpp.ConstCharStar;
+    var start: cpp.Int64;
+    var end: cpp.Int64;
 }
 
 @:include('./snowkit_sdl.h')
@@ -71,10 +84,10 @@ extern class TextEditingEvent {
 @:unreflective
 @:native("SDL_TextInputEvent")
 extern class TextInputEvent {
-    public var type: SDLEventType;
-    public var timestamp: UInt;
-    public var windowID: UInt;
-    public var text: cpp.ConstCharStar;
+    var type: SDLEventType;
+    var timestamp: UInt;
+    var windowID: UInt;
+    var text: cpp.ConstCharStar;
 }
 
 @:include('./snowkit_sdl.h')
@@ -82,12 +95,12 @@ extern class TextInputEvent {
 @:unreflective
 @:native("SDL_WindowEvent")
 extern class WindowEvent {
-    public var type: SDLEventType;
-    public var timestamp: UInt;
-    public var windowID: UInt;
-    public var event: sdl.SDL.SDLWindowEventID;
-    public var data1: UInt;
-    public var data2: UInt;
+    var type: SDLEventType;
+    var timestamp: UInt;
+    var windowID: UInt;
+    var event: sdl.SDL.SDLWindowEventID;
+    var data1: UInt;
+    var data2: UInt;
 }
 
 @:include('./snowkit_sdl.h')
@@ -95,12 +108,12 @@ extern class WindowEvent {
 @:unreflective
 @:native("SDL_KeyboardEvent")
 extern class KeyboardEvent {
-    public var type: SDLEventType;
-    public var timestamp: UInt;
-    public var windowID: UInt;
-    public var state: UInt;
-    public var repeat: UInt;
-    public var keysym: SDLKeysym;
+    var type: SDLEventType;
+    var timestamp: UInt;
+    var windowID: UInt;
+    var state: UInt;
+    var repeat: UInt;
+    var keysym: SDLKeysym;
 }
 
 @:include('./snowkit_sdl.h')
@@ -108,9 +121,9 @@ extern class KeyboardEvent {
 @:unreflective
 @:native("SDL_Keysym")
 extern class SDLKeysym {
-    public var scancode: UInt;
-    public var sym: UInt;
-    public var mod: UInt;
+    var scancode: UInt;
+    var sym: UInt;
+    var mod: UInt;
 }
 
 @:include('./snowkit_sdl.h')
@@ -118,15 +131,15 @@ extern class SDLKeysym {
 @:unreflective
 @:native("SDL_MouseMotionEvent")
 extern class MouseMotionEvent {
-    public var type: SDLEventType;
-    public var timestamp: UInt;
-    public var windowID: UInt;
-    public var which: UInt;
-    public var state: UInt;
-    public var x: UInt;
-    public var y: UInt;
-    public var xrel: UInt;
-    public var yrel: UInt;
+    var type: SDLEventType;
+    var timestamp: UInt;
+    var windowID: UInt;
+    var which: UInt;
+    var state: UInt;
+    var x: UInt;
+    var y: UInt;
+    var xrel: UInt;
+    var yrel: UInt;
 }
 
 
@@ -135,11 +148,11 @@ extern class MouseMotionEvent {
 @:unreflective
 @:native("SDL_JoyAxisEvent")
 extern class JoyAxisEvent {
-    public var type: SDLEventType;
-    public var timestamp: UInt;
-    public var which: UInt;
-    public var axis: UInt;
-    public var value: Int;
+    var type: SDLEventType;
+    var timestamp: UInt;
+    var which: UInt;
+    var axis: UInt;
+    var value: Int;
 }
 
 
@@ -148,12 +161,12 @@ extern class JoyAxisEvent {
 @:unreflective
 @:native("SDL_JoyBallEvent")
 extern class JoyBallEvent {
-    public var type: SDLEventType;
-    public var timestamp: UInt;
-    public var which: UInt;
-    public var ball: UInt;
-    public var xrel: cpp.Int64;
-    public var yrel: cpp.Int64;
+    var type: SDLEventType;
+    var timestamp: UInt;
+    var which: UInt;
+    var ball: UInt;
+    var xrel: cpp.Int64;
+    var yrel: cpp.Int64;
 }
 
 @:include('./snowkit_sdl.h')
@@ -161,11 +174,11 @@ extern class JoyBallEvent {
 @:unreflective
 @:native("SDL_JoyHatEvent")
 extern class JoyHatEvent {
-    public var type: SDLEventType;
-    public var timestamp: UInt;
-    public var which: UInt;
-    public var hat: UInt;
-    public var value: sdl.SDL.SDLHatValue;
+    var type: SDLEventType;
+    var timestamp: UInt;
+    var which: UInt;
+    var hat: UInt;
+    var value: sdl.SDL.SDLHatValue;
 }
 
 @:include('./snowkit_sdl.h')
@@ -173,11 +186,11 @@ extern class JoyHatEvent {
 @:unreflective
 @:native("SDL_JoyButtonEvent")
 extern class JoyButtonEvent {
-    public var type: SDLEventType;
-    public var timestamp: UInt;
-    public var which: UInt;
-    public var button: UInt;
-    public var state: UInt;
+    var type: SDLEventType;
+    var timestamp: UInt;
+    var which: UInt;
+    var button: UInt;
+    var state: UInt;
 }
 
 @:include('./snowkit_sdl.h')
@@ -185,9 +198,9 @@ extern class JoyButtonEvent {
 @:unreflective
 @:native("SDL_JoyDeviceEvent")
 extern class JoyDeviceEvent {
-    public var type: SDLEventType;
-    public var timestamp: UInt;
-    public var which: UInt;
+    var type: SDLEventType;
+    var timestamp: UInt;
+    var which: UInt;
 }
 
 
@@ -196,11 +209,11 @@ extern class JoyDeviceEvent {
 @:unreflective
 @:native("SDL_ControllerAxisEvent")
 extern class ControllerAxisEvent {
-    public var type: SDLEventType;
-    public var timestamp: UInt;
-    public var which: UInt;
-    public var axis: UInt;
-    public var value: Int;
+    var type: SDLEventType;
+    var timestamp: UInt;
+    var which: UInt;
+    var axis: UInt;
+    var value: Int;
 }
 
 
@@ -209,11 +222,11 @@ extern class ControllerAxisEvent {
 @:unreflective
 @:native("SDL_ControllerButtonEvent")
 extern class ControllerButtonEvent {
-    public var type: SDLEventType;
-    public var timestamp: UInt;
-    public var which: UInt;
-    public var button: UInt;
-    public var state: UInt;
+    var type: SDLEventType;
+    var timestamp: UInt;
+    var which: UInt;
+    var button: UInt;
+    var state: UInt;
 }
 
 @:include('./snowkit_sdl.h')
@@ -221,9 +234,9 @@ extern class ControllerButtonEvent {
 @:unreflective
 @:native("SDL_ControllerDeviceEvent")
 extern class ControllerDeviceEvent {
-    public var type: SDLEventType;
-    public var timestamp: UInt;
-    public var which: UInt;
+    var type: SDLEventType;
+    var timestamp: UInt;
+    var which: UInt;
 }
 
 @:include('./snowkit_sdl.h')
@@ -231,10 +244,10 @@ extern class ControllerDeviceEvent {
 @:unreflective
 @:native("SDL_AudioDeviceEvent")
 extern class AudioDeviceEvent {
-    public var type: SDLEventType;
-    public var timestamp: UInt;
-    public var which: UInt;
-    public var iscapture: UInt;
+    var type: SDLEventType;
+    var timestamp: UInt;
+    var which: UInt;
+    var iscapture: UInt;
 }
 
 
@@ -243,15 +256,15 @@ extern class AudioDeviceEvent {
 @:unreflective
 @:native("SDL_TouchFingerEvent")
 extern class TouchFingerEvent {
-    public var type: SDLEventType;
-    public var timestamp: UInt;
-    public var touchId: cpp.Int64;
-    public var fingerId: cpp.Int64;
-    public var x: UInt;
-    public var y: UInt;
-    public var dx: UInt;
-    public var dy: UInt;
-    public var pressure: UInt;
+    var type: SDLEventType;
+    var timestamp: UInt;
+    var touchId: cpp.Int64;
+    var fingerId: cpp.Int64;
+    var x: UInt;
+    var y: UInt;
+    var dx: UInt;
+    var dy: UInt;
+    var pressure: UInt;
 }
 
 @:include('./snowkit_sdl.h')
@@ -259,14 +272,14 @@ extern class TouchFingerEvent {
 @:unreflective
 @:native("SDL_MultiGestureEvent")
 extern class MultiGestureEvent {
-    public var type: SDLEventType;
-    public var timestamp: UInt;
-    public var touchId: cpp.Int64;
-    public var dTheta: Float;
-    public var dDist: Float;
-    public var x: Float;
-    public var y: Float;
-    public var numFingers: UInt;
+    var type: SDLEventType;
+    var timestamp: UInt;
+    var touchId: cpp.Int64;
+    var dTheta: Float;
+    var dDist: Float;
+    var x: Float;
+    var y: Float;
+    var numFingers: UInt;
 }
 
 @:include('./snowkit_sdl.h')
@@ -274,14 +287,14 @@ extern class MultiGestureEvent {
 @:unreflective
 @:native("SDL_DollarGestureEvent")
 extern class DollarGestureEvent {
-    public var type: SDLEventType;
-    public var timestamp: UInt;
-    public var touchId: cpp.Int64;
-    public var gestureId: cpp.Int64;
-    public var numFingers: UInt;
-    public var error: Float;
-    public var x: Float;
-    public var y: Float;
+    var type: SDLEventType;
+    var timestamp: UInt;
+    var touchId: cpp.Int64;
+    var gestureId: cpp.Int64;
+    var numFingers: UInt;
+    var error: Float;
+    var x: Float;
+    var y: Float;
 }
 
 @:include('./snowkit_sdl.h')
@@ -289,15 +302,15 @@ extern class DollarGestureEvent {
 @:unreflective
 @:native("SDL_MouseButtonEvent")
 extern class MouseButtonEvent {
-    public var type: SDLEventType;
-    public var timestamp: UInt;
-    public var windowID: UInt;
-    public var which: UInt;
-    public var button: UInt;
-    public var state: UInt;
-    public var clicks: UInt;
-    public var x: UInt;
-    public var y: UInt;
+    var type: SDLEventType;
+    var timestamp: UInt;
+    var windowID: UInt;
+    var which: UInt;
+    var button: UInt;
+    var state: UInt;
+    var clicks: UInt;
+    var x: UInt;
+    var y: UInt;
 }
 
 @:include('./snowkit_sdl.h')
@@ -305,12 +318,12 @@ extern class MouseButtonEvent {
 @:unreflective
 @:native("SDL_MouseWheelEvent")
 extern class MouseWheelEvent {
-    public var type: SDLEventType;
-    public var timestamp: UInt;
-    public var windowID: UInt;
-    public var which: UInt;
-    public var x: UInt;
-    public var y: UInt;
-    public var direction: UInt;
+    var type: SDLEventType;
+    var timestamp: UInt;
+    var windowID: UInt;
+    var which: UInt;
+    var x: UInt;
+    var y: UInt;
+    var direction: UInt;
 }
 
