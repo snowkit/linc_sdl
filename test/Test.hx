@@ -8,6 +8,7 @@ class Test {
 
     static var state : { window:Window, renderer:Renderer };
     static var cursor : sdl.Cursor;
+    static var reason : String = '';
 
     static function main() {
 
@@ -104,7 +105,7 @@ class Test {
     }
 
     static function init() {
-        SDL.init(SDL_INIT_VIDEO);
+        SDL.init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
         state = SDL.createWindowAndRenderer(320, 320, SDL_WINDOW_RESIZABLE);
 
         trace('State:');
@@ -125,39 +126,51 @@ class Test {
         //mixed/redirected std io, it would be ordered.
         //Also, -Wformat-security is complaining because the fmt string is used.
         // SDL.log('init');
+
     }
 
-    static function loop() {
+    static function process_events() {
 
-        while(true) {
+        while(SDL.hasAnEvent()) {
+
             var e = SDL.pollEvent();
 
             if(e.type == SDL_QUIT) {
-                trace("Program quit after ticks: " + SDL.getTicks());
-                break;
+                reason = 'quit event';
+                return false;
             }
 
             if(e.type == SDL_KEYDOWN) {
                 if(e.key.keysym.sym == 27) {
-                    trace("Program quit with escape after ticks: " + SDL.getTicks());
-                    break;
+                    reason = 'escape key';
+                    return false;
                 }
             }
 
-            if(e.type == SDLEventType.SDL_MOUSEMOTION) {
-                trace('motion ' + e.motion.x + ',' + e.motion.y);
-            }
-            if(e.type == SDLEventType.SDL_MOUSEBUTTONDOWN) {
-                trace('mouse button down: ' + e.button.button);
-            }
+            if(e.type == SDLEventType.SDL_MOUSEMOTION) trace('motion ' + e.motion.x + ',' + e.motion.y);
+            if(e.type == SDLEventType.SDL_MOUSEBUTTONDOWN) trace('mouse button down: ' + e.button.button);
+            if(e.type == SDLEventType.SDL_MOUSEBUTTONUP) trace('mouse button up: ' + e.button.button);
 
-            if(e.type == SDLEventType.SDL_MOUSEBUTTONUP) {
-                trace('mouse button up: ' + e.button.button);
-            }
+        } //has an event
 
-            Sys.sleep(0.25/60);
+        return true;
+
+    } //process_events
+
+    static function loop() {
+
+        var updating = true;
+
+        while(updating) {
+
+            updating = process_events();
+
+            //give os time
+            SDL.delay(4);
+
         }
-    }
+
+    } //loop
 
     static function versions() {
         //https://wiki.libsdl.org/SDL_GetVersion#Code_Examples
@@ -224,6 +237,8 @@ class Test {
     } //blends
 
     static function cleanup() {
+
+        trace('quit($reason), elapsed(${SDL.getTicks()})');
 
         SDL.destroyWindow(state.window);
         SDL.destroyRenderer(state.renderer);
