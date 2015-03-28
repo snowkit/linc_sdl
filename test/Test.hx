@@ -146,6 +146,10 @@ class Test {
                     return false;
                 }
                 if(e.key.keysym.sym == 32) {
+                    SDL.setModState(KMOD_LCTRL|KMOD_LSHIFT);
+                    trace(SDL.getModState() == (KMOD_LCTRL | KMOD_LSHIFT));
+                    SDL.setModState(sdl.SDL.SDLKeymod.KMOD_NONE);
+                    trace(SDL.getModState());
                     var a = SDL.waitEvent();
                     trace('next event was SDL_TEXTINPUT:' + (a.type == SDL_TEXTINPUT));
                 }

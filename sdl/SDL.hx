@@ -499,6 +499,57 @@ extern class SDL {
     @:native("snowkit_sdl::getPrefPath")
     static function getPrefPath(org:String, app:String) : String;
 
+//SDL_keyboard.h
+
+    // @:native('SDL_GetKeyFromName')
+    // static function getKeyFromName(name:String):SDLKeycode;
+
+    // @:native('SDL_GetKeyFromScancode')
+    // static function getKeyFromScancode(scan:SDLScancode):SDLKeycode;
+
+    // @:native('SDL_GetKeyName')
+    // static function getKeyName(key:SDLKeycode):String;
+
+    @:native('SDL_GetKeyboardFocus')
+    static function getKeyboardFocus():Window;
+
+    // @:native('SDL_GetKeyboardState')
+    // static function getKeyboardState():Int;
+
+    @:native('SDL_GetModState')
+    static function getModState():SDLKeymod;
+
+    // @:native('SDL_GetScancodeFromKey')
+    // static function getScancodeFromKey(key:SDLKeycode):SDLScancode;
+
+    // @:native('SDL_GetScancodeFromName')
+    // static function getScancodeFromName(name:String):SDLScancode;
+
+    // @:native('SDL_GetScancodeName')
+    // static function getScancodeName(scan:SDLScancode):String;
+
+    @:native('SDL_HasScreenKeyboardSupport')
+    static function hasScreenKeyboardSupport():Bool;
+
+    @:native('SDL_IsScreenKeyboardShown')
+    static function isScreenKeyboardShown(window:Window):Bool;
+
+    @:native('SDL_IsTextInputActive')
+    static function isTextInputActive():Bool;
+
+    @:native('snowkit_sdl::setModState')
+    static function setModState(modstate:SDLKeymod):Void;
+
+    @:native('snowkit_sdl::setTextInputRect')
+    static function setTextInputRect(rect:SDLRect):Void;
+
+    @:native('SDL_StartTextInput')
+    static function startTextInput():Void;
+
+    @:native('SDL_StopTextInput')
+    static function stopTextInput():Void;
+
+
 //SDL_mouse.h
 
     @:native('SDL_CaptureMouse')
@@ -567,8 +618,8 @@ extern class SDL {
     @:native('SDL_JoystickGetAxis')
     static function joystickGetAxis(joystick:Joystick, axis:Int):cpp.Int64;
 
-    // @:native('SDL_JoystickGetBall')
-    // static function joystickGetBall(joystick:Joystick):Int;
+    @:native('snowkit_sdl::joystickGetBall')
+    static function joystickGetBall(joystick:Joystick, ball:Int, into:SDLPoint):SDLPoint;
 
     @:native('SDL_JoystickGetButton')
     static function joystickGetButton(joystick:Joystick, button:Int):UInt;
@@ -582,8 +633,8 @@ extern class SDL {
     // @:native('SDL_JoystickGetGUIDFromString')
     // static function joystickGetGUIDFromString(pchGUID:String):String;
 
-    // @:native('SDL_JoystickGetGUIDString')
-    // static function joystickGetGUIDString():Int;
+    // @:native('snowkit_sdl::joystickGetGUIDString')
+    // static function joystickGetGUIDString(guid:haxe.io.Bytes):String;
 
     @:native('SDL_JoystickGetHat')
     static function joystickGetHat(joystick:Joystick, hat:SDLHatValue):Int;
@@ -591,11 +642,13 @@ extern class SDL {
     @:native('SDL_JoystickInstanceID')
     static function joystickInstanceID(joystick:Joystick):UInt;
 
-    // @:native('SDL_JoystickName')
-    // static function joystickName(joystick:Joystick):String;
+    @:native('SDL_JoystickName')
+    private static function _joystickName(device_index:Int) : cpp.ConstCharStar;
+    static inline function joystickName(device_index:Int):String return cast _joystickName(device_index);
 
-    // @:native('SDL_JoystickNameForIndex')
-    // static function joystickNameForIndex(device_index:Int):String;
+    @:native('SDL_JoystickNameForIndex')
+    private static function _joystickNameForIndex(device_index:Int) : cpp.ConstCharStar;
+    static inline function joystickNameForIndex(device_index:Int):String return cast _joystickNameForIndex(device_index);
 
     @:native('SDL_JoystickNumAxes')
     static function joystickNumAxes(joystick:Joystick):Int;
@@ -1004,6 +1057,28 @@ from Int to Int {
     var SDL_PEEKEVENT = 1;
     var SDL_GETEVENT  = 2;
 } //SDLEventAction
+
+@:enum
+abstract SDLKeymod(Int)
+from Int to Int {
+    var KMOD_NONE       = 0x0000;
+    var KMOD_LSHIFT     = 0x0001;
+    var KMOD_RSHIFT     = 0x0002;
+    var KMOD_LCTRL      = 0x0040;
+    var KMOD_RCTRL      = 0x0080;
+    var KMOD_LALT       = 0x0100;
+    var KMOD_RALT       = 0x0200;
+    var KMOD_LGUI       = 0x0400;
+    var KMOD_RGUI       = 0x0800;
+    var KMOD_NUM        = 0x1000;
+    var KMOD_CAPS       = 0x2000;
+    var KMOD_MODE       = 0x4000;
+    var KMOD_RESERVED   = 0x8000;
+    var KMOD_CTRL       = 0x0040|0x0080;
+    var KMOD_SHIFT      = 0x0001|0x0002;
+    var KMOD_ALT        = 0x0100|0x0200;
+    var KMOD_GUI        = 0x0400|0x0800;
+} //SDLKeymod
 
 
 

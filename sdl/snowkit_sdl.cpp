@@ -9,6 +9,7 @@ namespace snowkit_sdl {
         static Dynamic set_color_into(Dynamic into, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
         static Dynamic set_size_into(Dynamic into, int w, int h);
         static Dynamic set_scale_into(Dynamic into, float x, float y);
+        static Dynamic set_point_into(Dynamic into, int x, int y);
         static Dynamic set_rect_into(Dynamic into, int x, int y, int w, int h);
         static Dynamic set_rect_into(Dynamic into, SDL_Rect from);
         static SDL_Rect get_rect_from(Dynamic from);
@@ -279,6 +280,29 @@ namespace snowkit_sdl {
 
     } //createSystemCursor
 
+    Dynamic joystickGetBall(SDL_Joystick* joystick, int ball, Dynamic into) {
+
+        int dx,dy;
+        SDL_JoystickGetBall(joystick, ball, &dx, &dy);
+
+        return convert::set_point_into(into, dx, dy);
+
+    } //joystickGetBall
+
+    void setModState(int modstate) {
+
+        SDL_SetModState((SDL_Keymod)modstate);
+
+    } //setModState
+
+    void setTextInputRect(Dynamic rect) {
+
+        SDL_Rect _rect = convert::get_rect_from(rect);
+
+        SDL_SetTextInputRect(&_rect);
+
+    } //setTextInputRect
+
     namespace convert {
 
             // return {
@@ -329,10 +353,10 @@ namespace snowkit_sdl {
 
         } //set_size_into
 
-        static Dynamic set_scale_into(Dynamic into, float w, float h) {
+        static Dynamic set_scale_into(Dynamic into, float x, float y) {
 
-            into->__FieldRef(HX_CSTRING("w")) = w;
-            into->__FieldRef(HX_CSTRING("h")) = h;
+            into->__FieldRef(HX_CSTRING("x")) = x;
+            into->__FieldRef(HX_CSTRING("y")) = y;
 
             return into;
 
@@ -348,6 +372,15 @@ namespace snowkit_sdl {
             return into;
 
         } //set_rect_into
+
+        static Dynamic set_point_into(Dynamic into, int x, int y) {
+
+            into->__FieldRef(HX_CSTRING("x")) = x;
+            into->__FieldRef(HX_CSTRING("y")) = y;
+
+            return into;
+
+        } //set_point_into
 
         static Dynamic set_rect_into(Dynamic into, SDL_Rect from) {
 
