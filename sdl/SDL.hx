@@ -499,6 +499,19 @@ extern class SDL {
     @:native("snowkit_sdl::getPrefPath")
     static function getPrefPath(org:String, app:String) : String;
 
+//SDL_clipboard.h
+
+    @:native('SDL_GetClipboardText')
+    private static function _getClipboardText() : cpp.ConstCharStar;
+    static inline function getClipboardText() : String return cast _getClipboardText();
+
+    @:native('SDL_HasClipboardText')
+    static function hasClipboardText():Bool;
+
+    @:native('SDL_SetClipboardText')
+    static function setClipboardText(text:String):Int;
+
+
 //SDL_keyboard.h
 
     // @:native('SDL_GetKeyFromName')
@@ -548,6 +561,7 @@ extern class SDL {
 
     @:native('SDL_StopTextInput')
     static function stopTextInput():Void;
+
 
 
 //SDL_mouse.h
@@ -602,6 +616,84 @@ extern class SDL {
 
     @:native('SDL_WarpMouseInWindow')
     static function warpMouseInWindow(window:Window, x:Int, y:Int):Void;
+
+//SDL_gamecontroller.h
+
+    @:native('SDL_GameControllerAddMapping')
+    private static function _gameControllerAddMapping(mappingString:cpp.ConstCharStar):Int;
+    static inline function gameControllerAddMapping(mappingString:String):Int return _gameControllerAddMapping(cast mappingString);
+
+    // @:native('SDL_GameControllerAddMappingsFromFile')
+    // static function gameControllerAddMappingsFromFile():Int;
+
+    // @:native('SDL_GameControllerAddMappingsFromRW')
+    // static function gameControllerAddMappingsFromRW():Int;
+
+    @:native('SDL_GameControllerClose')
+    static function gameControllerClose(gamecontroller:GameController):Void;
+
+    @:native('SDL_GameControllerEventState')
+    static function gameControllerEventState(state:SDLEventState):Int;
+
+    @:native('SDL_GameControllerGetAttached')
+    static function gameControllerGetAttached(gamecontroller:GameController):Bool;
+
+    @:native('SDL_GameControllerGetAxis')
+    static function gameControllerGetAxis(gamecontroller:GameController, axis:SDLGameControllerAxis):cpp.Int16;
+
+    //:internal:
+    // @:native('SDL_GameControllerGetAxisFromString')
+    // static function gameControllerGetAxisFromString(SDLGameControllerAxis):Int;
+
+    // @:native('SDL_GameControllerGetBindForAxis')
+    // static function gameControllerGetBindForAxis(gamecontroller:GameController, axis:SDLGameControllerAxis):Int;
+
+    // @:native('SDL_GameControllerGetBindForButton')
+    // static function gameControllerGetBindForButton():Int;
+
+    @:native('SDL_GameControllerGetButton')
+    static function gameControllerGetButton(gamecontroller:GameController, button:SDLGameControllerButton):Int;
+
+    //:internal:
+    // @:native('SDL_GameControllerGetButtonFromString')
+    // static function gameControllerGetButtonFromString():Int;
+
+    @:native('SDL_GameControllerGetJoystick')
+    static function gameControllerGetJoystick(gamecontroller:GameController):Joystick;
+
+    //:internal:
+    // @:native('SDL_GameControllerGetStringForAxis')
+    // static function gameControllerGetStringForAxis():Int;
+
+    //:internal:
+    // @:native('SDL_GameControllerGetStringForButton')
+    // static function gameControllerGetStringForButton():Int;
+
+    @:native('SDL_GameControllerMapping')
+    private static function _gameControllerMapping(gamecontroller:GameController):cpp.ConstCharStar;
+    static function gameControllerMapping(gamecontroller:GameController):String return cast _gameControllerMapping(gamecontroller);
+
+    // @:native('SDL_GameControllerMappingForGUID')
+    // static function gameControllerMappingForGUID():Int;
+
+    @:native('SDL_GameControllerName')
+    private static function _gameControllerName(gamecontroller:GameController):cpp.ConstCharStar;
+    static function gameControllerName(gamecontroller:GameController):String return cast _gameControllerName(gamecontroller);
+
+    @:native('SDL_GameControllerNameForIndex')
+    private static function _gameControllerNameForIndex(joystick_index:Int):cpp.ConstCharStar;
+    static function gameControllerNameForIndex(joystick_index:Int):String return cast _gameControllerNameForIndex(joystick_index);
+
+    @:native('SDL_GameControllerOpen')
+    static function gameControllerOpen(joystick_index:Int):GameController;
+
+    #if sdl_include_internal
+    @:native('SDL_GameControllerUpdate')
+    static function gameControllerUpdate():Void;
+    #end
+
+    @:native('SDL_IsGameController')
+    static function isGameController(joystick_index:Int):Bool;
 
 
 //SDL_Joystick.h
@@ -1048,6 +1140,44 @@ from Int to Int {
     var SDL_DISABLE = 0;
     var SDL_ENABLE = 1;
 } //SDLEventState
+
+
+@:enum
+abstract SDLGameControllerButton(Int)
+from Int to Int {
+    var SDL_CONTROLLER_BUTTON_INVALID       = -1;
+    var SDL_CONTROLLER_BUTTON_A             = 0;
+    var SDL_CONTROLLER_BUTTON_B             = 1;
+    var SDL_CONTROLLER_BUTTON_X             = 2;
+    var SDL_CONTROLLER_BUTTON_Y             = 3;
+    var SDL_CONTROLLER_BUTTON_BACK          = 4;
+    var SDL_CONTROLLER_BUTTON_GUIDE         = 5;
+    var SDL_CONTROLLER_BUTTON_START         = 6;
+    var SDL_CONTROLLER_BUTTON_LEFTSTICK     = 7;
+    var SDL_CONTROLLER_BUTTON_RIGHTSTICK    = 8;
+    var SDL_CONTROLLER_BUTTON_LEFTSHOULDER  = 9;
+    var SDL_CONTROLLER_BUTTON_RIGHTSHOULDER = 10;
+    var SDL_CONTROLLER_BUTTON_DPAD_UP       = 11;
+    var SDL_CONTROLLER_BUTTON_DPAD_DOWN     = 12;
+    var SDL_CONTROLLER_BUTTON_DPAD_LEFT     = 13;
+    var SDL_CONTROLLER_BUTTON_DPAD_RIGHT    = 14;
+    var SDL_CONTROLLER_BUTTON_MAX           = 15;
+} //SDLGameControllerButton
+
+
+
+@:enum
+abstract SDLGameControllerAxis(Int)
+from Int to Int {
+    var SDL_CONTROLLER_AXIS_INVALID         = -1;
+    var SDL_CONTROLLER_AXIS_LEFTX           = 0;
+    var SDL_CONTROLLER_AXIS_LEFTY           = 1;
+    var SDL_CONTROLLER_AXIS_RIGHTX          = 2;
+    var SDL_CONTROLLER_AXIS_RIGHTY          = 3;
+    var SDL_CONTROLLER_AXIS_TRIGGERLEFT     = 4;
+    var SDL_CONTROLLER_AXIS_TRIGGERRIGHT    = 5;
+    var SDL_CONTROLLER_AXIS_MAX             = 6;
+} //SDLGameControllerAxis
 
 
 @:enum

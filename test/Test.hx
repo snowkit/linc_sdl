@@ -141,15 +141,15 @@ class Test {
             }
 
             if(e.type == SDL_KEYDOWN) {
+
+                var ctrlormetadown = (SDL.getModState() == (KMOD_GUI | KMOD_CTRL));
+
                 if(e.key.keysym.sym == 27) {
                     reason = 'escape key';
                     return false;
                 }
+
                 if(e.key.keysym.sym == 32) {
-                    SDL.setModState(KMOD_LCTRL|KMOD_LSHIFT);
-                    trace(SDL.getModState() == (KMOD_LCTRL | KMOD_LSHIFT));
-                    SDL.setModState(sdl.SDL.SDLKeymod.KMOD_NONE);
-                    trace(SDL.getModState());
                     var a = SDL.waitEvent();
                     trace('next event was SDL_TEXTINPUT:' + (a.type == SDL_TEXTINPUT));
                 }
@@ -186,12 +186,20 @@ class Test {
         var compiled = SDL.VERSION();
         var linked = SDL.getVersion();
 
+        var compiled_rev = SDL.REVISION();
+        var linked_rev = SDL.getRevision();
+
         trace("Versions:");
         trace('    - We compiled against SDL version ${compiled.major}.${compiled.minor}.${compiled.patch} ...');
         trace('    - But we are linking against SDL version ${linked.major}.${linked.minor}.${linked.patch}');
 
-        trace('    - Compile revision : ' + SDL.REVISION() );
-        trace('    - Link revision: ' + SDL.getRevision() );
+        trace('    - Compile revision : ' + compiled_rev );
+        trace('    - Link revision: ' + linked_rev );
+        trace('    - clipboard change to compile revision');
+
+        SDL.setClipboardText(compiled_rev);
+
+        trace('    - clipboard after: ' + SDL.getClipboardText());
 
     } //versions
 
