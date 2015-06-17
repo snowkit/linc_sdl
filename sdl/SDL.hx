@@ -9,6 +9,7 @@ import sdl.Joystick;
 import sdl.Window;
 import sdl.GLContext;
 import sdl.Thread;
+import sdl.RWops;
 import sdl.Haptic;
 
 @:include('./native_sdl.cpp')
@@ -255,6 +256,96 @@ extern class SDL {
 
 
 
+//SDL_RWops.h
+
+    @:native('SDL_AllocRW')
+    static function allocRW() : RWops;
+
+    @:native('SDL_FreeRW')
+    static function freeRW(area:RWops) : Void;
+
+    @:native('SDL_RWFromFile')
+    static function RWFromFile(file:String, mode:String) : RWops;
+
+    @:native('SDL_RWFromMem')
+    static function RWFromMem(source:Bytes, size:Int) : RWops;
+
+    @:native('SDL_RWclose')
+    static function RWclose(context:RWops) : RWops;
+
+    @:native('SDL_RWread')
+    static function RWread(context:RWops, into:Bytes, size:UInt, maxnum:UInt) : UInt;
+
+    @:native('SDL_RWwrite')
+    static function RWwrite(context:RWops, from:Bytes, size:UInt, num:UInt) : UInt;
+
+    @:native('SDL_RWseek')
+    static function RWseek(context:RWops, offset:cpp.Int64, whence:Int) : cpp.Int64;
+
+    @:native('SDL_RWsize')
+    static function RWsize(context:RWops) : cpp.Int64;
+
+    @:native('SDL_RWtell')
+    static function RWtell(context:RWops) : cpp.Int64;
+
+    @:native('SDL_ReadBE16')
+    static function ReadBE16(src:RWops) : cpp.Int16;
+
+    @:native('SDL_ReadBE32')
+    static function ReadBE32(src:RWops) : cpp.Int32;
+
+    @:native('SDL_ReadBE64')
+    static function ReadBE64(src:RWops) : cpp.Int64;
+
+    @:native('SDL_ReadLE16')
+    static function ReadLE16(src:RWops) : cpp.Int16;
+
+    @:native('SDL_ReadLE32')
+    static function ReadLE32(src:RWops) : cpp.Int32;
+
+    @:native('SDL_ReadLE64')
+    static function ReadLE64(src:RWops) : cpp.Int64;
+
+    @:native('SDL_WriteBE16')
+    static function WriteBE16(dst:RWops, value:cpp.Int16) : UInt;
+
+    @:native('SDL_WriteBE32')
+    static function WriteBE32(dst:RWops, value:cpp.Int32) : UInt;
+
+    @:native('SDL_WriteBE64')
+    static function WriteBE64(dst:RWops, value:cpp.Int64) : UInt;
+
+    @:native('SDL_WriteLE16')
+    static function WriteLE16(dst:RWops, value:cpp.Int16) : UInt;
+
+    @:native('SDL_WriteLE32')
+    static function WriteLE32(dst:RWops, value:cpp.Int32) : UInt;
+
+    @:native('SDL_WriteLE64')
+    static function WriteLE64(dst:RWops, value:cpp.Int64) : UInt;
+
+
+//SDL_surface.h
+
+    @:native('SDL_LoadBMP_RW')
+    static function loadBMP_RW(src:RWops, freesrc:Int) : Surface;
+
+    @:native('SDL_LoadBMP')
+    static function loadBMP(file:String) : Surface;
+
+    @:native('SDL_FreeSurface')
+    static function freeSurface(surface:Surface) : Void;
+
+    @:native('SDL_BlitSurface')
+    static function blitSurface(src:Surface, srcrect:SDLRect, dst:Surface, dstrect:SDLRect ) : Int;
+
+    @:native('SDL_GetWindowSurface')
+    static function getWindowSurface(window:Window) : Surface;
+
+    @:native('SDL_UpdateWindowSurface')
+    static function updateWindowSurface(window:Window) : Int;
+
+
 //SDL_render.h
 
     @:native('SDL_CreateRenderer')
@@ -267,7 +358,7 @@ extern class SDL {
     static function createTexture(renderer:Renderer, format:SDLPixelFormat, access:SDLTextureAccess, w:Int, h:Int): Texture;
 
     @:native('SDL_CreateTextureFromSurface')
-    static function createTextureFromSurface():Void;
+    static function createTextureFromSurface(renderer:Renderer, surface:Surface):Texture;
 
     @:native('native_sdl::createWindowAndRenderer')
     static function createWindowAndRenderer(w:Int, h:Int, flags:SDLWindowFlags) : { window:Window, renderer:Renderer };
@@ -326,8 +417,8 @@ extern class SDL {
     @:native('SDL_RenderClear')
     static function renderClear(renderer:Renderer):Int;
 
-    // @:native('SDL_RenderCopy')
-    // static function renderCopy():Void;
+    @:native('native_sdl::renderCopy')
+    static function renderCopy(renderer:Renderer, texture:Texture, srcrect:SDLRect, dstrect:SDLRect) : Int;
 
     // @:native('SDL_RenderCopyEx')
     // static function renderCopyEx():Void;

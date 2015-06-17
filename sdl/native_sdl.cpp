@@ -344,6 +344,35 @@
 
         } //getDisplayBounds
 
+        static int renderCopy(SDL_Renderer* renderer, SDL_Texture* texture, Dynamic srcrect, Dynamic dstrect) {
+
+            bool has_src = srcrect != null();
+            bool has_dst = dstrect != null();
+
+                //neither?
+            if(!has_src && !has_dst) {
+                return SDL_RenderCopy(renderer, texture, NULL, NULL);
+            }
+
+                //just src?
+            if(has_src && !has_dst) {
+                SDL_Rect _src = convert::get_rect_from(srcrect);
+                return SDL_RenderCopy(renderer, texture, &_src, NULL);
+            }
+
+                //just dst?
+            if(has_dst && !has_src) {
+                SDL_Rect _dst = convert::get_rect_from(dstrect);
+                return SDL_RenderCopy(renderer, texture, NULL, &_dst);
+            }
+
+            SDL_Rect _src = convert::get_rect_from(srcrect);
+            SDL_Rect _dst = convert::get_rect_from(dstrect);
+
+            return SDL_RenderCopy(renderer, texture, &_src, &_dst);
+
+        } //renderCopy
+
         typedef ::cpp::Function < int(::String)> FN;
         static std::vector<FN> list;
         static int testfunc( FN fn ) {

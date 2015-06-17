@@ -109,6 +109,21 @@ class Test {
                 { x:200, y:140, w:5, h:20 },
             ]);
 
+
+            //draw an image
+            var file:sdl.RWops = SDL.RWFromFile("test.bmp", "rb");
+            var image:sdl.Surface = SDL.loadBMP_RW(file, 1);
+            var texture:sdl.Texture = SDL.createTextureFromSurface(state.renderer, image);
+
+            SDL.freeSurface(image);
+            image = null;
+
+            trace('image load errors: `' + SDL.getError() + '`');
+
+            SDL.renderCopy(state.renderer, texture, null, { x:160-48, y:160+32, w:96, h:96 });
+
+            trace('render copy errors: `' + SDL.getError() + '`');
+
         //finalize
 
             SDL.renderPresent(state.renderer);
