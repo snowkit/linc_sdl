@@ -42,22 +42,22 @@ extern class SDL {
 //SDL_events.h
 
 
-    //void SDL_AddEventWatch(SDL_EventFilter filter,
-    //                       void*           userdata)
+    @:native('native_sdl::addEventWatch')
+    static function addEventWatch(filter:cpp.Callable<SDLEventFilter>, userdata:Dynamic) : Void;
 
-    //void SDL_DelEventWatch(SDL_EventFilter filter,
-    //                       void*           userdata)
+    @:native('native_sdl::delEventWatch')
+    static function delEventWatch(filter:cpp.Callable<SDLEventFilter>, userdata:Dynamic) : Void;
 
     @:native('SDL_EventState')
-    static function eventState( type:SDLEventType, state:SDLEventState ) : UInt;
+    static function eventState(type:SDLEventType, state:SDLEventState) : UInt;
 
     //void SDL_FilterEvents(SDL_EventFilter filter, void* userdata)
 
     @:native('SDL_FlushEvent')
-    static function flushEvent( type:SDLEventType ) : Void;
+    static function flushEvent(type:SDLEventType) : Void;
 
     @:native('SDL_FlushEvents')
-    static function flushEvents( min:SDLEventType, max:SDLEventType ) : Void;
+    static function flushEvents(min:SDLEventType, max:SDLEventType) : Void;
 
     //SDL_bool SDL_GetEventFilter(SDL_EventFilter* filter,
     //                            void**           userdata)
@@ -1161,6 +1161,9 @@ extern class SDL {
 
 
 }
+
+//function filter(userdata:Dynamic, event:sdl.Event)
+typedef SDLEventFilter = Dynamic->Dynamic->Void;
 
 typedef SDLColor = { r:UInt, g:UInt, b:UInt, a:UInt };
 typedef SDLPoint = { x:Int, y:Int };

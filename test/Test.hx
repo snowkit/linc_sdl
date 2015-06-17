@@ -124,6 +124,9 @@ class Test {
 
             trace('render copy errors: `' + SDL.getError() + '`');
 
+            SDL.addEventWatch( cpp.Callable.fromStaticFunction(eventfilter), {id:1} );
+            SDL.addEventWatch( cpp.Callable.fromStaticFunction(eventfilter2), {id:2} );
+
         //finalize
 
             SDL.renderPresent(state.renderer);
@@ -140,6 +143,14 @@ class Test {
 
             cleanup();
 
+    }
+
+    static function eventfilter(v:Dynamic, e:Dynamic) {
+        trace('eventfilter1:' + e);
+    }
+
+    static function eventfilter2(v:Dynamic, e:Dynamic) {
+        trace('eventfilter2:' + e);
     }
 
     static function init() {

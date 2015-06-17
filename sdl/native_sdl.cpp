@@ -4,6 +4,7 @@
 #include <hxcpp.h>
 #include "./native_sdl.h"
 #include <vector>
+#include <map>
 
     namespace native_sdl {
 
@@ -372,6 +373,35 @@
             return SDL_RenderCopy(renderer, texture, &_src, &_dst);
 
         } //renderCopy
+
+        typedef ::cpp::Function < Void(Dynamic, Dynamic)> EventFilterFN;
+        static std::map<void*, EventFilterFN> filter_list;
+
+        inline static int _filter(void* userdata, SDL_Event* event) {
+
+            //todo: unpack dynamic and event
+            EventFilterFN filter = filter_list[userdata];
+            filter(null(), null());
+
+            return 0; //ignored by SDL
+
+        } //_filter
+
+        static void addEventWatch(EventFilterFN filter, Dynamic userdata) {
+
+            void* ptr = hx::DynamicPtr(userdata);
+            filter_list[ptr] = filter;
+            SDL_AddEventWatch( _filter, ptr );
+
+        } //addEventWatch
+
+        static void delEventWatch(EventFilterFN filter, Dynamic userdata) {
+
+            void* ptr = hx::DynamicPtr(userdata);
+            filter_list.erase(ptr);
+            SDL_DelEventWatch( _filter, ptr );
+
+        } //delEventWatch
 
         typedef ::cpp::Function < int(::String)> FN;
         static std::vector<FN> list;
