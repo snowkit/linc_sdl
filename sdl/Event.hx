@@ -3,7 +3,7 @@ package sdl;
 import sdl.SDL.SDLEventType;
 
 @:native("SDL_Finger")
-@:include('./snowkit_sdl.h')
+@:include('./native_sdl.h')
 @:structAccess
 @:unreflective
 extern private class SDL_Finger {
@@ -15,7 +15,7 @@ extern private class SDL_Finger {
 typedef Finger = cpp.Pointer<SDL_Finger>;
 
 
-@:include('./snowkit_sdl.h')
+@:include('./native_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_Event")
@@ -47,7 +47,7 @@ extern class Event {
 }
 
 
-@:include('./snowkit_sdl.h')
+@:include('./native_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_QuitEvent")
@@ -56,7 +56,7 @@ extern class QuitEvent {
     var timestamp: UInt;
 }
 
-@:include('./snowkit_sdl.h')
+@:include('./native_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_DropEvent")
@@ -66,7 +66,7 @@ extern class DropEvent {
     var file: cpp.ConstCharStar;
 }
 
-@:include('./snowkit_sdl.h')
+@:include('./native_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_TextEditingEvent")
@@ -79,7 +79,7 @@ extern class TextEditingEvent {
     var end: cpp.Int64;
 }
 
-@:include('./snowkit_sdl.h')
+@:include('./native_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_TextInputEvent")
@@ -90,7 +90,7 @@ extern class TextInputEvent {
     var text: cpp.ConstCharStar;
 }
 
-@:include('./snowkit_sdl.h')
+@:include('./native_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_WindowEvent")
@@ -103,7 +103,7 @@ extern class WindowEvent {
     var data2: UInt;
 }
 
-@:include('./snowkit_sdl.h')
+@:include('./native_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_KeyboardEvent")
@@ -116,7 +116,7 @@ extern class KeyboardEvent {
     var keysym: SDLKeysym;
 }
 
-@:include('./snowkit_sdl.h')
+@:include('./native_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_Keysym")
@@ -126,7 +126,7 @@ extern class SDLKeysym {
     var mod: UInt;
 }
 
-@:include('./snowkit_sdl.h')
+@:include('./native_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_MouseMotionEvent")
@@ -143,7 +143,7 @@ extern class MouseMotionEvent {
 }
 
 
-@:include('./snowkit_sdl.h')
+@:include('./native_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_JoyAxisEvent")
@@ -156,7 +156,7 @@ extern class JoyAxisEvent {
 }
 
 
-@:include('./snowkit_sdl.h')
+@:include('./native_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_JoyBallEvent")
@@ -169,7 +169,7 @@ extern class JoyBallEvent {
     var yrel: cpp.Int64;
 }
 
-@:include('./snowkit_sdl.h')
+@:include('./native_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_JoyHatEvent")
@@ -181,7 +181,7 @@ extern class JoyHatEvent {
     var value: sdl.SDL.SDLHatValue;
 }
 
-@:include('./snowkit_sdl.h')
+@:include('./native_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_JoyButtonEvent")
@@ -193,7 +193,7 @@ extern class JoyButtonEvent {
     var state: UInt;
 }
 
-@:include('./snowkit_sdl.h')
+@:include('./native_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_JoyDeviceEvent")
@@ -204,7 +204,7 @@ extern class JoyDeviceEvent {
 }
 
 
-@:include('./snowkit_sdl.h')
+@:include('./native_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_ControllerAxisEvent")
@@ -217,7 +217,7 @@ extern class ControllerAxisEvent {
 }
 
 
-@:include('./snowkit_sdl.h')
+@:include('./native_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_ControllerButtonEvent")
@@ -229,7 +229,7 @@ extern class ControllerButtonEvent {
     var state: UInt;
 }
 
-@:include('./snowkit_sdl.h')
+@:include('./native_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_ControllerDeviceEvent")
@@ -239,7 +239,7 @@ extern class ControllerDeviceEvent {
     var which: UInt;
 }
 
-@:include('./snowkit_sdl.h')
+@:include('./native_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_AudioDeviceEvent")
@@ -251,7 +251,7 @@ extern class AudioDeviceEvent {
 }
 
 
-@:include('./snowkit_sdl.h')
+@:include('./native_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_TouchFingerEvent")
@@ -267,7 +267,7 @@ extern class TouchFingerEvent {
     var pressure: UInt;
 }
 
-@:include('./snowkit_sdl.h')
+@:include('./native_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_MultiGestureEvent")
@@ -282,7 +282,7 @@ extern class MultiGestureEvent {
     var numFingers: UInt;
 }
 
-@:include('./snowkit_sdl.h')
+@:include('./native_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_DollarGestureEvent")
@@ -297,7 +297,7 @@ extern class DollarGestureEvent {
     var y: Float;
 }
 
-@:include('./snowkit_sdl.h')
+@:include('./native_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_MouseButtonEvent")
@@ -313,7 +313,7 @@ extern class MouseButtonEvent {
     var y: UInt;
 }
 
-@:include('./snowkit_sdl.h')
+@:include('./native_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_MouseWheelEvent")

@@ -10,12 +10,35 @@ class Test {
     static var cursor : sdl.Cursor;
     static var reason : String = '';
 
+    static function testf(val:String):Int {
+        trace("test1:"+val);
+        return 1;
+    }
+    static function testf2(val:String):Int {
+        trace("test2:"+val);
+        return 2;
+    }
+
+    static function testf3(val:String):Int {
+        trace("test3:"+val);
+        return 3;
+    }
+
     static function main() {
+
+        // trace(SDL.testfunc(cpp.Function.fromStaticFunction(testf)));
+        // trace(SDL.testfunc(cpp.Function.fromStaticFunction(testf2)));
+        // trace(SDL.testfunc(cpp.Function.fromStaticFunction(testf3)));
+
+        // SDL.run();
+
+        // return ;
 
         init();
         versions();
         renderinfo();
         blends();
+
 
         cursor = SDL.createSystemCursor(SDL_SYSTEM_CURSOR_HAND);
         SDL.setCursor(cursor);
