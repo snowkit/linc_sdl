@@ -1,6 +1,6 @@
 package sdl;
 
 @:native("SDL_Window")
-@:include('./snowkit_sdl.h')
+@:include('./native_sdl.h')
 extern private class SDL_Window {}
 typedef Window = cpp.Pointer<SDL_Window>;

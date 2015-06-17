@@ -7,11 +7,12 @@ import sdl.Cursor;
 import sdl.Texture;
 import sdl.Joystick;
 import sdl.Window;
+import sdl.GLContext;
 import sdl.Thread;
 import sdl.Haptic;
 
-@:include('./snowkit_sdl.cpp')
-@:buildXml("<include name='${SNOWKIT_SDL_LIB_PATH}/../sdl/snowkit_sdl.xml'/>")
+@:include('./native_sdl.cpp')
+@:buildXml("<include name='${NATIVE_SDL_LIB_PATH}/../sdl/native_sdl.xml'/>")
 @:keep
 extern class SDL {
 
@@ -113,7 +114,7 @@ extern class SDL {
             //otherwise it can hold bogus event values.
             //since type=0 would be "invalid" as above,
             //it would be acceptable to only do type = 0
-            //if pollevent returned null, but at least during
+            //if pollevent returned 0, but at least during
             //heavy development the chance of error should be slimmed
             //down as much as possible - therefore the entire struct is cleared.
             //I would use SDL_zero(event), however haxe requires assignment on a local
@@ -237,16 +238,16 @@ extern class SDL {
     @:native('SDL_GetRevisionNumber')
     static function getRevisionNumber(): Int;
 
-    @:native('snowkit_sdl::getVersion')
+    @:native('native_sdl::getVersion')
     static function getVersion(): SDLVersion;
 
-    @:native('snowkit_sdl::REVISION')
+    @:native('native_sdl::REVISION')
     static function REVISION() : String;
 
     @:native('SDL_VERSIONNUM')
     static function VERSIONNUM(major:Int, minor:Int, patch:Int): Int;
 
-    @:native('snowkit_sdl::VERSION')
+    @:native('native_sdl::VERSION')
     static function VERSION(): SDLVersion;
 
     @:native('SDL_VERSION_ATLEAST')
@@ -268,7 +269,7 @@ extern class SDL {
     @:native('SDL_CreateTextureFromSurface')
     static function createTextureFromSurface():Void;
 
-    @:native('snowkit_sdl::createWindowAndRenderer')
+    @:native('native_sdl::createWindowAndRenderer')
     static function createWindowAndRenderer(w:Int, h:Int, flags:SDLWindowFlags) : { window:Window, renderer:Renderer };
 
     @:native('SDL_DestroyRenderer')
@@ -277,7 +278,7 @@ extern class SDL {
     @:native('SDL_DestroyTexture')
     static function destroyTexture(texture:Texture):Void;
 
-    @:native('snowkit_sdl::GL_BindTexture')
+    @:native('native_sdl::GL_BindTexture')
     static function GL_BindTexture(texture:Texture): { texw:Float, texh:Float };
 
     @:native('SDL_GL_UnbindTexture')
@@ -286,13 +287,13 @@ extern class SDL {
     @:native('SDL_GetNumRenderDrivers')
     static function getNumRenderDrivers():Int;
 
-    @:native('snowkit_sdl::getRenderDrawBlendMode')
+    @:native('native_sdl::getRenderDrawBlendMode')
     static function getRenderDrawBlendMode(renderer:Renderer):SDLBlendMode;
 
-    @:native('snowkit_sdl::getRenderDrawColor')
+    @:native('native_sdl::getRenderDrawColor')
     static function getRenderDrawColor(renderer:Renderer, into:SDLColor) : SDLColor;
 
-    @:native('snowkit_sdl::getRenderDriverInfo')
+    @:native('native_sdl::getRenderDriverInfo')
     static function getRenderDriverInfo(index:Int):SDLRendererInfo;
 
     @:native('SDL_GetRenderTarget')
@@ -301,19 +302,19 @@ extern class SDL {
     @:native('SDL_GetRenderer')
     static function getRenderer(window:Window):Renderer;
 
-    @:native('snowkit_sdl::getRendererInfo')
+    @:native('native_sdl::getRendererInfo')
     static function getRendererInfo(renderer:Renderer):SDLRendererInfo;
 
-    @:native('snowkit_sdl::getRendererOutputSize')
+    @:native('native_sdl::getRendererOutputSize')
     static function getRendererOutputSize(renderer:Renderer, into:SDLSize):SDLSize;
 
-    @:native('snowkit_sdl::getTextureAlphaMod')
+    @:native('native_sdl::getTextureAlphaMod')
     static function getTextureAlphaMod(texture:Texture):Int;
 
-    @:native('snowkit_sdl::getTextureBlendMode')
+    @:native('native_sdl::getTextureBlendMode')
     static function getTextureBlendMode(texture:Texture):SDLBlendMode;
 
-    @:native('snowkit_sdl::getTextureColorMod')
+    @:native('native_sdl::getTextureColorMod')
     static function getTextureColorMod(texture:Texture, into:SDLColor):SDLColor;
 
     // @:native('SDL_LockTexture')
@@ -335,7 +336,7 @@ extern class SDL {
     static function renderDrawLine(renderer:Renderer, x1:Int, y1:Int, x2:Int, y2:Int):Int;
 
     static inline function renderDrawLines(renderer:Renderer, points:Array<SDLPoint>):Void {
-        if(points.length % 2 != 0) throw "points not divisible by 2!";
+        if(points.length % 2 != 0) throw "renderDrawLines: points not divisible by 2!";
         var half = Std.int(points.length/2);
         for(i in 0 ... half) {
             var cur = points[i*2+0];
@@ -351,30 +352,30 @@ extern class SDL {
         for(p in points) renderDrawPoint(renderer, p.x, p.y);
     } //renderDrawPoints
 
-    @:native('snowkit_sdl::renderDrawRect')
+    @:native('native_sdl::renderDrawRect')
     static function renderDrawRect(renderer:Renderer, rect:SDLRect):Int;
 
     static inline function renderDrawRects(renderer:Renderer, rects:Array<SDLRect>):Void {
         for(r in rects) renderDrawRect(renderer, r);
     }
 
-    @:native('snowkit_sdl::renderFillRect')
+    @:native('native_sdl::renderFillRect')
     static function renderFillRect(renderer:Renderer, rect:SDLRect):Void;
 
     static inline function renderFillRects(renderer:Renderer, rects:Array<SDLRect>):Void {
         for(r in rects) renderFillRect(renderer, r);
     }
 
-    @:native('snowkit_sdl::renderGetClipRect')
+    @:native('native_sdl::renderGetClipRect')
     static function renderGetClipRect(renderer:Renderer, into:SDLRect):SDLRect;
 
-    @:native('snowkit_sdl::renderGetLogicalSize')
+    @:native('native_sdl::renderGetLogicalSize')
     static function renderGetLogicalSize(renderer:Renderer, into:SDLSize):SDLSize;
 
-    @:native('snowkit_sdl::renderGetScale')
+    @:native('native_sdl::renderGetScale')
     static function renderGetScale(renderer:Renderer, into:SDLScale):SDLScale;
 
-    @:native('snowkit_sdl::renderGetViewport')
+    @:native('native_sdl::renderGetViewport')
     static function renderGetViewport(renderer:Renderer, into:SDLRect):SDLRect;
 
     @:native('SDL_RenderIsClipEnabled')
@@ -386,7 +387,7 @@ extern class SDL {
     // @:native('SDL_RenderReadPixels')
     // static function renderReadPixels():Void;
 
-    @:native('snowkit_sdl::renderSetClipRect')
+    @:native('native_sdl::renderSetClipRect')
     static function renderSetClipRect(renderer:Renderer, rect:SDLRect):Int;
 
     @:native('SDL_RenderSetLogicalSize')
@@ -395,13 +396,13 @@ extern class SDL {
     @:native('SDL_RenderSetScale')
     static function renderSetScale(renderer:Renderer, x:Float, y:Float):Int;
 
-    @:native('snowkit_sdl::renderSetViewport')
+    @:native('native_sdl::renderSetViewport')
     static function renderSetViewport(renderer:Renderer, rect:SDLRect):Int;
 
     @:native('SDL_RenderTargetSupported')
     static function renderTargetSupported(renderer:Renderer):Bool;
 
-    @:native('snowkit_sdl::setRenderDrawBlendMode')
+    @:native('native_sdl::setRenderDrawBlendMode')
     static function setRenderDrawBlendMode(renderer:Renderer, mode:SDLBlendMode):Int;
 
     @:native('SDL_SetRenderDrawColor')
@@ -493,10 +494,10 @@ extern class SDL {
 
 //SDL_filesystem.h
 
-    @:native("snowkit_sdl::getBasePath")
+    @:native("native_sdl::getBasePath")
     static function getBasePath() : String;
 
-    @:native("snowkit_sdl::getPrefPath")
+    @:native("native_sdl::getPrefPath")
     static function getPrefPath(org:String, app:String) : String;
 
 //SDL_clipboard.h
@@ -550,10 +551,10 @@ extern class SDL {
     @:native('SDL_IsTextInputActive')
     static function isTextInputActive():Bool;
 
-    @:native('snowkit_sdl::setModState')
+    @:native('native_sdl::setModState')
     static function setModState(modstate:SDLKeymod):Void;
 
-    @:native('snowkit_sdl::setTextInputRect')
+    @:native('native_sdl::setTextInputRect')
     static function setTextInputRect(rect:SDLRect):Void;
 
     @:native('SDL_StartTextInput')
@@ -575,7 +576,7 @@ extern class SDL {
     @:native('SDL_CreateCursor')
     static function createCursor(data:Bytes, mask:Bytes, w:Int, h:Int, hot_x:Int, hot_y:Int):Cursor;
 
-    @:native('snowkit_sdl::createSystemCursor')
+    @:native('native_sdl::createSystemCursor')
     static function createSystemCursor(id:SDLSystemCursor):Cursor;
 
     @:native('SDL_FreeCursor')
@@ -710,7 +711,7 @@ extern class SDL {
     @:native('SDL_JoystickGetAxis')
     static function joystickGetAxis(joystick:Joystick, axis:Int):cpp.Int64;
 
-    @:native('snowkit_sdl::joystickGetBall')
+    @:native('native_sdl::joystickGetBall')
     static function joystickGetBall(joystick:Joystick, ball:Int, into:SDLPoint):SDLPoint;
 
     @:native('SDL_JoystickGetButton')
@@ -725,7 +726,7 @@ extern class SDL {
     // @:native('SDL_JoystickGetGUIDFromString')
     // static function joystickGetGUIDFromString(pchGUID:String):String;
 
-    // @:native('snowkit_sdl::joystickGetGUIDString')
+    // @:native('native_sdl::joystickGetGUIDString')
     // static function joystickGetGUIDString(guid:haxe.io.Bytes):String;
 
     @:native('SDL_JoystickGetHat')
@@ -952,7 +953,7 @@ extern class SDL {
     static function UnlockMutex(mutex:Mutex) : Int;
 
 
-
+//SDL_video.h
 
     @:native('SDL_CreateWindow')
     static function createWindow(title:String, x:Int, y:Int, w:Int, h:Int, flags:SDLWindowFlags):Window;
@@ -960,6 +961,112 @@ extern class SDL {
     @:native('SDL_DestroyWindow')
     static function destroyWindow(window:Window):Void;
 
+    @:native('SDL_HideWindow')
+    static function hideWindow(window:Window):Void;
+
+    @:native('SDL_ShowWindow')
+    static function showWindow(window:Window):Void;
+
+    @:native('SDL_ShowSimpleMessageBox')
+    static function showSimpleMessageBox(flags:SDLMessageBoxFlags, title:String, message:String, window:Window):Void;
+
+    @:native('SDL_GetWindowID')
+    static function getWindowID(window:Window):UInt;
+
+    @:native('SDL_GetNumVideoDisplays')
+    static function getNumVideoDisplays():Int;
+
+    @:native('SDL_GetNumDisplayModes')
+    static function getNumDisplayModes(displayIndex:Int):Int;
+
+    @:native("SDL_GetDisplayName")
+    private static function _getDisplayName(displayIndex:Int) : cpp.ConstCharStar;
+    static inline function getDisplayName(displayIndex:Int) : String return cast _getDisplayName(displayIndex);
+
+    @:native('native_sdl::getDisplayBounds')
+    static function getDisplayBounds(displayIndex:Int, into:SDLRect) : SDLRect;
+
+    @:native('SDL_SetWindowSize')
+    static function setWindowSize(window:Window, w:Int, h:Int) : Void;
+
+    @:native('SDL_SetWindowMaximumSize')
+    static function setWindowMaximumSize(window:Window, max_w:Int, max_h:Int) : Void;
+
+    @:native('SDL_SetWindowMinimumSize')
+    static function setWindowMinimumSize(window:Window, max_w:Int, max_h:Int) : Void;
+
+    @:native('SDL_SetWindowFullscreen')
+    static function setWindowFullscreen(window:Window, flags:UInt) : Void;
+
+    @:native('SDL_SetWindowBordered')
+    static function setWindowBordered(window:Window, bordered:Bool) : Void;
+
+    @:native('SDL_SetWindowGrab')
+    static function setWindowGrab(window:Window, grabbed:Bool) : Void;
+
+    @:native('SDL_SetWindowTitle')
+    static function setWindowTitle( title:String ) : Void;
+
+    @:native('SDL_SetWindowPosition')
+    static function setWindowPosition(window:Window, w:Int, h:Int) : Void;
+
+    @:native('native_sdl::getWindowPosition')
+    static function getWindowPosition(window:Window, into:SDLPoint) : SDLPoint;
+
+    @:native('native_sdl::getWindowSize')
+    static function getWindowSize(window:Window, into:SDLSize) : SDLSize;
+
+    @:native('SDL_DisableScreenSaver')
+    static function disableScreenSaver():Void;
+
+    @:native('SDL_EnableScreenSaver')
+    static function enableScreenSaver():Void;
+
+    @:native('SDL_GL_CreateContext')
+    static function GL_CreateContext(window:Window) : GLContext;
+
+    @:native('SDL_GL_DeleteContext')
+    static function GL_DeleteContext(context:GLContext) : Void;
+
+    @:native('native_sdl::GL_GetDrawableSize')
+    static function GL_GetDrawableSize(window:Window, into:SDLSize) : SDLSize;
+
+    @:native('SDL_GL_GetCurrentContext')
+    static function GL_GetCurrentContext() : GLContext;
+
+    @:native('SDL_GL_GetCurrentWindow')
+    static function GL_GetCurrentWindow() : Window;
+
+    @:native('SDL_GL_ExtensionSupported')
+    static function GL_ExtensionSupported(extension:String) : Bool;
+
+    @:native('SDL_GL_SwapWindow')
+    static function GL_SwapWindow(window:Window) : Void;
+
+    @:native('SDL_GL_SetSwapInterval')
+    static function GL_SetSwapInterval(interval:Int) : Int;
+
+    @:native('SDL_GL_GetSwapInterval')
+    static function GL_GetSwapInterval() : Int;
+
+    @:native('SDL_GL_ResetAttributes')
+    static function GL_ResetAttributes() : Void;
+
+    @:native('SDL_GL_MakeCurrent')
+    static function GL_MakeCurrent(window:Window, context:GLContext) : Int;
+
+    @:native('SDL_GL_SetAttribute')
+    static function GL_SetAttribute(attr:SDLGLAttr, value:Int) : Int;
+
+    @:native('SDL_GL_GetAttribute')
+    static function GL_GetAttribute(attr:SDLGLAttr) : Int;
+
+
+    @:native('native_sdl::testfunc')
+    static function testfunc( fn : cpp.Callable<String->Int> ):Int;
+
+    @:native('native_sdl::run')
+    static function run():Void;
 
 
 }
@@ -1143,6 +1250,36 @@ from Int to Int {
 
 
 @:enum
+abstract SDLGLAttr(Int)
+from Int to Int {
+    var SDL_GL_RED_SIZE                     = 0;
+    var SDL_GL_GREEN_SIZE                   = 1;
+    var SDL_GL_BLUE_SIZE                    = 2;
+    var SDL_GL_ALPHA_SIZE                   = 3;
+    var SDL_GL_BUFFER_SIZE                  = 4;
+    var SDL_GL_DOUBLEBUFFER                 = 5;
+    var SDL_GL_DEPTH_SIZE                   = 6;
+    var SDL_GL_STENCIL_SIZE                 = 7;
+    var SDL_GL_ACCUM_RED_SIZE               = 8;
+    var SDL_GL_ACCUM_GREEN_SIZE             = 9;
+    var SDL_GL_ACCUM_BLUE_SIZE              = 10;
+    var SDL_GL_ACCUM_ALPHA_SIZE             = 11;
+    var SDL_GL_STEREO                       = 12;
+    var SDL_GL_MULTISAMPLEBUFFERS           = 13;
+    var SDL_GL_MULTISAMPLESAMPLES           = 14;
+    var SDL_GL_ACCELERATED_VISUAL           = 15;
+    var SDL_GL_RETAINED_BACKING             = 16;
+    var SDL_GL_CONTEXT_MAJOR_VERSION        = 17;
+    var SDL_GL_CONTEXT_MINOR_VERSION        = 18;
+    var SDL_GL_CONTEXT_EGL                  = 19;
+    var SDL_GL_CONTEXT_FLAGS                = 20;
+    var SDL_GL_CONTEXT_PROFILE_MASK         = 21;
+    var SDL_GL_SHARE_WITH_CURRENT_CONTEXT   = 22;
+    var SDL_GL_FRAMEBUFFER_SRGB_CAPABLE     = 23;
+} //SDLGLAttr
+
+
+@:enum
 abstract SDLGameControllerButton(Int)
 from Int to Int {
     var SDL_CONTROLLER_BUTTON_INVALID       = -1;
@@ -1187,6 +1324,14 @@ from Int to Int {
     var SDL_PEEKEVENT = 1;
     var SDL_GETEVENT  = 2;
 } //SDLEventAction
+
+@:enum
+abstract SDLMessageBoxFlags(Int)
+from Int to Int {
+    var SDL_MESSAGEBOX_ERROR        = 0x00000010;
+    var SDL_MESSAGEBOX_WARNING      = 0x00000020;
+    var SDL_MESSAGEBOX_INFORMATION  = 0x00000040;
+} //SDLMessageBoxFlags
 
 @:enum
 abstract SDLKeymod(Int)
@@ -1385,3 +1530,7 @@ from Int to Int {
     var SDL_WINDOW_ALLOW_HIGHDPI        = 0x00002000;       /**< window should be created in high-DPI mode if supported */
     var SDL_WINDOW_MOUSE_CAPTURE        = 0x00004000;       /**< window has mouse captured (unrelated to INPUT_GRABBED) */
 } //SDLWindowFlags
+
+
+
+
