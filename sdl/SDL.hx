@@ -1070,6 +1070,15 @@ extern class SDL {
     @:native('SDL_GetNumDisplayModes')
     static function getNumDisplayModes(displayIndex:Int):Int;
 
+    @:native('native_sdl::getDisplayMode')
+    static function getDisplayMode(displayIndex:Int, modeIndex:Int) : SDLDisplayMode;
+
+    @:native('native_sdl::getDesktopDisplayMode')
+    static function getDesktopDisplayMode(displayIndex:Int) : SDLDisplayMode;
+
+    @:native('native_sdl::getCurrentDisplayMode')
+    static function getCurrentDisplayMode(displayIndex:Int) : SDLDisplayMode;
+
     @:native("SDL_GetDisplayName")
     private static function _getDisplayName(displayIndex:Int) : cpp.ConstCharStar;
     static inline function getDisplayName(displayIndex:Int) : String return cast _getDisplayName(displayIndex);
@@ -1162,6 +1171,7 @@ extern class SDL {
 
 }
 
+//supposed to be (userdata:Dynamic, event:cpp.Pointer<sdl.Event>)
 //function filter(userdata:Dynamic, event:sdl.Event)
 typedef SDLEventFilter = Dynamic->Dynamic->Void;
 
@@ -1181,6 +1191,12 @@ typedef SDLRendererInfo = {
     var max_texture_height:Int;
 }
 
+typedef SDLDisplayMode = {
+    var w: Int;
+    var h: Int;
+    var refresh_rate: Int;
+    var format: SDLPixelFormat;
+}
 
 @:enum
 abstract SDLInitFlags(Int)

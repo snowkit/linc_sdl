@@ -11,6 +11,7 @@
             //forward declarations of conversions
         namespace convert {
             static  Dynamic render_info_to_hx(SDL_RendererInfo info);
+            static  Dynamic display_mode_to_hx(SDL_DisplayMode mode);
             static  Dynamic set_color_into(Dynamic into, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
             static  Dynamic set_size_into(Dynamic into, int w, int h);
             static  Dynamic set_scale_into(Dynamic into, float x, float y);
@@ -374,12 +375,48 @@
 
         } //renderCopy
 
+        Dynamic getDisplayMode(int display_index, int mode_index) {
+
+            SDL_DisplayMode mode;
+            int res = SDL_GetDisplayMode(display_index, mode_index, &mode);
+
+            if(res != 0) return null();
+
+            return convert::display_mode_to_hx(mode);
+
+        } //getDisplayMode
+
+        Dynamic getDesktopDisplayMode(int display_index) {
+
+            SDL_DisplayMode mode;
+            int res = SDL_GetDesktopDisplayMode(display_index, &mode);
+
+            if(res != 0) return null();
+
+            return convert::display_mode_to_hx(mode);
+
+        } //getDesktopDisplayMode
+
+        Dynamic getCurrentDisplayMode(int display_index) {
+
+            SDL_DisplayMode mode;
+            int res = SDL_GetCurrentDisplayMode(display_index, &mode);
+
+            if(res != 0) return null();
+
+            return convert::display_mode_to_hx(mode);
+
+        } //getCurrentDisplayMode
+
+
+
+
         typedef ::cpp::Function < Void(Dynamic, Dynamic)> EventFilterFN;
         static std::map<void*, EventFilterFN> filter_list;
 
         inline static int _filter(void* userdata, SDL_Event* event) {
 
-            //todo: unpack dynamic and event
+            //todo: unpack dynamic and convert event
             EventFilterFN filter = filter_list[userdata];
             filter(null(), null());
 
@@ -449,6 +486,20 @@
                 return out;
 
             } //render_info_to_hx
+
+            static Dynamic display_mode_to_hx(SDL_DisplayMode mode) {
+
+                hx::Anon out = hx::Anon_obj::Create();
+
+                    out->Add(HX_CSTRING("w"), mode.w);
+                    out->Add(HX_CSTRING("h"), mode.h);
+                        //:note: this was UInt32, but the ranges appear to fit in int and Dynamic hates unsigned int
+                    out->Add(HX_CSTRING("format"), (int)mode.format);
+                    out->Add(HX_CSTRING("refresh_rate"), mode.refresh_rate);
+
+                return out;
+
+            } //display_mode_to_hx
 
             static Dynamic set_color_into(Dynamic into, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
 
