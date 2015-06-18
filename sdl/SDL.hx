@@ -43,10 +43,10 @@ extern class SDL {
 
 
     @:native('native_sdl::addEventWatch')
-    static function addEventWatch(filter:cpp.Callable<SDLEventFilter>, userdata:Dynamic) : Void;
+    static function addEventWatch(filter:cpp.Callable<SDLEventFilter>) : Void;
 
     @:native('native_sdl::delEventWatch')
-    static function delEventWatch(filter:cpp.Callable<SDLEventFilter>, userdata:Dynamic) : Void;
+    static function delEventWatch(filter:cpp.Callable<SDLEventFilter>) : Void;
 
     @:native('SDL_EventState')
     static function eventState(type:SDLEventType, state:SDLEventState) : UInt;
@@ -1173,7 +1173,7 @@ extern class SDL {
 
 //supposed to be (userdata:Dynamic, event:cpp.Pointer<sdl.Event>)
 //function filter(userdata:Dynamic, event:sdl.Event)
-typedef SDLEventFilter = Dynamic->Dynamic->Void;
+typedef SDLEventFilter = sdl.Event->Void;
 
 typedef SDLColor = { r:UInt, g:UInt, b:UInt, a:UInt };
 typedef SDLPoint = { x:Int, y:Int };

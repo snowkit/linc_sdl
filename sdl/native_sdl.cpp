@@ -411,32 +411,51 @@
 
 
 
-        typedef ::cpp::Function < Void(Dynamic, Dynamic)> EventFilterFN;
-        static std::map<void*, EventFilterFN> filter_list;
+        typedef ::cpp::Function < Void(SDL_Event)> EventFilterFN;
+        static std::map<int*, EventFilterFN> filter_id_map;
+        static std::map<EventFilterFN, int*> filter_map;
+        static int filter_seq = 0;
 
         inline static int _filter(void* userdata, SDL_Event* event) {
 
-            //todo: unpack dynamic and convert event
-            EventFilterFN filter = filter_list[userdata];
-            filter(null(), null());
+            int* filter_id = (int*)userdata;
+
+            if(*filter_id == 0) return 0; //if 0 id
+            if(filter_id == 0) return 0; //if null
+
+            EventFilterFN filter = filter_id_map[filter_id];
+
+            if(filter != null()) filter(*event);
 
             return 0; //ignored by SDL
 
         } //_filter
 
-        static void addEventWatch(EventFilterFN filter, Dynamic userdata) {
+        static void addEventWatch(EventFilterFN filter) {
 
-            void* ptr = hx::DynamicPtr(userdata);
-            filter_list[ptr] = filter;
-            SDL_AddEventWatch( _filter, ptr );
+            filter_seq++;
+
+            int* seq_id = (int*)malloc(sizeof(int));
+            memcpy((void*)seq_id, &filter_seq, sizeof(int));
+
+            filter_id_map[seq_id] = filter;
+            filter_map[filter] = seq_id;
+
+            SDL_AddEventWatch( _filter, seq_id );
 
         } //addEventWatch
 
-        static void delEventWatch(EventFilterFN filter, Dynamic userdata) {
+        static void delEventWatch(EventFilterFN filter) {
 
-            void* ptr = hx::DynamicPtr(userdata);
-            filter_list.erase(ptr);
-            SDL_DelEventWatch( _filter, ptr );
+            int* filter_id = filter_map[filter];
+
+            filter_map.erase(filter);
+            filter_id_map.erase(filter_id);
+
+            SDL_DelEventWatch( _filter, (void*)filter_id );
+
+            free(filter_id);
+            filter_id = 0;
 
         } //delEventWatch
 

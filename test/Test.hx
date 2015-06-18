@@ -124,8 +124,8 @@ class Test {
 
             trace('render copy errors: `' + SDL.getError() + '`');
 
-            // SDL.addEventWatch( cpp.Callable.fromStaticFunction(eventfilter), {id:1} );
-            // SDL.addEventWatch( cpp.Callable.fromStaticFunction(eventfilter2), {id:2} );
+            SDL.addEventWatch( cpp.Callable.fromStaticFunction(eventfilter) );
+            // SDL.addEventWatch( cpp.Callable.fromStaticFunction(eventfilter2), null );
 
             trace('Displays:');
             var num_displays = SDL.getNumVideoDisplays();
@@ -205,12 +205,12 @@ class Test {
         }
     }
 
-    static function eventfilter(v:Dynamic, e:Dynamic) {
-        trace('eventfilter1:' + e);
+    static function eventfilter(e:sdl.Event) {
+        trace('eventfilter1:' + Std.int(e.type));
     }
 
-    static function eventfilter2(v:Dynamic, e:Dynamic) {
-        trace('eventfilter2:' + e);
+    static function eventfilter2(e:sdl.Event) {
+        trace('eventfilter2:' + e.type);
     }
 
     static function init() {
