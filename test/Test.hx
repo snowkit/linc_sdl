@@ -124,7 +124,7 @@ class Test {
 
             trace('render copy errors: `' + SDL.getError() + '`');
 
-            SDL.addEventWatch( cpp.Callable.fromStaticFunction(eventfilter) );
+            // SDL.addEventWatch( cpp.Callable.fromStaticFunction(eventfilter) );
             // SDL.addEventWatch( cpp.Callable.fromStaticFunction(eventfilter2), null );
 
             trace('Displays:');
@@ -210,7 +210,7 @@ class Test {
     }
 
     static function eventfilter2(e:sdl.Event) {
-        trace('eventfilter2:' + e.type);
+        trace('eventfilter2:' + Std.int(e.type));
     }
 
     static function init() {
@@ -300,7 +300,7 @@ class Test {
 
         trace("Versions:");
         trace('    - We compiled against SDL version ${compiled.major}.${compiled.minor}.${compiled.patch} ...');
-        trace('    - But we are linking against SDL version ${linked.major}.${linked.minor}.${linked.patch}');
+        trace('    - And linked against SDL version ${linked.major}.${linked.minor}.${linked.patch}');
 
         trace('    - Compile revision : ' + compiled_rev );
         trace('    - Link revision: ' + linked_rev );

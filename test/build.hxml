@@ -7,7 +7,7 @@
 # currently, you must set this to the lib/ folder,
 # relative to your cpp build output folder or absolute path
 
--D NATIVE_SDL_LIB_PATH=../../lib
+-D LINC_SDL_LIB_PATH=../../lib
 
 # pick a target
 

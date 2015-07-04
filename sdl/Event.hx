@@ -3,7 +3,7 @@ package sdl;
 import sdl.SDL.SDLEventType;
 
 @:native("SDL_Finger")
-@:include('./native_sdl.h')
+@:include('./linc_sdl.h')
 @:structAccess
 @:unreflective
 extern private class SDL_Finger {
@@ -15,10 +15,8 @@ extern private class SDL_Finger {
 typedef Finger = cpp.Pointer<SDL_Finger>;
 
 
-@:include('./native_sdl.h')
-@:structAccess
-@:unreflective
-@:native("SDL_Event")
+@:include('./linc_sdl.h')
+@:native("cpp::Struct<SDL_Event>")
 extern class Event {
     var type:SDLEventType;
     var window:WindowEvent;
@@ -47,7 +45,7 @@ extern class Event {
 }
 
 
-@:include('./native_sdl.h')
+@:include('./linc_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_QuitEvent")
@@ -56,7 +54,7 @@ extern class QuitEvent {
     var timestamp: UInt;
 }
 
-@:include('./native_sdl.h')
+@:include('./linc_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_DropEvent")
@@ -66,7 +64,7 @@ extern class DropEvent {
     var file: cpp.ConstCharStar;
 }
 
-@:include('./native_sdl.h')
+@:include('./linc_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_TextEditingEvent")
@@ -79,7 +77,7 @@ extern class TextEditingEvent {
     var end: cpp.Int64;
 }
 
-@:include('./native_sdl.h')
+@:include('./linc_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_TextInputEvent")
@@ -90,7 +88,7 @@ extern class TextInputEvent {
     var text: cpp.ConstCharStar;
 }
 
-@:include('./native_sdl.h')
+@:include('./linc_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_WindowEvent")
@@ -103,7 +101,7 @@ extern class WindowEvent {
     var data2: UInt;
 }
 
-@:include('./native_sdl.h')
+@:include('./linc_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_KeyboardEvent")
@@ -116,7 +114,7 @@ extern class KeyboardEvent {
     var keysym: SDLKeysym;
 }
 
-@:include('./native_sdl.h')
+@:include('./linc_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_Keysym")
@@ -126,7 +124,7 @@ extern class SDLKeysym {
     var mod: UInt;
 }
 
-@:include('./native_sdl.h')
+@:include('./linc_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_MouseMotionEvent")
@@ -143,7 +141,7 @@ extern class MouseMotionEvent {
 }
 
 
-@:include('./native_sdl.h')
+@:include('./linc_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_JoyAxisEvent")
@@ -156,7 +154,7 @@ extern class JoyAxisEvent {
 }
 
 
-@:include('./native_sdl.h')
+@:include('./linc_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_JoyBallEvent")
@@ -169,7 +167,7 @@ extern class JoyBallEvent {
     var yrel: cpp.Int64;
 }
 
-@:include('./native_sdl.h')
+@:include('./linc_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_JoyHatEvent")
@@ -181,7 +179,7 @@ extern class JoyHatEvent {
     var value: sdl.SDL.SDLHatValue;
 }
 
-@:include('./native_sdl.h')
+@:include('./linc_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_JoyButtonEvent")
@@ -193,7 +191,7 @@ extern class JoyButtonEvent {
     var state: UInt;
 }
 
-@:include('./native_sdl.h')
+@:include('./linc_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_JoyDeviceEvent")
@@ -204,7 +202,7 @@ extern class JoyDeviceEvent {
 }
 
 
-@:include('./native_sdl.h')
+@:include('./linc_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_ControllerAxisEvent")
@@ -217,7 +215,7 @@ extern class ControllerAxisEvent {
 }
 
 
-@:include('./native_sdl.h')
+@:include('./linc_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_ControllerButtonEvent")
@@ -229,7 +227,7 @@ extern class ControllerButtonEvent {
     var state: UInt;
 }
 
-@:include('./native_sdl.h')
+@:include('./linc_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_ControllerDeviceEvent")
@@ -239,7 +237,7 @@ extern class ControllerDeviceEvent {
     var which: UInt;
 }
 
-@:include('./native_sdl.h')
+@:include('./linc_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_AudioDeviceEvent")
@@ -251,7 +249,7 @@ extern class AudioDeviceEvent {
 }
 
 
-@:include('./native_sdl.h')
+@:include('./linc_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_TouchFingerEvent")
@@ -267,7 +265,7 @@ extern class TouchFingerEvent {
     var pressure: UInt;
 }
 
-@:include('./native_sdl.h')
+@:include('./linc_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_MultiGestureEvent")
@@ -282,7 +280,7 @@ extern class MultiGestureEvent {
     var numFingers: UInt;
 }
 
-@:include('./native_sdl.h')
+@:include('./linc_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_DollarGestureEvent")
@@ -297,7 +295,7 @@ extern class DollarGestureEvent {
     var y: Float;
 }
 
-@:include('./native_sdl.h')
+@:include('./linc_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_MouseButtonEvent")
@@ -313,7 +311,7 @@ extern class MouseButtonEvent {
     var y: UInt;
 }
 
-@:include('./native_sdl.h')
+@:include('./linc_sdl.h')
 @:structAccess
 @:unreflective
 @:native("SDL_MouseWheelEvent")

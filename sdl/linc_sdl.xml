@@ -1,15 +1,15 @@
 <xml>
-    <set name='NATIVE_TOOLKIT_PATH' value='${NATIVE_SDL_LIB_PATH}'/>
+    <set name='NATIVE_TOOLKIT_PATH' value='${LINC_SDL_LIB_PATH}'/>
     <files id='haxe'>
         <compilerflag value='-DNATIVE_SDL'/>
-        <compilerflag value='-I${NATIVE_SDL_LIB_PATH}/sdl/include/'/>
-        <compilerflag value='-I${NATIVE_SDL_LIB_PATH}/sdl/include/configs/default/'    unless='windows || mac || linux'/>
-        <compilerflag value='-I${NATIVE_SDL_LIB_PATH}/sdl/include/configs/linux/'      if='linux'/>
-        <compilerflag value='-I${NATIVE_SDL_LIB_PATH}/sdl/include/configs/windows/'    if='windows'/>
-        <compilerflag value='-I${NATIVE_SDL_LIB_PATH}/sdl/include/configs/mac/'        if='mac'/>
+        <compilerflag value='-I${LINC_SDL_LIB_PATH}/sdl/include/'/>
+        <compilerflag value='-I${LINC_SDL_LIB_PATH}/sdl/include/configs/default/'    unless='windows || mac || linux'/>
+        <compilerflag value='-I${LINC_SDL_LIB_PATH}/sdl/include/configs/linux/'      if='linux'/>
+        <compilerflag value='-I${LINC_SDL_LIB_PATH}/sdl/include/configs/windows/'    if='windows'/>
+        <compilerflag value='-I${LINC_SDL_LIB_PATH}/sdl/include/configs/mac/'        if='mac'/>
     </files>
     <target id="haxe">
-        <lib name="${NATIVE_SDL_LIB_PATH}/sdl/lib/${BINDIR}/libsdl.a"/>
+        <lib name="${LINC_SDL_LIB_PATH}/sdl/lib/${BINDIR}/libsdl.a"/>
 
         <section if="mac">
             <vflag name="-l" value="iconv"/>
