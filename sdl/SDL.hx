@@ -12,7 +12,7 @@ import sdl.Thread;
 import sdl.RWops;
 import sdl.Haptic;
 
-@:include('./linc_sdl.cpp')
+@:include('./linc_sdl.h')
 @:buildXml("<include name='${LINC_SDL_LIB_PATH}/../sdl/linc_sdl.xml'/>")
 @:keep
 extern class SDL {

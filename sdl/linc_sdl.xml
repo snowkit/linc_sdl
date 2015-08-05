@@ -1,7 +1,16 @@
 <xml>
     <set name='NATIVE_TOOLKIT_PATH' value='${LINC_SDL_LIB_PATH}'/>
+    <set name='LINC_SDL_PATH' value='${haxelib:linc_sdl}'/>
     <files id='haxe'>
-        <compilerflag value='-DNATIVE_SDL'/>
+        <compilerflag value='-DLINC_SDL'/>
+        <compilerflag value='-I${LINC_SDL_LIB_PATH}/sdl/include/'/>
+        <compilerflag value='-I${LINC_SDL_LIB_PATH}/sdl/include/configs/default/'    unless='windows || mac || linux'/>
+        <compilerflag value='-I${LINC_SDL_LIB_PATH}/sdl/include/configs/linux/'      if='linux'/>
+        <compilerflag value='-I${LINC_SDL_LIB_PATH}/sdl/include/configs/windows/'    if='windows'/>
+        <compilerflag value='-I${LINC_SDL_LIB_PATH}/sdl/include/configs/mac/'        if='mac'/>
+        <file name='${LINC_SDL_PATH}/sdl/linc_sdl.cpp' />
+    </files>
+    <files id="__main__">
         <compilerflag value='-I${LINC_SDL_LIB_PATH}/sdl/include/'/>
         <compilerflag value='-I${LINC_SDL_LIB_PATH}/sdl/include/configs/default/'    unless='windows || mac || linux'/>
         <compilerflag value='-I${LINC_SDL_LIB_PATH}/sdl/include/configs/linux/'      if='linux'/>
