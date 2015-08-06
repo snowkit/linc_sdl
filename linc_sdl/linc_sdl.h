@@ -25,6 +25,9 @@ namespace linc {
             extern ::String REVISION();
             extern Dynamic VERSION();
 			extern Dynamic getVersion();
+            extern ::cpp::Struct<SDL_Event> pollEvent();
+            extern ::cpp::Struct<SDL_Event> waitEvent();
+            extern ::cpp::Struct<SDL_Event> waitEventTimeout(int _timeout);
 			extern ::String getBasePath();
 			extern ::String getPrefPath(::String org, ::String app);
 			extern Dynamic GL_BindTexture(SDL_Texture* texture);

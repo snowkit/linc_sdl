@@ -102,34 +102,8 @@ extern class SDL {
     @:native('SDL_PumpEvents')
     static function pumpEvents():Void;
 
-        //usually, pollEvent returns 0 in C, so that
-        //while(SDL_PollEvent(&event)) is used on a stack variable,
-        //however this notion in haxe doesn't apply, but we
-        //can still keep the variable on the stack,
-        //use hasAnEvent() to know if this is worth calling,
-        //or call it and if event.type is 0 the queue was empty
-    static inline function pollEvent() : Event {
-
-            //:portability: this requires C99
-            //this makes sure the memory is zeroed because
-            //otherwise it can hold bogus event values.
-            //since type=0 would be "invalid" as above,
-            //it would be acceptable to only do type = 0
-            //if pollevent returned 0, but at least during
-            //heavy development the chance of error should be slimmed
-            //down as much as possible - therefore the entire struct is cleared.
-            //I would use SDL_zero(event), however haxe requires assignment on a local
-        untyped __cpp__('SDL_Event _sdl_event = (const union SDL_Event){0}');
-        untyped __cpp__('SDL_PollEvent(&_sdl_event)');
-
-        var event = untyped __cpp__('cpp::Struct<SDL_Event>(_sdl_event)');
-
-        untyped __cpp__('SDL_PollEvent(&event.value)');
-
-        return event;
-
-    } //pollEvent
-
+    @:native('linc::sdl::pollEvent')
+    static function pollEvent() : sdl.Event;
 
     // int SDL_PushEvent(SDL_Event* event)
 
@@ -147,19 +121,11 @@ extern class SDL {
     //void SDL_SetEventFilter(SDL_EventFilter filter,
     //                        void*           userdata)
 
-    static inline function waitEvent() : Event {
-        untyped __cpp__('SDL_Event _sdl_event = (const union SDL_Event){0}');
-        untyped __cpp__('SDL_WaitEvent(&_sdl_event)');
-        var event = untyped __cpp__('cpp::Struct<SDL_Event>(_sdl_event)');
-        return event;
-    }
+    @:native('linc::sdl::waitEvent')
+    static function waitEvent() : sdl.Event;
 
-    static inline function waitEventTimeout(timeout_ms:Int) : Event {
-        untyped __cpp__('SDL_Event _sdl_event = (const union SDL_Event){0}');
-        untyped SDL_WaitEventTimeout( untyped __cpp__('&_sdl_event'), untyped timeout_ms );
-        var event = untyped __cpp__('cpp::Struct<SDL_Event>(_sdl_event)');
-        return event;
-    }
+    @:native('linc::sdl::waitEventTimeout')
+    static function waitEventTimeout(timeout_ms:Int) : sdl.Event;
 
 //SDL_error.h
 

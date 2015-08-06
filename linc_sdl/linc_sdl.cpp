@@ -76,6 +76,30 @@
 
             } //getVersion
 
+            ::cpp::Struct<SDL_Event> pollEvent() {
+
+                SDL_Event event;
+                SDL_PollEvent(&event);
+                return event;
+
+            } //pollEvent
+
+            ::cpp::Struct<SDL_Event> waitEvent() {
+
+                SDL_Event event;
+                SDL_WaitEvent(&event);
+                return event;
+
+            } //waitEvent
+
+            ::cpp::Struct<SDL_Event> waitEventTimeout(int _timeout) {
+
+                SDL_Event event;
+                SDL_WaitEventTimeout(&event, _timeout);
+                return event;
+
+            } //waitEventTimeout
+
             ::String getBasePath() {
 
                 char *base_path = SDL_GetBasePath();

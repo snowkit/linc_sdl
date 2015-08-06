@@ -2,22 +2,8 @@ package sdl;
 
 import sdl.SDL.SDLEventType;
 
-@:native("SDL_Finger")
-@:include('linc_sdl.h')
-@:structAccess
-@:unreflective
-extern private class SDL_Finger {
-    var id:cpp.Int64;
-    var x:Float;
-    var y:Float;
-    var pressure:Float;
-}
-typedef Finger = cpp.Pointer<SDL_Finger>;
-
-
-@:include('linc_sdl.h')
-@:native("cpp::Struct<SDL_Event>")
-extern class Event {
+@:keep @:include('linc_sdl.h') @:native("SDL_Event")
+private extern class SDLEvent {
     var type:SDLEventType;
     var window:WindowEvent;
     var key:KeyboardEvent;
@@ -45,29 +31,29 @@ extern class Event {
 }
 
 
-@:include('linc_sdl.h')
+@:include('linc_sdl.h') @:native("::cpp::Reference<SDL_Event>")
+@:keep extern class EventRef extends SDLEvent {}
+@:include('linc_sdl.h') @:native("::cpp::Struct<SDL_Event>")
+@:keep extern class Event extends EventRef {}
+
+
 @:structAccess
-@:unreflective
-@:native("SDL_QuitEvent")
+@:include('linc_sdl.h') @:native("::cpp::Struct<SDL_QuitEvent>")
 extern class QuitEvent {
     var type: SDLEventType;
     var timestamp: UInt;
 }
 
-@:include('linc_sdl.h')
 @:structAccess
-@:unreflective
-@:native("SDL_DropEvent")
+@:include('linc_sdl.h') @:native("::cpp::Struct<SDL_DropEvent>")
 extern class DropEvent {
     var type: SDLEventType;
     var timestamp: UInt;
     var file: cpp.ConstCharStar;
 }
 
-@:include('linc_sdl.h')
 @:structAccess
-@:unreflective
-@:native("SDL_TextEditingEvent")
+@:include('linc_sdl.h') @:native("::cpp::Struct<SDL_TextEditingEvent>")
 extern class TextEditingEvent {
     var type: SDLEventType;
     var timestamp: UInt;
@@ -77,10 +63,8 @@ extern class TextEditingEvent {
     var end: cpp.Int64;
 }
 
-@:include('linc_sdl.h')
 @:structAccess
-@:unreflective
-@:native("SDL_TextInputEvent")
+@:include('linc_sdl.h') @:native("::cpp::Struct<SDL_TextInputEvent>")
 extern class TextInputEvent {
     var type: SDLEventType;
     var timestamp: UInt;
@@ -88,10 +72,8 @@ extern class TextInputEvent {
     var text: cpp.ConstCharStar;
 }
 
-@:include('linc_sdl.h')
 @:structAccess
-@:unreflective
-@:native("SDL_WindowEvent")
+@:include('linc_sdl.h') @:native("::cpp::Struct<SDL_WindowEvent>")
 extern class WindowEvent {
     var type: SDLEventType;
     var timestamp: UInt;
@@ -101,10 +83,8 @@ extern class WindowEvent {
     var data2: UInt;
 }
 
-@:include('linc_sdl.h')
 @:structAccess
-@:unreflective
-@:native("SDL_KeyboardEvent")
+@:include('linc_sdl.h') @:native("::cpp::Struct<SDL_KeyboardEvent>")
 extern class KeyboardEvent {
     var type: SDLEventType;
     var timestamp: UInt;
@@ -114,20 +94,15 @@ extern class KeyboardEvent {
     var keysym: SDLKeysym;
 }
 
-@:include('linc_sdl.h')
-@:structAccess
-@:unreflective
-@:native("SDL_Keysym")
+@:include('linc_sdl.h') @:native("::cpp::Struct<SDL_Keysym>")
 extern class SDLKeysym {
     var scancode: UInt;
     var sym: UInt;
     var mod: UInt;
 }
 
-@:include('linc_sdl.h')
 @:structAccess
-@:unreflective
-@:native("SDL_MouseMotionEvent")
+@:include('linc_sdl.h') @:native("::cpp::Struct<SDL_MouseMotionEvent>")
 extern class MouseMotionEvent {
     var type: SDLEventType;
     var timestamp: UInt;
@@ -141,10 +116,8 @@ extern class MouseMotionEvent {
 }
 
 
-@:include('linc_sdl.h')
 @:structAccess
-@:unreflective
-@:native("SDL_JoyAxisEvent")
+@:include('linc_sdl.h') @:native("::cpp::Struct<SDL_JoyAxisEvent>")
 extern class JoyAxisEvent {
     var type: SDLEventType;
     var timestamp: UInt;
@@ -153,11 +126,8 @@ extern class JoyAxisEvent {
     var value: Int;
 }
 
-
-@:include('linc_sdl.h')
 @:structAccess
-@:unreflective
-@:native("SDL_JoyBallEvent")
+@:include('linc_sdl.h') @:native("::cpp::Struct<SDL_JoyBallEvent>")
 extern class JoyBallEvent {
     var type: SDLEventType;
     var timestamp: UInt;
@@ -167,10 +137,8 @@ extern class JoyBallEvent {
     var yrel: cpp.Int64;
 }
 
-@:include('linc_sdl.h')
 @:structAccess
-@:unreflective
-@:native("SDL_JoyHatEvent")
+@:include('linc_sdl.h') @:native("::cpp::Struct<SDL_JoyHatEvent>")
 extern class JoyHatEvent {
     var type: SDLEventType;
     var timestamp: UInt;
@@ -179,10 +147,8 @@ extern class JoyHatEvent {
     var value: sdl.SDL.SDLHatValue;
 }
 
-@:include('linc_sdl.h')
 @:structAccess
-@:unreflective
-@:native("SDL_JoyButtonEvent")
+@:include('linc_sdl.h') @:native("::cpp::Struct<SDL_JoyButtonEvent>")
 extern class JoyButtonEvent {
     var type: SDLEventType;
     var timestamp: UInt;
@@ -191,10 +157,8 @@ extern class JoyButtonEvent {
     var state: UInt;
 }
 
-@:include('linc_sdl.h')
 @:structAccess
-@:unreflective
-@:native("SDL_JoyDeviceEvent")
+@:include('linc_sdl.h') @:native("::cpp::Struct<SDL_JoyDeviceEvent>")
 extern class JoyDeviceEvent {
     var type: SDLEventType;
     var timestamp: UInt;
@@ -202,10 +166,8 @@ extern class JoyDeviceEvent {
 }
 
 
-@:include('linc_sdl.h')
 @:structAccess
-@:unreflective
-@:native("SDL_ControllerAxisEvent")
+@:include('linc_sdl.h') @:native("::cpp::Struct<SDL_ControllerAxisEvent>")
 extern class ControllerAxisEvent {
     var type: SDLEventType;
     var timestamp: UInt;
@@ -214,11 +176,8 @@ extern class ControllerAxisEvent {
     var value: Int;
 }
 
-
-@:include('linc_sdl.h')
 @:structAccess
-@:unreflective
-@:native("SDL_ControllerButtonEvent")
+@:include('linc_sdl.h') @:native("::cpp::Struct<SDL_ControllerButtonEvent>")
 extern class ControllerButtonEvent {
     var type: SDLEventType;
     var timestamp: UInt;
@@ -227,20 +186,16 @@ extern class ControllerButtonEvent {
     var state: UInt;
 }
 
-@:include('linc_sdl.h')
 @:structAccess
-@:unreflective
-@:native("SDL_ControllerDeviceEvent")
+@:include('linc_sdl.h') @:native("::cpp::Struct<SDL_ControllerDeviceEvent>")
 extern class ControllerDeviceEvent {
     var type: SDLEventType;
     var timestamp: UInt;
     var which: UInt;
 }
 
-@:include('linc_sdl.h')
 @:structAccess
-@:unreflective
-@:native("SDL_AudioDeviceEvent")
+@:include('linc_sdl.h') @:native("::cpp::Struct<SDL_AudioDeviceEvent>")
 extern class AudioDeviceEvent {
     var type: SDLEventType;
     var timestamp: UInt;
@@ -248,11 +203,8 @@ extern class AudioDeviceEvent {
     var iscapture: UInt;
 }
 
-
-@:include('linc_sdl.h')
 @:structAccess
-@:unreflective
-@:native("SDL_TouchFingerEvent")
+@:include('linc_sdl.h') @:native("::cpp::Struct<SDL_TouchFingerEvent>")
 extern class TouchFingerEvent {
     var type: SDLEventType;
     var timestamp: UInt;
@@ -265,10 +217,8 @@ extern class TouchFingerEvent {
     var pressure: UInt;
 }
 
-@:include('linc_sdl.h')
 @:structAccess
-@:unreflective
-@:native("SDL_MultiGestureEvent")
+@:include('linc_sdl.h') @:native("::cpp::Struct<SDL_MultiGestureEvent>")
 extern class MultiGestureEvent {
     var type: SDLEventType;
     var timestamp: UInt;
@@ -280,10 +230,8 @@ extern class MultiGestureEvent {
     var numFingers: UInt;
 }
 
-@:include('linc_sdl.h')
 @:structAccess
-@:unreflective
-@:native("SDL_DollarGestureEvent")
+@:include('linc_sdl.h') @:native("::cpp::Struct<SDL_DollarGestureEvent>")
 extern class DollarGestureEvent {
     var type: SDLEventType;
     var timestamp: UInt;
@@ -295,10 +243,8 @@ extern class DollarGestureEvent {
     var y: Float;
 }
 
-@:include('linc_sdl.h')
 @:structAccess
-@:unreflective
-@:native("SDL_MouseButtonEvent")
+@:include('linc_sdl.h') @:native("::cpp::Struct<SDL_MouseButtonEvent>")
 extern class MouseButtonEvent {
     var type: SDLEventType;
     var timestamp: UInt;
@@ -311,10 +257,8 @@ extern class MouseButtonEvent {
     var y: UInt;
 }
 
-@:include('linc_sdl.h')
 @:structAccess
-@:unreflective
-@:native("SDL_MouseWheelEvent")
+@:include('linc_sdl.h') @:native("::cpp::Struct<SDL_MouseWheelEvent>")
 extern class MouseWheelEvent {
     var type: SDLEventType;
     var timestamp: UInt;
@@ -324,4 +268,14 @@ extern class MouseWheelEvent {
     var y: UInt;
     var direction: UInt;
 }
+
+@:structAccess
+@:include('linc_sdl.h') @:native("::cpp::Struct<SDL_Finger>")
+private extern class SDLFinger {
+    var id:cpp.Int64;
+    var x:Float;
+    var y:Float;
+    var pressure:Float;
+}
+typedef Finger = cpp.Pointer<SDLFinger>;
 
