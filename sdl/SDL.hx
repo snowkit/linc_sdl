@@ -41,11 +41,13 @@ extern class SDL {
 //SDL_events.h
 
 
-    // @:native(linc::sdl::addEventWatch')
-    // static function addEventWatch(filter:cpp.Callable<SDLEventFilter>) : Void;
+    static inline function addEventWatch(filter:SDLEventFilter, userdata:Dynamic) : Void {
+        SDL_helper.add_event_watch(filter, userdata);
+    }
 
-    // @:native('linc::sdl::delEventWatch')
-    // static function delEventWatch(filter:cpp.Callable<SDLEventFilter>) : Void;
+    static inline function delEventWatch(filter:SDLEventFilter) : Void {
+        SDL_helper.del_event_watch(filter);
+    }
 
     @:native('SDL_EventState')
     static function eventState(type:SDLEventType, state:SDLEventState) : UInt;
@@ -74,7 +76,7 @@ extern class SDL {
     static function getTouchFinger(touchID:cpp.Int64, index:Int): sdl.Event.Finger;
 
         //:note: Not SDL API, this was added to work
-        //better against pollEvent, see the comments there.
+        //better against pollEvent and haxe
     static inline function hasAnEvent():Bool  {
         pumpEvents();
         return hasEvents( SDL_FIRSTEVENT, SDL_LASTEVENT );
@@ -1139,12 +1141,64 @@ extern class SDL {
     @:native('linc::sdl::run')
     static function run():Void;
 
+    @:native('linc::sdl::init_event_watch')
+    private static function init_event_watch(func:cpp.Callable<sdl.Event.EventRef->Void>):Void;
 
 } //SDL
 
+@:allow(sdl.SDL)
+private class SDL_helper {
+
+    static var event_watchs : Array<{ func:SDLEventFilter, data:Dynamic }> = [];
+
+    static var watch_callback_set = false;
+
+    static function add_event_watch(func:SDLEventFilter, data:Dynamic) {
+
+        if(!watch_callback_set) {
+            init_watch_callback();
+        }
+
+        for(e in event_watchs) if(e.func == func) throw "Can't add event watch to the same callback twice";
+
+        event_watchs.push({ func:func, data:data });
+
+    } //add_event_watch
+
+    static function del_event_watch(func:SDLEventFilter) {
+
+        var index = -1;
+        var idx = 0;
+
+        for(e in event_watchs) {
+            if(e.func == func) index = idx;
+            ++idx;
+        }
+
+        if(index == -1) throw "Can't find event watch to remove, did you add it?";
+
+        event_watchs.remove( event_watchs[index] );
+
+    } //del_event_watch
+
+    static function init_watch_callback() {
+        watch_callback_set = true;
+        @:privateAccess SDL.init_event_watch( cpp.Callable.fromStaticFunction(event_watch_callback) );
+    }
+
+    static function event_watch_callback(event:sdl.Event.EventRef) {
+
+        for(e in event_watchs) {
+            e.func(e.data, cast event);
+        }
+
+    } //event_watch_callback
+
+} //SDL_helper
+
 //supposed to be (userdata:Dynamic, event:cpp.Pointer<sdl.Event>)
 //function filter(userdata:Dynamic, event:sdl.Event)
-typedef SDLEventFilter = sdl.Event->Void;
+typedef SDLEventFilter = Dynamic->sdl.Event->Void;
 
 typedef SDLColor = { r:UInt, g:UInt, b:UInt, a:UInt };
 typedef SDLPoint = { x:Int, y:Int };

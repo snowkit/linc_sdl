@@ -424,68 +424,32 @@
             } //getCurrentDisplayMode
 
 
+            //internal
+            static InternalEventFilterFN event_fn = 0;
+            static bool inited_event_watch = false;
 
+            //sdl ignores the return value
+            static int InternalEventFilter(void* userdata, SDL_Event* event) {
 
-            // typedef ::cpp::Function < Void(::cpp::Struct<SDL_Event>)> EventFilterFN;
-            // static std::map<int*, EventFilterFN> filter_id_map;
-            // static std::map<EventFilterFN, int*> filter_map;
-            // static int filter_seq = 0;
+                if(!inited_event_watch) return 0;
 
-            // inline static int _filter(void* userdata, SDL_Event* event) {
+                event_fn(event);
 
-            //     int* filter_id = (int*)userdata;
+                return 0;
 
-            //     if(*filter_id == 0) return 0; //if 0 id
-            //     if(filter_id == 0) return 0; //if null
+            } //InternalEventFilter
 
-            //     EventFilterFN filter = filter_id_map[filter_id];
+            void init_event_watch( InternalEventFilterFN fn ) {
 
-            //     if(filter != null()) filter(*event);
+                if(inited_event_watch) return;
 
-            //     return 0; //ignored by SDL
+                event_fn = fn;
 
-            // } //_filter
+                SDL_AddEventWatch(InternalEventFilter, 0);
 
-            // static void addEventWatch(EventFilterFN filter) {
+                inited_event_watch = true;
 
-            //     filter_seq++;
-
-            //     int* seq_id = (int*)malloc(sizeof(int));
-            //     memcpy((void*)seq_id, &filter_seq, sizeof(int));
-
-            //     filter_id_map[seq_id] = filter;
-            //     filter_map[filter] = seq_id;
-
-            //     SDL_AddEventWatch( _filter, seq_id );
-
-            // } //addEventWatch
-
-            // static void delEventWatch(EventFilterFN filter) {
-
-            //     int* filter_id = filter_map[filter];
-
-            //     filter_map.erase(filter);
-            //     filter_id_map.erase(filter_id);
-
-            //     SDL_DelEventWatch( _filter, (void*)filter_id );
-
-            //     free(filter_id);
-            //     filter_id = 0;
-
-            // } //delEventWatch
-
-            typedef ::cpp::Function < int(::String)> FN;
-            static std::vector<FN> list;
-            static int testfunc( FN fn ) {
-                list.push_back(fn);
-                return list.size() - 1;
-            }
-
-            static void run() {
-                for(int i = 0; i < list.size(); ++i) {
-                    list[i]( ::String("good ole c") );
-                }
-            }
+            } //init_event_watch
 
         //conversions
 

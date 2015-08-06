@@ -10,29 +10,7 @@ class Test {
     static var cursor : sdl.Cursor;
     static var reason : String = '';
 
-    static function testf(val:String):Int {
-        trace("test1:"+val);
-        return 1;
-    }
-    static function testf2(val:String):Int {
-        trace("test2:"+val);
-        return 2;
-    }
-
-    static function testf3(val:String):Int {
-        trace("test3:"+val);
-        return 3;
-    }
-
     static function main() {
-
-        // trace(SDL.testfunc(cpp.Function.fromStaticFunction(testf)));
-        // trace(SDL.testfunc(cpp.Function.fromStaticFunction(testf2)));
-        // trace(SDL.testfunc(cpp.Function.fromStaticFunction(testf3)));
-
-        // SDL.run();
-
-        // return ;
 
         init();
         versions();
@@ -124,8 +102,8 @@ class Test {
 
             trace('render copy errors: `' + SDL.getError() + '`');
 
-            // SDL.addEventWatch( cpp.Callable.fromStaticFunction(eventfilter) );
-            // SDL.addEventWatch( cpp.Callable.fromStaticFunction(eventfilter2), null );
+            SDL.addEventWatch( eventfilter, {id:1} );
+            SDL.addEventWatch( eventfilter2, {id:2} );
 
             trace('Displays:');
             var num_displays = SDL.getNumVideoDisplays();
@@ -205,12 +183,17 @@ class Test {
         }
     }
 
-    static function eventfilter(e:sdl.Event) {
-        trace('eventfilter1:' + Std.int(e.type));
+    static function eventfilter(userdata:{id:Int}, e:sdl.Event) {
+        if(e.type == SDLEventType.SDL_MOUSEBUTTONDOWN) {
+            trace('event filter 1 mouse down :' + userdata);
+        }
     }
 
-    static function eventfilter2(e:sdl.Event) {
-        trace('eventfilter2:' + Std.int(e.type));
+    static function eventfilter2(userdata:{id:Int}, e:sdl.Event) {
+        if(e.type == SDLEventType.SDL_MOUSEBUTTONUP) {
+            trace('event filter 2 mouse up :' + userdata);
+            SDL.delEventWatch(eventfilter2);
+        }
     }
 
     static function init() {

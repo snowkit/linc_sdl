@@ -63,6 +63,11 @@ namespace linc {
 			extern Dynamic getDesktopDisplayMode(int display_index);
 			extern Dynamic getCurrentDisplayMode(int display_index);
 
+
+            //internal
+            typedef ::cpp::Function < Void(::cpp::Reference<SDL_Event>)> InternalEventFilterFN;
+            extern void init_event_watch( InternalEventFilterFN fn );
+
     } //sdl
 
 } //linc
