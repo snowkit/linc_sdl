@@ -3,16 +3,16 @@
     <set name='NATIVE_TOOLKIT_PATH' value='${LINC_SDL_PATH}/lib/sdl/'/>
     <files id='haxe'>
         <compilerflag value='-DLINC_SDL'/>
-        <compilerflag value='-I${LINC_SDL_PATH}/linc_sdl/'/>
+        <compilerflag value='-I${LINC_SDL_PATH}/linc/'/>
         <compilerflag value='-I${LINC_SDL_PATH}/sdl/include/'/>
         <compilerflag value='-I${LINC_SDL_PATH}/sdl/include/configs/default/'    unless='windows || mac || linux'/>
         <compilerflag value='-I${LINC_SDL_PATH}/sdl/include/configs/linux/'      if='linux'/>
         <compilerflag value='-I${LINC_SDL_PATH}/sdl/include/configs/windows/'    if='windows'/>
         <compilerflag value='-I${LINC_SDL_PATH}/sdl/include/configs/mac/'        if='mac'/>
-        <file name='${LINC_SDL_PATH}/linc_sdl/linc_sdl.cpp' />
+        <file name='${LINC_SDL_PATH}/linc/linc_sdl.cpp' />
     </files>
     <files id="__main__">
-        <compilerflag value='-I${LINC_SDL_PATH}/linc_sdl/'/>
+        <compilerflag value='-I${LINC_SDL_PATH}/linc/'/>
         <compilerflag value='-I${LINC_SDL_PATH}/sdl/include/'/>
         <compilerflag value='-I${LINC_SDL_PATH}/sdl/include/configs/default/'    unless='windows || mac || linux'/>
         <compilerflag value='-I${LINC_SDL_PATH}/sdl/include/configs/linux/'      if='linux'/>

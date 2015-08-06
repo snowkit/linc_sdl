@@ -14,9 +14,8 @@ import sdl.Haptic;
 
 @:keep
 @:include('linc_sdl.h')
+@:build(linc.Touch.apply())
 extern class SDL {
-
-    static inline var forcer:String = Forcer.get();
 
 //:note:differences:
 // - vargs type functions : use haxe string interpolation instead
@@ -1616,11 +1615,5 @@ from Int to Int {
 
 
 
-@:buildXml("
-<set name='LINC_SDL_PATH' value='${haxelib:linc_sdl}'/>
-<include name='${LINC_SDL_PATH}/linc_sdl/linc_sdl.xml'/>
-")
-@:keep private class SDLLinc {
-    static inline var forcer:String = Forcer.get();
-    function __init__(){}
-}
+@:buildXml("<include name='${haxelib:linc_sdl}/linc/linc_sdl.xml'/>")
+@:keep private class SDLLinc {}

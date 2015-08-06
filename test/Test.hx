@@ -371,9 +371,4 @@ class Test {
 
     } //cleanup
 
-
-        //a simple macro to force compilation each time
-        //allowing faster iteration
-    static inline var forcer:String = Forcer.get();
-
 }

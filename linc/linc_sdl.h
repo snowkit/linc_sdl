@@ -10,6 +10,7 @@ namespace linc {
 
                 //forward declarations
             namespace convert {
+
                 extern  Dynamic render_info_to_hx(SDL_RendererInfo info);
                 extern  Dynamic display_mode_to_hx(SDL_DisplayMode mode);
                 extern  Dynamic set_color_into(Dynamic into, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
@@ -19,7 +20,8 @@ namespace linc {
                 extern  Dynamic set_rect_into(Dynamic into, int x, int y, int w, int h);
                 extern  Dynamic set_rect_into(Dynamic into, SDL_Rect from);
                 extern SDL_Rect get_rect_from(Dynamic from);
-            }
+
+            } //convert
 
             extern Dynamic createWindowAndRenderer(int x, int y, int flags);
             extern ::String REVISION();
