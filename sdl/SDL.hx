@@ -12,11 +12,11 @@ import sdl.Thread;
 import sdl.RWops;
 import sdl.Haptic;
 
-@:include('./linc_sdl.h')
-@:buildXml("<include name='${LINC_SDL_LIB_PATH}/../sdl/linc_sdl.xml'/>")
 @:keep
+@:include('linc_sdl.h')
 extern class SDL {
 
+    static inline var forcer:String = Forcer.get();
 
 //:note:differences:
 // - vargs type functions : use haxe string interpolation instead
@@ -1650,3 +1650,11 @@ from Int to Int {
 
 
 
+@:buildXml("
+<set name='LINC_SDL_PATH' value='${haxelib:linc_sdl}'/>
+<include name='${LINC_SDL_PATH}/linc_sdl/linc_sdl.xml'/>
+")
+@:keep private class SDLLinc {
+    static inline var forcer:String = Forcer.get();
+    function __init__(){}
+}

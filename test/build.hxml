@@ -4,11 +4,6 @@
 -D no-debug
 -cmd cpp/Test
 
-# currently, you must set this to the lib/ folder,
-# relative to your cpp build output folder or absolute path
-
--D LINC_SDL_LIB_PATH=../../lib
-
 # pick a target
 
 -D mac
