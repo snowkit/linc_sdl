@@ -475,11 +475,11 @@ extern class SDL {
     @:native('SDL_UnlockTexture')
     static function unlockTexture(texture:Texture):Void;
 
-    // @:native('SDL_UpdateTexture')
-    //:todo: static function updateTexture():Void;
+    @:native('linc::sdl::updateTexture')
+    static function updateTexture(texture:Texture, rect:SDLRect, pixels:Bytes, pitch:Int):Int;
 
-    // @:native('SDL_UpdateYUVTexture')
-    //:todo: static function updateYUVTexture():Void;
+    @:native('linc::sdl::updateYUVTexture')
+    static function updateYUVTexture(texture:Texture, rect:SDLRect, Yplane:Bytes, Ypitch:Int, Uplane:Bytes, Upitch:Int, Vplane:Bytes, Vpitch:Int):Int;
 
 
 //SDL_cpuinfo.h

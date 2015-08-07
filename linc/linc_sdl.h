@@ -45,7 +45,12 @@ namespace linc {
 			extern Uint8 getTextureAlphaMod(SDL_Texture* texture);
 			extern int getTextureBlendMode(SDL_Texture* texture);
             extern Dynamic getTextureColorMod(SDL_Texture* texture, Dynamic into);
-			extern Dynamic queryTexture(SDL_Texture* texture, Dynamic into);
+            extern Dynamic queryTexture(SDL_Texture* texture, Dynamic into);
+            extern int updateTexture(SDL_Texture* texture, Dynamic rect, Array<unsigned char> pixels, int pitch);
+			extern int updateYUVTexture(SDL_Texture* texture, Dynamic rect,
+                                        Array<unsigned char> Yplane, int Ypitch,
+                                        Array<unsigned char> Uplane, int Upitch,
+                                        Array<unsigned char> Vplane, int Vpitch);
 			extern int renderDrawRect(SDL_Renderer* renderer, Dynamic rect);
 			extern int renderFillRect(SDL_Renderer* renderer, Dynamic rect);
 			extern Dynamic renderGetClipRect(SDL_Renderer* renderer, Dynamic into);

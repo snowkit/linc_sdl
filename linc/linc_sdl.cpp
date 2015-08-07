@@ -237,6 +237,40 @@
 
             } //queryTexture
 
+            int updateTexture(SDL_Texture* texture, Dynamic rect, Array<unsigned char> pixels, int pitch) {
+
+                if(rect != null()) {
+                    SDL_Rect _rect = convert::get_rect_from(rect);
+                    return SDL_UpdateTexture(texture, &_rect, (const void*)&pixels[0], pitch);
+                } else {
+                    return SDL_UpdateTexture(texture, NULL, (const void*)&pixels[0], pitch);
+                }
+
+            } //updateTexture
+
+            int updateYUVTexture(SDL_Texture* texture, Dynamic rect,
+                                 Array<unsigned char> Yplane, int Ypitch,
+                                 Array<unsigned char> Uplane, int Upitch,
+                                 Array<unsigned char> Vplane, int Vpitch)
+            {
+
+                if(rect != null()) {
+                    SDL_Rect _rect = convert::get_rect_from(rect);
+                    return SDL_UpdateYUVTexture( texture, &_rect,
+                                                 (const Uint8*)&Yplane[0], Ypitch,
+                                                 (const Uint8*)&Uplane[0], Upitch,
+                                                 (const Uint8*)&Vplane[0], Vpitch );
+
+                } else {
+                    return SDL_UpdateYUVTexture( texture, NULL,
+                                                 (const Uint8*)&Yplane[0], Ypitch,
+                                                 (const Uint8*)&Uplane[0], Upitch,
+                                                 (const Uint8*)&Vplane[0], Vpitch );
+                }
+
+            } //updateYUVTexture
+
+
             int renderDrawRect(SDL_Renderer* renderer, Dynamic rect) {
 
                 SDL_Rect _rect = convert::get_rect_from(rect);
