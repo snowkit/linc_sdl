@@ -262,6 +262,7 @@ class Test {
                     }
                 }
             }
+
             if(e.type == SDLEventType.SDL_MOUSEBUTTONDOWN) trace('mouse button down: ' + e.button.button);
             if(e.type == SDLEventType.SDL_MOUSEBUTTONUP) trace('mouse button up: ' + e.button.button);
 

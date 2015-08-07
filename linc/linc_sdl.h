@@ -65,8 +65,14 @@ namespace linc {
 
 
             //internal
-            typedef ::cpp::Function < Void(::cpp::Reference<SDL_Event>)> InternalEventFilterFN;
+            typedef ::cpp::Function < Void(::cpp::Reference<SDL_Event>) > InternalEventFilterFN;
             extern void init_event_watch( InternalEventFilterFN fn );
+
+            //iOS callbacks
+            #if defined(__IPHONEOS__) || defined(IPHONE)
+                typedef ::cpp::Function < Void() > InternaliOSCallbackFN;
+                extern void init_ios_callback( SDL_Window* window, int interval, InternaliOSCallbackFN fn );
+            #endif
 
     } //sdl
 

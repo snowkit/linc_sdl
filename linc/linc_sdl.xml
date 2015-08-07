@@ -11,6 +11,9 @@
         <compilerflag value='-I${LINC_SDL_PATH}/sdl/include/configs/mac/'        if='mac'/>
         <file name='${LINC_SDL_PATH}/linc/linc_sdl.cpp' />
     </files>
+    <files id="__lib__">
+        <compilerflag value='-I${LINC_SDL_PATH}/linc/'/>
+    </files>
     <files id="__main__">
         <compilerflag value='-I${LINC_SDL_PATH}/linc/'/>
         <compilerflag value='-I${LINC_SDL_PATH}/sdl/include/'/>
@@ -20,7 +23,8 @@
         <compilerflag value='-I${LINC_SDL_PATH}/sdl/include/configs/mac/'        if='mac'/>
     </files>
     <target id="haxe">
-        <lib name="${LINC_SDL_PATH}/lib/sdl/lib/${BINDIR}/libsdl.a"/>
+
+        <lib name="${LINC_SDL_PATH}/lib/sdl/lib/${BINDIR}/libsdl${LIBEXTRA}.a"/>
 
         <section if="mac">
             <vflag name="-l" value="iconv"/>

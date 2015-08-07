@@ -1134,12 +1134,36 @@ extern class SDL {
     @:native('SDL_GL_GetAttribute')
     static function GL_GetAttribute(attr:SDLGLAttr) : Int;
 
+//SDL_system.h
 
-    @:native('linc::sdl::testfunc')
-    static function testfunc( fn : cpp.Callable<String->Int> ):Int;
+    #if ios
 
-    @:native('linc::sdl::run')
-    static function run():Void;
+        static inline function iPhoneSetAnimationCallback(window:Window, interval:Int, callback:Dynamic->Void, userdata:Dynamic) : Void {
+
+            SDL_helper.iOS_set_callback(window, interval, callback, userdata);
+
+        } //iPhoneSetAnimationCallback
+
+        //internal
+        @:native('linc::sdl::init_ios_callback')
+        private static function init_ios_callback(window:Window, interval:Int, func:cpp.Callable<Void->Void>):Void;
+
+    #end
+
+    // SDL_AndroidGetActivity
+    // SDL_AndroidGetExternalStoragePath
+    // SDL_AndroidGetExternalStorageState
+    // SDL_AndroidGetInternalStoragePath
+    // SDL_AndroidGetJNIEnv
+    // SDL_DXGIGetOutputInfo
+    // SDL_Direct3D9GetAdapterIndex
+    // SDL_RenderGetD3D9Device
+    // SDL_SetWindowsMessageHook
+    // SDL_WinRTGetFSPathUNICODE
+    // SDL_WinRTGetFSPathUTF8
+
+
+//Internal
 
     @:native('linc::sdl::init_event_watch')
     private static function init_event_watch(func:cpp.Callable<sdl.Event.EventRef->Void>):Void;
@@ -1149,8 +1173,35 @@ extern class SDL {
 @:allow(sdl.SDL)
 private class SDL_helper {
 
-    static var event_watchs : Array<{ func:SDLEventFilter, data:Dynamic }> = [];
+#if ios
+    //iOS animation callbacks
 
+    static var iOS_callback_data: { fn:Dynamic->Void, userdata:Dynamic } = null;
+    static function iOS_set_callback(window:Window, interval:Int, callback:Dynamic->Void, userdata:Dynamic) {
+
+        var _init = (iOS_callback_data == null);
+
+        iOS_callback_data = { fn:callback, userdata:userdata };
+
+        if(_init) {
+            @:privateAccess SDL.init_ios_callback(window, interval, cpp.Callable.fromStaticFunction(iOS_callback_handler));
+        }
+
+    } //iOS_set_callback
+
+    static function iOS_callback_handler() {
+
+        if(iOS_callback_data != null && iOS_callback_data.fn != null) {
+            iOS_callback_data.fn(iOS_callback_data.userdata);
+        }
+
+    } //iOS_callback_handler
+
+#end
+
+//Event Watch
+
+    static var event_watchs : Array<{ func:SDLEventFilter, data:Dynamic }> = [];
     static var watch_callback_set = false;
 
     static function add_event_watch(func:SDLEventFilter, data:Dynamic) {

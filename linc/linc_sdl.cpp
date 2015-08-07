@@ -451,6 +451,26 @@
 
             } //init_event_watch
 
+        #if defined(__IPHONEOS__) || defined(IPHONE)
+
+            //iOS callback
+
+                static InternaliOSCallbackFN ios_fn;
+
+                static void InternaliOSCallback(void* userdata) {
+
+                    ios_fn();
+
+                } //InternaliOSCallback
+
+                void init_ios_callback( SDL_Window* window, int interval, InternaliOSCallbackFN fn ) {
+
+                    SDL_iPhoneSetAnimationCallback(window, interval, InternaliOSCallback, NULL);
+
+                } //init_ios_callback
+
+        #endif //iOS
+
         //conversions
 
             namespace convert {
