@@ -226,6 +226,19 @@
 
             } //getTextureColorMod
 
+            int lockTexture(SDL_Texture* texture, Dynamic rect, Array<unsigned char> dest) {
+
+                int pitch = -1;
+
+                if(rect != null()) {
+                    SDL_Rect _rect = convert::get_rect_from(rect);
+                    SDL_LockTexture(texture, &_rect, (void**)&dest[0], &pitch);
+                }
+
+                return pitch;
+
+            } //lockTexture
+
             Dynamic queryTexture(SDL_Texture* texture, Dynamic into) {
 
                 Uint32 format;
@@ -322,6 +335,17 @@
                 return convert::set_rect_into(into, from);
 
             } //renderGetViewport
+
+            int renderReadPixels(SDL_Renderer* renderer, Dynamic rect, int format, Array<unsigned char> dest, int pitch) {
+
+                if(rect != null()) {
+                    SDL_Rect _rect = convert::get_rect_from(rect);
+                    return SDL_RenderReadPixels(renderer, &_rect, format, (void*)&dest[0], pitch);
+                } else {
+                    return SDL_RenderReadPixels(renderer, NULL, format, (void*)&dest[0], pitch);
+                }
+
+            } //renderReadPixels
 
             int renderSetClipRect(SDL_Renderer* renderer, Dynamic rect) {
 

@@ -45,6 +45,7 @@ namespace linc {
 			extern Uint8 getTextureAlphaMod(SDL_Texture* texture);
 			extern int getTextureBlendMode(SDL_Texture* texture);
             extern Dynamic getTextureColorMod(SDL_Texture* texture, Dynamic into);
+            extern int lockTexture(SDL_Texture* texture, Dynamic rect, Array<unsigned char> dest);
             extern Dynamic queryTexture(SDL_Texture* texture, Dynamic into);
             extern int updateTexture(SDL_Texture* texture, Dynamic rect, Array<unsigned char> pixels, int pitch);
 			extern int updateYUVTexture(SDL_Texture* texture, Dynamic rect,
@@ -56,7 +57,8 @@ namespace linc {
 			extern Dynamic renderGetClipRect(SDL_Renderer* renderer, Dynamic into);
 			extern Dynamic renderGetLogicalSize(SDL_Renderer* renderer, Dynamic into);
 			extern Dynamic renderGetScale(SDL_Renderer* renderer, Dynamic into);
-			extern Dynamic renderGetViewport(SDL_Renderer* renderer, Dynamic into);
+            extern Dynamic renderGetViewport(SDL_Renderer* renderer, Dynamic into);
+            extern int renderReadPixels(SDL_Renderer* renderer, Dynamic rect, int format, Array<unsigned char> dest, int pitch);
 			extern int renderSetClipRect(SDL_Renderer* renderer, Dynamic rect);
 			extern int renderSetViewport(SDL_Renderer* renderer, Dynamic rect);
 			extern SDL_Cursor* createSystemCursor(int id);

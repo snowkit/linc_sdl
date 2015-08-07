@@ -369,8 +369,8 @@ extern class SDL {
     @:native('linc::sdl::getTextureColorMod')
     static function getTextureColorMod(texture:Texture, into:SDLColor):SDLColor;
 
-    // @:native('SDL_LockTexture')
-    //:todo: static function lockTexture():Void;
+    @:native('linc::sdl::lockTexture')
+    static function lockTexture(texture:Texture, rect:SDLRect, dest:Bytes):Int;
 
     @:native('linc::sdl::queryTexture')
     static function queryTexture(texture:Texture, into:SDLTextureQuery):SDLTextureQuery;
@@ -436,8 +436,8 @@ extern class SDL {
     @:native('SDL_RenderPresent')
     static function renderPresent(renderer:Renderer):Int;
 
-    // @:native('SDL_RenderReadPixels')
-    //:todo: static function renderReadPixels():Void;
+    @:native('linc::sdl::renderReadPixels')
+    static function renderReadPixels(renderer:Renderer, rect:SDLRect, format:SDLPixelFormat, dest:Bytes, pitch:Int):Int;
 
     @:native('linc::sdl::renderSetClipRect')
     static function renderSetClipRect(renderer:Renderer, rect:SDLRect):Int;
