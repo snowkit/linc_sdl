@@ -580,32 +580,36 @@ extern class SDL {
 
 //SDL_keyboard.h
 
-    // @:native('SDL_GetKeyFromName')
-    //:todo: static function getKeyFromName(name:String):SDLKeycode;
+    @:native('SDL_GetKeyFromName')
+    private static function _getKeyFromName(name:cpp.ConstCharStar):SDLKeycode;
+    static inline function getKeyFromName(name:String) : SDLKeycode return _getKeyFromName(cast name);
 
-    // @:native('SDL_GetKeyFromScancode')
-    //:todo: static function getKeyFromScancode(scan:SDLScancode):SDLKeycode;
+    @:native('SDL_GetKeyFromScancode')
+    static function getKeyFromScancode(scan:SDLScancode):SDLKeycode;
 
-    // @:native('SDL_GetKeyName')
-    //:todo: static function getKeyName(key:SDLKeycode):String;
+    @:native('SDL_GetKeyName')
+    private static function _getKeyName(key:SDLKeycode):cpp.ConstCharStar;
+    static inline function getKeyName(key:SDLKeycode):String return cast _getKeyName(key);
 
     @:native('SDL_GetKeyboardFocus')
     static function getKeyboardFocus():Window;
 
     // @:native('SDL_GetKeyboardState')
-    //:todo:not sure this makes sense: static function getKeyboardState():Array<Int>;
+    //:note:not sure this makes sense: static function getKeyboardState():Array<Int>;
 
     @:native('SDL_GetModState')
     static function getModState():SDLKeymod;
 
-    // @:native('SDL_GetScancodeFromKey')
-    //:todo: static function getScancodeFromKey(key:SDLKeycode):SDLScancode;
+    @:native('SDL_GetScancodeFromKey')
+    static function getScancodeFromKey(key:SDLKeycode):SDLScancode;
 
-    // @:native('SDL_GetScancodeFromName')
-    //:todo: static function getScancodeFromName(name:String):SDLScancode;
+    @:native('SDL_GetScancodeFromName')
+    private static function _getScancodeFromName(name:cpp.ConstCharStar):SDLScancode;
+    static inline function getScancodeFromName(name:String):SDLScancode return _getScancodeFromName(cast name);
 
-    // @:native('SDL_GetScancodeName')
-    //:todo: static function getScancodeName(scan:SDLScancode):String;
+    @:native('SDL_GetScancodeName')
+    private static function _getScancodeName(scan:SDLScancode):cpp.ConstCharStar;
+    static inline function getScancodeName(scan:SDLScancode):String return cast _getScancodeName(scan);
 
     @:native('SDL_HasScreenKeyboardSupport')
     static function hasScreenKeyboardSupport():Bool;
@@ -1171,12 +1175,12 @@ extern class SDL {
     #end
 
     #if windows
-        //:todo: static function SDL_DXGIGetOutputInfo():Void;
-        //:todo: static function SDL_Direct3D9GetAdapterIndex():Void;
-        //:todo: static function SDL_RenderGetD3D9Device():Void;
-        //:todo: static function SDL_SetWindowsMessageHook():Void;
-        //:todo: static function SDL_WinRTGetFSPathUNICODE():Void;
-        //:todo: static function SDL_WinRTGetFSPathUTF8():Void;
+        //:pending: static function SDL_DXGIGetOutputInfo():Void;
+        //:pending: static function SDL_Direct3D9GetAdapterIndex():Void;
+        //:pending: static function SDL_RenderGetD3D9Device():Void;
+        //:pending: static function SDL_SetWindowsMessageHook():Void;
+        //:pending: static function SDL_WinRTGetFSPathUNICODE():Void;
+        //:pending: static function SDL_WinRTGetFSPathUTF8():Void;
     #end
 
 
@@ -1758,6 +1762,8 @@ from Int to Int {
     var SDL_WINDOW_MOUSE_CAPTURE        = 0x00004000;       /**< window has mouse captured (unrelated to INPUT_GRABBED) */
 } //SDLWindowFlags
 
+typedef SDLKeycode = UInt;
+typedef SDLScancode = UInt;
 
 #if android
     @:include('jni.h')

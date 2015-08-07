@@ -212,7 +212,7 @@ class Test {
         trace('    - pref path: ' + SDL.getPrefPath('org.snowkit','sdl_test'));
         trace('    - timer ticks: ' + SDL.getTicks());
 
-            //:todo: This breaks on hxcpp cos
+            //:note: This breaks on hxcpp cos
             //error: conversion from '::cpp::UInt64' (aka 'unsigned long long') to 'Dynamic' is ambiguous
         // trace('    - perf counter: ' + SDL.getPerformanceCounter());
         // trace('    - perf freq: ' + SDL.getPerformanceFrequency());
@@ -240,6 +240,8 @@ class Test {
             if(e.type == SDL_KEYDOWN) {
 
                 var ctrlormetadown = (SDL.getModState() == (KMOD_GUI | KMOD_CTRL));
+
+                trace(SDL.getKeyName(e.key.keysym.sym));
 
                 if(e.key.keysym.sym == 27) {
                     reason = 'escape key';

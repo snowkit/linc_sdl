@@ -401,7 +401,7 @@
 
             } //renderCopy
 
-                //:todo: Isn't there a better way than all these conditions...
+                //:note: silly structs and nulls, these conditions...
             int renderCopyEx(SDL_Renderer* renderer, SDL_Texture* texture,
                              Dynamic srcrect, Dynamic dstrect, Float angle,
                              Dynamic center, int flip )
