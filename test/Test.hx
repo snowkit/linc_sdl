@@ -250,7 +250,9 @@ class Test {
             }
 
             if(e.type == SDLEventType.SDL_MOUSEMOTION) {
-                trace('motion ' + e.motion.x + ',' + e.motion.y);
+
+                var gp = SDL.getGlobalMouseState({x:0,y:0,buttons:0});
+                trace('motion ' + e.motion.x + ',' + e.motion.y + ' / global / ' + gp.x + ',' + gp.y + ' b:' + gp.buttons);
                 if(e.motion.x >= 112 && e.motion.x <= 208 && e.motion.y >= 192 && e.motion.y <= 288) {
                     if(!hover) {
                         SDL.setCursor(hand_cursor);

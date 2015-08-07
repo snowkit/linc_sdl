@@ -17,6 +17,7 @@ namespace linc {
                 extern  Dynamic set_size_into(Dynamic into, int w, int h);
                 extern  Dynamic set_scale_into(Dynamic into, float x, float y);
                 extern  Dynamic set_point_into(Dynamic into, int x, int y);
+                extern  Dynamic set_mouse_state_into(Dynamic into, int x, int y, Uint32 buttons);
                 extern  Dynamic set_rect_into(Dynamic into, int x, int y, int w, int h);
                 extern  Dynamic set_rect_into(Dynamic into, SDL_Rect from);
                 extern SDL_Rect get_rect_from(Dynamic from);
@@ -62,6 +63,9 @@ namespace linc {
 			extern Dynamic getDisplayMode(int display_index, int mode_index);
 			extern Dynamic getDesktopDisplayMode(int display_index);
             extern Dynamic getCurrentDisplayMode(int display_index);
+            extern Dynamic getGlobalMouseState(Dynamic into);
+            extern Dynamic getMouseState(Dynamic into);
+            extern Dynamic getRelativeMouseState(Dynamic into);
 			extern int waitThread(SDL_Thread* thread);
 
 

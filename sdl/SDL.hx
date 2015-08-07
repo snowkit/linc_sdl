@@ -636,7 +636,7 @@ extern class SDL {
     static function captureMouse(enabled:Bool):Int;
 
     @:native('SDL_CreateColorCursor')
-    static function createColorCursor(surface:Surface, hot_x:Int, hot_y:Int): Cursor;
+    static function createColorCursor(surface:Surface, hot_x:Int, hot_y:Int):Cursor;
 
     @:native('SDL_CreateCursor')
     static function createCursor(data:Bytes, mask:Bytes, w:Int, h:Int, hot_x:Int, hot_y:Int):Cursor;
@@ -653,20 +653,20 @@ extern class SDL {
     @:native('SDL_GetDefaultCursor')
     static function getDefaultCursor():Cursor;
 
-    // @:native('SDL_GetGlobalMouseState')
-    //:todo: static function getGlobalMouseState():Int;
+    @:native('linc::sdl::getGlobalMouseState')
+    static function getGlobalMouseState(into:SDLMouseState):SDLMouseState;
 
     @:native('SDL_GetMouseFocus')
     static function getMouseFocus():Window;
 
-    // @:native('SDL_GetMouseState')
-    //:todo: static function getMouseState():Int;
+    @:native('linc::sdl::getMouseState')
+    static function getMouseState(into:SDLMouseState):SDLMouseState;
 
     @:native('SDL_GetRelativeMouseMode')
     static function getRelativeMouseMode():Bool;
 
-    // @:native('SDL_GetRelativeMouseState')
-    //:todo: static function getRelativeMouseState():Int;
+    @:native('linc::sdl::SDL_GetRelativeMouseState')
+    static function getRelativeMouseState(into:SDLMouseState):SDLMouseState;
 
     @:native('SDL_SetCursor')
     static function setCursor(cursor:Cursor):Void;
@@ -1269,6 +1269,7 @@ typedef SDLEventFilter = Dynamic->sdl.Event->Void;
 
 typedef SDLColor = { r:UInt, g:UInt, b:UInt, a:UInt };
 typedef SDLPoint = { x:Int, y:Int };
+typedef SDLMouseState = { x:Int, y:Int, buttons:UInt };
 typedef SDLSize  = { w:Int, h:Int };
 typedef SDLScale = { x:Float, y:Float };
 typedef SDLRect  = { > SDLPoint, > SDLSize, } //comma is required at the end

@@ -423,6 +423,33 @@
 
             } //getCurrentDisplayMode
 
+            Dynamic getGlobalMouseState(Dynamic into) {
+
+                int x, y;
+                Uint32 buttons = SDL_GetGlobalMouseState(&x, &y);
+
+                return convert::set_mouse_state_into(into, x, y, buttons);
+
+            } //getGlobalMouseState
+
+            Dynamic getMouseState(Dynamic into) {
+
+                int x, y;
+                Uint32 buttons = SDL_GetMouseState(&x, &y);
+
+                return convert::set_mouse_state_into(into, x, y, buttons);
+
+            } //getMouseState
+
+            Dynamic getRelativeMouseState(Dynamic into) {
+
+                int x, y;
+                Uint32 buttons = SDL_GetRelativeMouseState(&x, &y);
+
+                return convert::set_mouse_state_into(into, x, y, buttons);
+
+            } //getMouseState
+
             int waitThread(SDL_Thread* thread) {
 
                 int result = -1;
@@ -581,6 +608,16 @@
                     return into;
 
                 } //set_point_into
+
+                Dynamic set_mouse_state_into(Dynamic into, int x, int y, Uint32 buttons) {
+
+                        into->__FieldRef(HX_CSTRING("x")) = x;
+                        into->__FieldRef(HX_CSTRING("y")) = y;
+                        into->__FieldRef(HX_CSTRING("buttons")) = (float)buttons;
+
+                    return into;
+
+                } //set_mouse_state_into
 
                 Dynamic set_rect_into(Dynamic into, SDL_Rect from) {
 
