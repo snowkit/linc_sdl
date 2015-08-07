@@ -20,7 +20,6 @@ extern class SDL {
 //:note:differences:
 // - vargs type functions : use haxe string interpolation instead
 
-
 //SDL.h
 
     @:native('SDL_Init')
@@ -39,7 +38,6 @@ extern class SDL {
     static function quit():Void;
 
 //SDL_events.h
-
 
     static inline function addEventWatch(filter:SDLEventFilter, userdata:Dynamic) : Void {
         SDL_helper.add_event_watch(filter, userdata);
@@ -96,9 +94,6 @@ extern class SDL {
                    // SDL_eventaction action,
                    // Uint32          minType,
                    // Uint32          maxType
-
-    // static inline function peepEvents(numevents:Int, action:SDLEventAction, min:SDLEventType, max:SDLEventType) : Array<Event> {
-    // } //peepEvents
 
     @:native('SDL_PumpEvents')
     static function pumpEvents():Void;
@@ -193,7 +188,6 @@ extern class SDL {
     static function logWarn(category:Int, value:String):Void;
 
 
-
 //SDL_assert.h
  // - :todo:
 
@@ -226,8 +220,6 @@ extern class SDL {
 
     @:native('SDL_VERSION_ATLEAST')
     static function VERSION_ATLEAST(major:Int, minor:Int, patch:Int) : Bool;
-
-
 
 //SDL_RWops.h
 
@@ -297,7 +289,6 @@ extern class SDL {
     @:native('SDL_WriteLE64')
     static function WriteLE64(dst:RWops, value:cpp.Int64) : UInt;
 
-
 //SDL_surface.h
 
     @:native('SDL_LoadBMP_RW')
@@ -317,7 +308,6 @@ extern class SDL {
 
     @:native('SDL_UpdateWindowSurface')
     static function updateWindowSurface(window:Window) : Int;
-
 
 //SDL_render.h
 
@@ -1150,17 +1140,32 @@ extern class SDL {
 
     #end
 
-    // SDL_AndroidGetActivity
-    // SDL_AndroidGetExternalStoragePath
-    // SDL_AndroidGetExternalStorageState
-    // SDL_AndroidGetInternalStoragePath
-    // SDL_AndroidGetJNIEnv
+    #if android
+
+        // SDL_AndroidGetActivity
+        // SDL_AndroidGetJNIEnv
+
+        @:native('SDL_AndroidGetExternalStoragePath')
+        private static function _androidGetExternalStoragePath() : cpp.ConstCharStar;
+        static function androidGetExternalStoragePath() : String return cast _androidGetExternalStoragePath();
+
+        @:native('SDL_AndroidGetInternalStoragePath')
+        private static function _androidGetInternalStoragePath() : cpp.ConstCharStar;
+        static function androidGetInternalStoragePath() : String return cast _androidGetInternalStoragePath();
+
+        @:native('SDL_AndroidGetExternalStorageState')
+        static function androidGetExternalStorageState() : SDLExternalStorageState;
+
+    #end
+
+    #if windows
     // SDL_DXGIGetOutputInfo
     // SDL_Direct3D9GetAdapterIndex
     // SDL_RenderGetD3D9Device
     // SDL_SetWindowsMessageHook
     // SDL_WinRTGetFSPathUNICODE
     // SDL_WinRTGetFSPathUTF8
+    #end
 
 
 //Internal
@@ -1171,6 +1176,7 @@ extern class SDL {
 } //SDL
 
 @:allow(sdl.SDL)
+@:include('linc_sdl.h')
 private class SDL_helper {
 
 #if ios
@@ -1247,8 +1253,6 @@ private class SDL_helper {
 
 } //SDL_helper
 
-//supposed to be (userdata:Dynamic, event:cpp.Pointer<sdl.Event>)
-//function filter(userdata:Dynamic, event:sdl.Event)
 typedef SDLEventFilter = Dynamic->sdl.Event->Void;
 
 typedef SDLColor = { r:UInt, g:UInt, b:UInt, a:UInt };
@@ -1295,6 +1299,15 @@ from Int to Int {
     var SDL_WINDOWPOS_UNDEFINED = 0|0x1FFF0000;
     var SDL_WINDOWPOS_CENTERED = 0|0x2FFF0000;
 } //SDLWindowPos
+
+#if android
+@:enum
+abstract SDLExternalStorageState(Int)
+from Int to Int {
+    var SDL_ANDROID_EXTERNAL_STORAGE_READ  = 0x01;
+    var SDL_ANDROID_EXTERNAL_STORAGE_WRITE = 0x02;
+} //SDLExternalStorageState
+#end
 
 @:enum
 abstract SDLLogPriority(Int)
