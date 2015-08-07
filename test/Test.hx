@@ -8,6 +8,7 @@ class Test {
 
     static var state : { window:Window, renderer:Renderer };
     static var cursor : sdl.Cursor;
+    static var hand_cursor : sdl.Cursor;
     static var reason : String = '';
 
     static function main() {
@@ -18,8 +19,8 @@ class Test {
         blends();
 
 
-        cursor = SDL.createSystemCursor(SDL_SYSTEM_CURSOR_HAND);
-        SDL.setCursor(cursor);
+        cursor = SDL.getDefaultCursor();
+        hand_cursor = SDL.createSystemCursor(SDL_SYSTEM_CURSOR_HAND);
 
         //clear to white
             SDL.setRenderDrawColor(state.renderer, 255,255,255,255);
@@ -247,7 +248,20 @@ class Test {
                 }
             }
 
-            if(e.type == SDLEventType.SDL_MOUSEMOTION) trace('motion ' + e.motion.x + ',' + e.motion.y);
+            if(e.type == SDLEventType.SDL_MOUSEMOTION) {
+                trace('motion ' + e.motion.x + ',' + e.motion.y);
+                if(e.motion.x >= 112 && e.motion.x <= 208 && e.motion.y >= 192 && e.motion.y <= 288) {
+                    if(!hover) {
+                        SDL.setCursor(hand_cursor);
+                        hover = true;
+                    }
+                } else {
+                    if(hover) {
+                        SDL.setCursor(cursor);
+                        hover = false;
+                    }
+                }
+            }
             if(e.type == SDLEventType.SDL_MOUSEBUTTONDOWN) trace('mouse button down: ' + e.button.button);
             if(e.type == SDLEventType.SDL_MOUSEBUTTONUP) trace('mouse button up: ' + e.button.button);
 
@@ -256,6 +270,8 @@ class Test {
         return true;
 
     } //process_events
+
+    static var hover = true;
 
     static function loop() {
 
