@@ -1142,8 +1142,11 @@ extern class SDL {
 
     #if android
 
-        // SDL_AndroidGetActivity
-        // SDL_AndroidGetJNIEnv
+        @:native('SDL_AndroidGetActivity')
+        static function androidGetActivity() : Dynamic;
+
+        @:native('SDL_AndroidGetJNIEnv')
+        static function androidGetJNIEnv() : JNIEnv;
 
         @:native('SDL_AndroidGetExternalStoragePath')
         private static function _androidGetExternalStoragePath() : cpp.ConstCharStar;
@@ -1731,6 +1734,12 @@ from Int to Int {
 } //SDLWindowFlags
 
 
+#if android
+    @:include('jni.h')
+    @:native('JNIEnv')
+    private extern class AndroidJNIEnv {}
+    typedef JNIEnv = cpp.Pointer<AndroidJNIEnv>;
+#end
 
 
 @:buildXml("<include name='${haxelib:linc_sdl}/linc/linc_sdl.xml'/>")

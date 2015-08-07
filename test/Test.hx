@@ -198,6 +198,7 @@ class Test {
     }
 
     static function init() {
+
         SDL.init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
         state = SDL.createWindowAndRenderer(320, 320, SDL_WINDOW_RESIZABLE);
 
@@ -220,7 +221,7 @@ class Test {
         //Also, -Wformat-security is complaining because the fmt string is used.
         // SDL.log('init');
 
-    }
+    } //init
 
     static function process_events() {
 
