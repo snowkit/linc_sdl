@@ -22,6 +22,7 @@ namespace linc {
                 extern  Dynamic set_rect_into(Dynamic into, int x, int y, int w, int h);
                 extern  Dynamic set_rect_into(Dynamic into, SDL_Rect from);
                 extern SDL_Rect get_rect_from(Dynamic from);
+                extern SDL_Point get_point_from(Dynamic from);
 
             } //convert
 
@@ -62,7 +63,7 @@ namespace linc {
 			extern Dynamic GL_GetDrawableSize(SDL_Window* window, Dynamic into);
 			extern Dynamic getDisplayBounds(int display_index, Dynamic into);
             extern int renderCopy(SDL_Renderer* renderer, SDL_Texture* texture, Dynamic srcrect, Dynamic dstrect);
-			extern int renderCopyEx(SDL_Renderer* renderer, SDL_Texture* texture, Dynamic srcrect, Dynamic dstrect, Float angle, Dynamic center, int SDLRenderFlip);
+			extern int renderCopyEx(SDL_Renderer* renderer, SDL_Texture* texture, Dynamic srcrect, Dynamic dstrect, Float angle, Dynamic center, int flip);
 			extern Dynamic getDisplayMode(int display_index, int mode_index);
 			extern Dynamic getDesktopDisplayMode(int display_index);
             extern Dynamic getCurrentDisplayMode(int display_index);

@@ -401,16 +401,69 @@
 
             } //renderCopy
 
+                //:todo: Isn't there a better way than all these conditions...
             int renderCopyEx(SDL_Renderer* renderer, SDL_Texture* texture,
                              Dynamic srcrect, Dynamic dstrect, Float angle,
-                             Dynamic center, int SDLRenderFlip )
+                             Dynamic center, int flip )
             {
                 bool has_src = srcrect != null();
                 bool has_dst = dstrect != null();
                 bool has_center = center != null();
 
-                return 0;
-            }
+                SDL_RendererFlip _flip = (SDL_RendererFlip)flip;
+
+                    //none
+                if(!has_src && !has_dst && !has_center) {
+                    return SDL_RenderCopyEx(renderer, texture, NULL, NULL, angle, NULL, _flip);
+                }
+
+
+                    //src dst
+                if(has_src && has_dst && !has_center) {
+                    SDL_Rect _src = convert::get_rect_from(srcrect);
+                    SDL_Rect _dst = convert::get_rect_from(dstrect);
+                    return SDL_RenderCopyEx(renderer, texture, &_src, &_dst, angle, NULL, _flip);
+                }
+
+                    //src
+                if(has_src && !has_dst && !has_center) {
+                    SDL_Rect _src = convert::get_rect_from(srcrect);
+                    return SDL_RenderCopyEx(renderer, texture, &_src, NULL, angle, NULL, _flip);
+                }
+
+                    //dst
+                if(!has_src && has_dst && !has_center) {
+                    SDL_Rect _dst = convert::get_rect_from(dstrect);
+                    return SDL_RenderCopyEx(renderer, texture, NULL, &_dst, angle, NULL, _flip);
+                }
+
+                    //center
+                if(!has_src && !has_dst && has_center) {
+                    SDL_Point _center = convert::get_point_from(center);
+                    return SDL_RenderCopyEx(renderer, texture, NULL, NULL, angle, &_center, _flip);
+                }
+
+                    //src center
+                if(has_src && !has_dst && has_center) {
+                    SDL_Rect _src = convert::get_rect_from(srcrect);
+                    SDL_Point _center = convert::get_point_from(center);
+                    return SDL_RenderCopyEx(renderer, texture, &_src, NULL, angle, &_center, _flip);
+                }
+
+                    //dst center
+                if(!has_src && has_dst && has_center) {
+                    SDL_Rect _dst = convert::get_rect_from(dstrect);
+                    SDL_Point _center = convert::get_point_from(center);
+                    return SDL_RenderCopyEx(renderer, texture, NULL, &_dst, angle, &_center, _flip);
+                }
+
+                SDL_Rect _src = convert::get_rect_from(srcrect);
+                SDL_Rect _dst = convert::get_rect_from(dstrect);
+                SDL_Point _center = convert::get_point_from(center);
+
+                return SDL_RenderCopyEx(renderer, texture, &_src, &_dst, angle, &_center, _flip);
+
+            } //renderCopyEx
 
             Dynamic getDisplayMode(int display_index, int mode_index) {
 
@@ -675,6 +728,17 @@
                     return r;
 
                 } //get_rect_from
+
+                SDL_Point get_point_from(Dynamic from) {
+
+                    SDL_Point p;
+
+                        p.x = from->__FieldRef(HX_CSTRING("x"));
+                        p.y = from->__FieldRef(HX_CSTRING("y"));
+
+                    return p;
+
+                } //get_point_from
 
             } //convert namespace
 

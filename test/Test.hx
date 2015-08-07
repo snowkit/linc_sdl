@@ -102,7 +102,7 @@ class Test {
 
             trace('image load errors: `' + SDL.getError() + '`');
 
-            SDL.renderCopy(state.renderer, texture, null, { x:160-48, y:160+32, w:96, h:96 });
+            SDL.renderCopyEx(state.renderer, texture, null, { x:160-48, y:160+32, w:96, h:96 }, 90, null, SDL_FLIP_VERTICAL);
 
             trace('render copy errors: `' + SDL.getError() + '`');
 
