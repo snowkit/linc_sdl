@@ -423,6 +423,17 @@
 
             } //getCurrentDisplayMode
 
+            int waitThread(SDL_Thread* thread) {
+
+                int result = -1;
+
+                SDL_WaitThread(thread, &result);
+
+                return result;
+
+            } //waitThread
+
+        //internal
 
             //internal
             static InternalEventFilterFN event_fn = 0;

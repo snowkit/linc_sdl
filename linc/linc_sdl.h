@@ -61,7 +61,8 @@ namespace linc {
 			extern int renderCopy(SDL_Renderer* renderer, SDL_Texture* texture, Dynamic srcrect, Dynamic dstrect);
 			extern Dynamic getDisplayMode(int display_index, int mode_index);
 			extern Dynamic getDesktopDisplayMode(int display_index);
-			extern Dynamic getCurrentDisplayMode(int display_index);
+            extern Dynamic getCurrentDisplayMode(int display_index);
+			extern int waitThread(SDL_Thread* thread);
 
 
             //internal

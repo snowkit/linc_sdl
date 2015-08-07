@@ -50,7 +50,7 @@ extern class SDL {
     @:native('SDL_EventState')
     static function eventState(type:SDLEventType, state:SDLEventState) : UInt;
 
-    //void SDL_FilterEvents(SDL_EventFilter filter, void* userdata)
+    //:todo: void SDL_FilterEvents(SDL_EventFilter filter, void* userdata)
 
     @:native('SDL_FlushEvent')
     static function flushEvent(type:SDLEventType) : Void;
@@ -58,8 +58,7 @@ extern class SDL {
     @:native('SDL_FlushEvents')
     static function flushEvents(min:SDLEventType, max:SDLEventType) : Void;
 
-    //SDL_bool SDL_GetEventFilter(SDL_EventFilter* filter,
-    //                            void**           userdata)
+    //:todo: SDL_bool SDL_GetEventFilter(SDL_EventFilter* filter, void** userdata)
 
     @:native('SDL_GetNumTouchDevices')
     static function getNumTouchDevices() : Int;
@@ -86,10 +85,10 @@ extern class SDL {
     @:native('SDL_HasEvents')
     static function hasEvents( min:SDLEventType, max:SDLEventType ) : Bool;
 
-    //int SDL_LoadDollarTemplates(SDL_TouchID touchId,
-    //                             SDL_RWops*  src)
+    @:native('SDL_LoadDollarTemplates')
+    static function loadDollarTemplates(touchId:cpp.Int64, src:RWops) : Int;
 
-    //int SDL_PeepEvents(SDL_Event*      events,
+    //:todo: int SDL_PeepEvents(SDL_Event*      events,
                    // int             numevents,
                    // SDL_eventaction action,
                    // Uint32          minType,
@@ -101,7 +100,7 @@ extern class SDL {
     @:native('linc::sdl::pollEvent')
     static function pollEvent() : sdl.Event;
 
-    // int SDL_PushEvent(SDL_Event* event)
+    //:todo: int SDL_PushEvent(SDL_Event* event)
 
     @:native('SDL_QuitRequested')
     static function quitRequested(): Bool;
@@ -112,10 +111,10 @@ extern class SDL {
     @:native('SDL_RegisterEvents')
     static function registerEvents(numevents:Int):UInt;
 
-    // int SDL_SaveAllDollarTemplates(SDL_RWops* dst)
+    @:native('SDL_SaveAllDollarTemplates')
+    static function SDL_SaveAllDollarTemplates(dst:RWops) : Int;
 
-    //void SDL_SetEventFilter(SDL_EventFilter filter,
-    //                        void*           userdata)
+    //:todo: void SDL_SetEventFilter(SDL_EventFilter filter, void* userdata)
 
     @:native('linc::sdl::waitEvent')
     static function waitEvent() : sdl.Event;
@@ -151,9 +150,9 @@ extern class SDL {
     @:native('SDL_LogError')
     static function logError(category:Int, value:String):Void;
 
+    //:skipped: ?
     // @:native('SDL_LogGetOutputFunction')
-    //:skipped:todo:
-    // static function logGetOutputFunction():
+    // static function logGetOutputFunction():Void;
 
     @:native('SDL_LogGetPriority')
     static function logGetPriority(category:Int):SDLLogPriority;
@@ -164,8 +163,8 @@ extern class SDL {
     @:native('SDL_LogMessage')
     static function logMessage(priority:SDLLogPriority, category:Int, value:String):Void;
 
-    // @:native('SDL_LogMessageV')
     //:skipped: vargs
+    // @:native('SDL_LogMessageV')
     // static function logMessageV():Void;
 
     @:native('SDL_LogResetPriorities')
@@ -174,8 +173,8 @@ extern class SDL {
     @:native('SDL_LogSetAllPriority')
     static function logSetAllPriority(priority:SDLLogPriority):Void;
 
+    //:skipped: ?
     // @:native('SDL_LogSetOutputFunction')
-    //:skipped:todo:
     // static function logSetOutputFunction():
 
     @:native('SDL_LogSetPriority')
@@ -188,9 +187,7 @@ extern class SDL {
     static function logWarn(category:Int, value:String):Void;
 
 
-//SDL_assert.h
- // - :todo:
-
+//:todo: SDL_assert.h
 
 //SDL_version.h
  // - the version macros in c side are patterned for c,
@@ -372,10 +369,10 @@ extern class SDL {
     static function getTextureColorMod(texture:Texture, into:SDLColor):SDLColor;
 
     // @:native('SDL_LockTexture')
-    // static function lockTexture():Void;
+    //:todo: static function lockTexture():Void;
 
     // @:native('SDL_QueryTexture')
-    // static function queryTexture():Void;
+    //:todo: static function queryTexture():Void;
 
     @:native('SDL_RenderClear')
     static function renderClear(renderer:Renderer):Int;
@@ -384,7 +381,7 @@ extern class SDL {
     static function renderCopy(renderer:Renderer, texture:Texture, srcrect:SDLRect, dstrect:SDLRect) : Int;
 
     // @:native('SDL_RenderCopyEx')
-    // static function renderCopyEx():Void;
+    //:todo: static function renderCopyEx():Void;
 
     @:native('SDL_RenderDrawLine')
     static function renderDrawLine(renderer:Renderer, x1:Int, y1:Int, x2:Int, y2:Int):Int;
@@ -439,7 +436,7 @@ extern class SDL {
     static function renderPresent(renderer:Renderer):Int;
 
     // @:native('SDL_RenderReadPixels')
-    // static function renderReadPixels():Void;
+    //:todo: static function renderReadPixels():Void;
 
     @:native('linc::sdl::renderSetClipRect')
     static function renderSetClipRect(renderer:Renderer, rect:SDLRect):Int;
@@ -478,40 +475,54 @@ extern class SDL {
     static function unlockTexture(texture:Texture):Void;
 
     // @:native('SDL_UpdateTexture')
-    // static function updateTexture():Void;
+    //:todo: static function updateTexture():Void;
 
     // @:native('SDL_UpdateYUVTexture')
-    // static function updateYUVTexture():Void;
+    //:todo: static function updateYUVTexture():Void;
 
 
 //SDL_cpuinfo.h
 
+
     @:native('SDL_GetCPUCacheLineSize')
     static function getCPUCacheLineSize():Int;
+
     @:native('SDL_GetCPUCount')
     static function getCPUCount():Int;
+
     @:native('SDL_GetSystemRAM')
     static function getSystemRAM():Int;
+
     @:native('SDL_Has3DNow')
     static function has3DNow():Bool;
+
     @:native('SDL_HasAVX')
     static function hasAVX():Bool;
+
     @:native('SDL_HasAVX2')
     static function hasAVX2():Bool;
+
     @:native('SDL_HasAltiVec')
     static function hasAltiVec():Bool;
+
     @:native('SDL_HasMMX')
     static function hasMMX():Bool;
+
     @:native('SDL_HasRDTSC')
     static function hasRDTSC():Bool;
+
     @:native('SDL_HasSSE')
     static function hasSSE():Bool;
+
     @:native('SDL_HasSSE2')
     static function hasSSE2():Bool;
+
     @:native('SDL_HasSSE3')
     static function hasSSE3():Bool;
+
     @:native('SDL_HasSSE41')
     static function hasSSE41():Bool;
+
     @:native('SDL_HasSSE42')
     static function hasSSE42():Bool;
 
@@ -529,10 +540,10 @@ extern class SDL {
 //SDL_timer.h
 
     // @:native('SDL_AddTimer')
-    // static function addTimer():Void;
+    //:todo: static function addTimer():Void;
 
     // @:native('SDL_RemoveTimer')
-    // static function removeTimer():Void;
+    //:todo: static function removeTimer():Void;
 
     @:native('SDL_Delay')
     static function delay(ms:UInt): Void;
@@ -570,31 +581,31 @@ extern class SDL {
 //SDL_keyboard.h
 
     // @:native('SDL_GetKeyFromName')
-    // static function getKeyFromName(name:String):SDLKeycode;
+    //:todo: static function getKeyFromName(name:String):SDLKeycode;
 
     // @:native('SDL_GetKeyFromScancode')
-    // static function getKeyFromScancode(scan:SDLScancode):SDLKeycode;
+    //:todo: static function getKeyFromScancode(scan:SDLScancode):SDLKeycode;
 
     // @:native('SDL_GetKeyName')
-    // static function getKeyName(key:SDLKeycode):String;
+    //:todo: static function getKeyName(key:SDLKeycode):String;
 
     @:native('SDL_GetKeyboardFocus')
     static function getKeyboardFocus():Window;
 
     // @:native('SDL_GetKeyboardState')
-    // static function getKeyboardState():Int;
+    //:todo:not sure this makes sense: static function getKeyboardState():Array<Int>;
 
     @:native('SDL_GetModState')
     static function getModState():SDLKeymod;
 
     // @:native('SDL_GetScancodeFromKey')
-    // static function getScancodeFromKey(key:SDLKeycode):SDLScancode;
+    //:todo: static function getScancodeFromKey(key:SDLKeycode):SDLScancode;
 
     // @:native('SDL_GetScancodeFromName')
-    // static function getScancodeFromName(name:String):SDLScancode;
+    //:todo: static function getScancodeFromName(name:String):SDLScancode;
 
     // @:native('SDL_GetScancodeName')
-    // static function getScancodeName(scan:SDLScancode):String;
+    //:todo: static function getScancodeName(scan:SDLScancode):String;
 
     @:native('SDL_HasScreenKeyboardSupport')
     static function hasScreenKeyboardSupport():Bool;
@@ -618,8 +629,8 @@ extern class SDL {
     static function stopTextInput():Void;
 
 
-
 //SDL_mouse.h
+
 
     @:native('SDL_CaptureMouse')
     static function captureMouse(enabled:Bool):Int;
@@ -643,19 +654,19 @@ extern class SDL {
     static function getDefaultCursor():Cursor;
 
     // @:native('SDL_GetGlobalMouseState')
-    // static function getGlobalMouseState():Int;
+    //:todo: static function getGlobalMouseState():Int;
 
     @:native('SDL_GetMouseFocus')
     static function getMouseFocus():Window;
 
     // @:native('SDL_GetMouseState')
-    // static function getMouseState():Int;
+    //:todo: static function getMouseState():Int;
 
     @:native('SDL_GetRelativeMouseMode')
     static function getRelativeMouseMode():Bool;
 
     // @:native('SDL_GetRelativeMouseState')
-    // static function getRelativeMouseState():Int;
+    //:todo: static function getRelativeMouseState():Int;
 
     @:native('SDL_SetCursor')
     static function setCursor(cursor:Cursor):Void;
@@ -678,11 +689,12 @@ extern class SDL {
     private static function _gameControllerAddMapping(mappingString:cpp.ConstCharStar):Int;
     static inline function gameControllerAddMapping(mappingString:String):Int return _gameControllerAddMapping(cast mappingString);
 
-    // @:native('SDL_GameControllerAddMappingsFromFile')
-    // static function gameControllerAddMappingsFromFile():Int;
+    @:native('SDL_GameControllerAddMappingsFromFile')
+    private static function _gameControllerAddMappingsFromFile(filename:cpp.ConstCharStar):Int;
+    static inline function gameControllerAddMappingsFromFile(filename:String):Int return _gameControllerAddMappingsFromFile(cast filename);
 
-    // @:native('SDL_GameControllerAddMappingsFromRW')
-    // static function gameControllerAddMappingsFromRW():Int;
+    @:native('SDL_GameControllerAddMappingsFromRW')
+    static function gameControllerAddMappingsFromRW(rw:RWops, freerw:Int):Int;
 
     @:native('SDL_GameControllerClose')
     static function gameControllerClose(gamecontroller:GameController):Void;
@@ -701,10 +713,10 @@ extern class SDL {
     // static function gameControllerGetAxisFromString(SDLGameControllerAxis):Int;
 
     // @:native('SDL_GameControllerGetBindForAxis')
-    // static function gameControllerGetBindForAxis(gamecontroller:GameController, axis:SDLGameControllerAxis):Int;
+    //:todo: static function gameControllerGetBindForAxis(gamecontroller:GameController, axis:SDLGameControllerAxis):Int;
 
     // @:native('SDL_GameControllerGetBindForButton')
-    // static function gameControllerGetBindForButton():Int;
+    //:todo: static function gameControllerGetBindForButton():Int;
 
     @:native('SDL_GameControllerGetButton')
     static function gameControllerGetButton(gamecontroller:GameController, button:SDLGameControllerButton):Int;
@@ -729,7 +741,7 @@ extern class SDL {
     static function gameControllerMapping(gamecontroller:GameController):String return cast _gameControllerMapping(gamecontroller);
 
     // @:native('SDL_GameControllerMappingForGUID')
-    // static function gameControllerMappingForGUID():Int;
+    //:todo: static function gameControllerMappingForGUID():Int;
 
     @:native('SDL_GameControllerName')
     private static function _gameControllerName(gamecontroller:GameController):cpp.ConstCharStar;
@@ -778,10 +790,10 @@ extern class SDL {
     static function joystickGetGUID(joystick:Joystick):String;
 
     // @:native('SDL_JoystickGetGUIDFromString')
-    // static function joystickGetGUIDFromString(pchGUID:String):String;
+    //:todo: static function joystickGetGUIDFromString(pchGUID:String):String;
 
     // @:native('linc::sdl::joystickGetGUIDString')
-    // static function joystickGetGUIDString(guid:haxe.io.Bytes):String;
+    //:todo: static function joystickGetGUIDString(guid:haxe.io.Bytes):String;
 
     @:native('SDL_JoystickGetHat')
     static function joystickGetHat(joystick:Joystick, hat:SDLHatValue):Int;
@@ -917,7 +929,7 @@ extern class SDL {
 
  //management
     // @:native('SDL_CreateThread')
-    // static function createThread(fn:Dynamic->Void, name:String, data:Dynamic) : Thread;
+    //:todo: static function createThread(fn:Dynamic->Void, name:String, data:Dynamic) : Thread;
 
     @:native('SDL_DetachThread')
     static function detachThread(thread:Thread) : Void;
@@ -939,16 +951,13 @@ extern class SDL {
     static function TLSGet(id:TLSID) : Dynamic;
 
     // @:native('SDL_TLSSet')
-    // static function TLSSet(id:TLSID, value:Dynamic, destructor:Dynamic->Void) : Int;
+    //:todo: static function TLSSet(id:TLSID, value:Dynamic, destructor:Dynamic->Void) : Int;
 
     @:native('SDL_ThreadID')
     static function threadID() : ThreadID;
 
-    static inline function waitThread(thread:Thread) : Int {
-        var result:Int = -1;
-        untyped SDL_WaitThread(thread, untyped __cpp__(' &result'));
-        return result;
-    } //waitThread
+    @:native('linc::sdl::waitThread')
+    static function waitThread(thread:Thread) : Int;
 
  //sync primitives
 
@@ -1162,12 +1171,12 @@ extern class SDL {
     #end
 
     #if windows
-    // SDL_DXGIGetOutputInfo
-    // SDL_Direct3D9GetAdapterIndex
-    // SDL_RenderGetD3D9Device
-    // SDL_SetWindowsMessageHook
-    // SDL_WinRTGetFSPathUNICODE
-    // SDL_WinRTGetFSPathUTF8
+        //:todo: static function SDL_DXGIGetOutputInfo():Void;
+        //:todo: static function SDL_Direct3D9GetAdapterIndex():Void;
+        //:todo: static function SDL_RenderGetD3D9Device():Void;
+        //:todo: static function SDL_SetWindowsMessageHook():Void;
+        //:todo: static function SDL_WinRTGetFSPathUNICODE():Void;
+        //:todo: static function SDL_WinRTGetFSPathUTF8():Void;
     #end
 
 
