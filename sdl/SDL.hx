@@ -187,7 +187,7 @@ extern class SDL {
     static function logWarn(category:Int, value:String):Void;
 
 
-//:todo: SDL_assert.h
+//:todo:?: SDL_assert.h
 
 //SDL_version.h
  // - the version macros in c side are patterned for c,
@@ -371,8 +371,8 @@ extern class SDL {
     // @:native('SDL_LockTexture')
     //:todo: static function lockTexture():Void;
 
-    // @:native('SDL_QueryTexture')
-    //:todo: static function queryTexture():Void;
+    @:native('linc::sdl::queryTexture')
+    static function queryTexture(texture:Texture, into:SDLTextureQuery):SDLTextureQuery;
 
     @:native('SDL_RenderClear')
     static function renderClear(renderer:Renderer):Int;
@@ -380,8 +380,8 @@ extern class SDL {
     @:native('linc::sdl::renderCopy')
     static function renderCopy(renderer:Renderer, texture:Texture, srcrect:SDLRect, dstrect:SDLRect) : Int;
 
-    // @:native('SDL_RenderCopyEx')
-    //:todo: static function renderCopyEx():Void;
+    @:native('linc::sdl::renderCopyEx')
+    static function renderCopyEx(renderer:Renderer, texture:Texture, srcrect:SDLRect, dstrect:SDLRect, angle:Float, center:SDLPoint, flip:SDLRenderFlip):Int;
 
     @:native('SDL_RenderDrawLine')
     static function renderDrawLine(renderer:Renderer, x1:Int, y1:Int, x2:Int, y2:Int):Int;
@@ -1291,6 +1291,13 @@ typedef SDLDisplayMode = {
     var format: SDLPixelFormat;
 }
 
+typedef SDLTextureQuery = {
+    var w: Int;
+    var h: Int;
+    var format: SDLPixelFormat;
+    var access: SDLTextureAccess;
+}
+
 @:enum
 abstract SDLInitFlags(Int)
 from Int to Int {
@@ -1448,6 +1455,14 @@ from Int to Int {
     var SDL_THREAD_PRIORITY_NORMAL = 1;
     var SDL_THREAD_PRIORITY_HIGH = 2;
 } //SDLThreadPriority
+
+@:enum
+abstract SDLRenderFlip(Int)
+from Int to Int {
+    var SDL_FLIP_NONE = 0x00000000;
+    var SDL_FLIP_HORIZONTAL = 0x00000001;
+    var SDL_FLIP_VERTICAL = 0x00000002;
+} //SDLRenderFlip
 
 
 

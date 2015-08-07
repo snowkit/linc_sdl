@@ -226,6 +226,17 @@
 
             } //getTextureColorMod
 
+            Dynamic queryTexture(SDL_Texture* texture, Dynamic into) {
+
+                Uint32 format;
+                int access, w, h;
+
+                SDL_QueryTexture(texture, &format, &access, &w, &h);
+
+                return convert::set_texture_query_into(into, format, access, w, h);
+
+            } //queryTexture
+
             int renderDrawRect(SDL_Renderer* renderer, Dynamic rect) {
 
                 SDL_Rect _rect = convert::get_rect_from(rect);
@@ -389,6 +400,17 @@
                 return SDL_RenderCopy(renderer, texture, &_src, &_dst);
 
             } //renderCopy
+
+            int renderCopyEx(SDL_Renderer* renderer, SDL_Texture* texture,
+                             Dynamic srcrect, Dynamic dstrect, Float angle,
+                             Dynamic center, int SDLRenderFlip )
+            {
+                bool has_src = srcrect != null();
+                bool has_dst = dstrect != null();
+                bool has_center = center != null();
+
+                return 0;
+            }
 
             Dynamic getDisplayMode(int display_index, int mode_index) {
 
@@ -571,6 +593,17 @@
 
                 } //set_color_into
 
+                Dynamic set_texture_query_into(Dynamic into, Uint32 format, int access, int w, int h) {
+
+                        into->__FieldRef(HX_CSTRING("format")) = (int)format;
+                        into->__FieldRef(HX_CSTRING("access")) = access;
+                        into->__FieldRef(HX_CSTRING("w")) = w;
+                        into->__FieldRef(HX_CSTRING("h")) = h;
+
+                    return into;
+
+                } //set_texture_query_into
+
                 Dynamic set_size_into(Dynamic into, int w, int h) {
 
                         into->__FieldRef(HX_CSTRING("w")) = w;
@@ -613,7 +646,7 @@
 
                         into->__FieldRef(HX_CSTRING("x")) = x;
                         into->__FieldRef(HX_CSTRING("y")) = y;
-                        into->__FieldRef(HX_CSTRING("buttons")) = (float)buttons;
+                        into->__FieldRef(HX_CSTRING("buttons")) = (int)buttons;
 
                     return into;
 

@@ -14,6 +14,7 @@ namespace linc {
                 extern  Dynamic render_info_to_hx(SDL_RendererInfo info);
                 extern  Dynamic display_mode_to_hx(SDL_DisplayMode mode);
                 extern  Dynamic set_color_into(Dynamic into, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+                extern  Dynamic set_texture_query_into(Dynamic into, Uint32 format, int access, int w, int h);
                 extern  Dynamic set_size_into(Dynamic into, int w, int h);
                 extern  Dynamic set_scale_into(Dynamic into, float x, float y);
                 extern  Dynamic set_point_into(Dynamic into, int x, int y);
@@ -42,7 +43,8 @@ namespace linc {
 			extern Dynamic getRendererOutputSize(SDL_Renderer* renderer, Dynamic into);
 			extern Uint8 getTextureAlphaMod(SDL_Texture* texture);
 			extern int getTextureBlendMode(SDL_Texture* texture);
-			extern Dynamic getTextureColorMod(SDL_Texture* texture, Dynamic into);
+            extern Dynamic getTextureColorMod(SDL_Texture* texture, Dynamic into);
+			extern Dynamic queryTexture(SDL_Texture* texture, Dynamic into);
 			extern int renderDrawRect(SDL_Renderer* renderer, Dynamic rect);
 			extern int renderFillRect(SDL_Renderer* renderer, Dynamic rect);
 			extern Dynamic renderGetClipRect(SDL_Renderer* renderer, Dynamic into);
@@ -59,7 +61,8 @@ namespace linc {
 			extern Dynamic getWindowPosition(SDL_Window* window, Dynamic into);
 			extern Dynamic GL_GetDrawableSize(SDL_Window* window, Dynamic into);
 			extern Dynamic getDisplayBounds(int display_index, Dynamic into);
-			extern int renderCopy(SDL_Renderer* renderer, SDL_Texture* texture, Dynamic srcrect, Dynamic dstrect);
+            extern int renderCopy(SDL_Renderer* renderer, SDL_Texture* texture, Dynamic srcrect, Dynamic dstrect);
+			extern int renderCopyEx(SDL_Renderer* renderer, SDL_Texture* texture, Dynamic srcrect, Dynamic dstrect, Float angle, Dynamic center, int SDLRenderFlip);
 			extern Dynamic getDisplayMode(int display_index, int mode_index);
 			extern Dynamic getDesktopDisplayMode(int display_index);
             extern Dynamic getCurrentDisplayMode(int display_index);
