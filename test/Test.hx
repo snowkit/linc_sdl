@@ -226,7 +226,25 @@ class Test {
 
     } //init
 
+    static var has_timer = false;
+    static function timer(interval:Int, data:{someint:Int}):Int {
+
+        has_timer = false;
+
+        trace('timer fired from $interval with data:'+data);
+
+            //return 0 to end the timer
+        return 0;
+
+    } //timer
+
+    static var timer_start:Int = 0;
     static function process_events() {
+
+        if(has_timer) {
+            var diff = SDL.getTicks() - timer_start;
+            trace('timer is running: elapsed ticks = ' + diff);
+        }
 
         while(SDL.hasAnEvent()) {
 
@@ -237,13 +255,24 @@ class Test {
                 return false;
             }
 
+
             if(e.type == SDL_KEYDOWN) {
 
                 var ctrlormetadown = (SDL.getModState() == (KMOD_GUI | KMOD_CTRL));
 
                 trace(SDL.getKeyName(e.key.keysym.sym));
 
-                if(e.key.keysym.sym == 27) {
+                if(e.key.keysym.sym == sdl.Keycodes.key_t) {
+                    if(!has_timer) {
+                        timer_start = SDL.getTicks();
+                        var intid = 1+Std.random(4);
+                        trace('Adding timer with random time as $intid');
+                        SDL.addTimer(intid*1000, timer, {someint:intid});
+                        has_timer = true;
+                    }
+                }
+
+                if(e.key.keysym.sym == sdl.Keycodes.escape) {
                     reason = 'escape key';
                     return false;
                 }

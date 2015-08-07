@@ -70,12 +70,20 @@ namespace linc {
             extern Dynamic getGlobalMouseState(Dynamic into);
             extern Dynamic getMouseState(Dynamic into);
             extern Dynamic getRelativeMouseState(Dynamic into);
-			extern int waitThread(SDL_Thread* thread);
+            extern int waitThread(SDL_Thread* thread);
+            extern int addTimer(int interval);
+			extern bool removeTimer(int timerID);
 
 
-            //internal
+        //internal
+
+            //event watches
             typedef ::cpp::Function < Void(::cpp::Reference<SDL_Event>) > InternalEventFilterFN;
             extern void init_event_watch( InternalEventFilterFN fn );
+
+            //timers
+            typedef ::cpp::Function < int(int) > InternalTimerCallbackFN;
+            extern void init_timer( InternalTimerCallbackFN fn );
 
             //iOS callbacks
             #if defined(__IPHONEOS__) || defined(IPHONE)

@@ -537,32 +537,74 @@
 
         //internal
 
-            //internal
-            static InternalEventFilterFN event_fn = 0;
-            static bool inited_event_watch = false;
+            //event watches
+                static InternalEventFilterFN event_fn = 0;
+                static bool inited_event_watch = false;
 
-            //sdl ignores the return value
-            static int InternalEventFilter(void* userdata, SDL_Event* event) {
+                //sdl ignores the return value
+                static int InternalEventFilter(void* userdata, SDL_Event* event) {
 
-                if(!inited_event_watch) return 0;
+                    if(!inited_event_watch) return 0;
 
-                event_fn(event);
+                    event_fn(event);
 
-                return 0;
+                    return 0;
 
-            } //InternalEventFilter
+                } //InternalEventFilter
 
-            void init_event_watch( InternalEventFilterFN fn ) {
+                void init_event_watch( InternalEventFilterFN fn ) {
 
-                if(inited_event_watch) return;
+                    if(inited_event_watch) return;
 
-                event_fn = fn;
+                    event_fn = fn;
 
-                SDL_AddEventWatch(InternalEventFilter, 0);
+                    SDL_AddEventWatch(InternalEventFilter, 0);
 
-                inited_event_watch = true;
+                    inited_event_watch = true;
 
-            } //init_event_watch
+                } //init_event_watch
+
+            //timer
+                static InternalTimerCallbackFN timer_fn = 0;
+                static bool inited_timer = false;
+
+            static Uint32 InternalTimerCallback(Uint32 interval, void *param) {
+
+                int* timerid = (int*)param;
+
+                int result = timer_fn(*timerid);
+
+                return result;
+
+            } //InternalTimerCallback
+
+            void init_timer( InternalTimerCallbackFN fn ) {
+
+                if(inited_timer) return;
+
+                timer_fn = fn;
+
+                inited_timer = true;
+
+            } //init_timer
+
+            int addTimer( int interval ) {
+
+                int* _id = new int;
+                int timerid = SDL_AddTimer(interval, InternalTimerCallback, _id);
+                *_id = timerid;
+
+                return timerid;
+
+            } //add_timer
+
+            bool removeTimer( int timerID ) {
+
+                return SDL_RemoveTimer(timerID);
+
+            } //remove_timer
+
+
 
         #if defined(__IPHONEOS__) || defined(IPHONE)
 

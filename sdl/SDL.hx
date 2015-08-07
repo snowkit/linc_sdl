@@ -15,6 +15,7 @@ import sdl.Haptic;
 @:keep
 @:include('linc_sdl.h')
 @:build(linc.Touch.apply())
+@:allow(SDL_helper)
 extern class SDL {
 
 //:note:differences:
@@ -539,11 +540,13 @@ extern class SDL {
 
 //SDL_timer.h
 
-    // @:native('SDL_AddTimer')
-    //:todo: static function addTimer():Void;
+    static inline function addTimer(interval:UInt, callback:SDLTimerCallback, userdata:Dynamic):SDLTimerID {
+        return SDL_helper.add_timer(interval, callback, userdata);
+    }
 
-    // @:native('SDL_RemoveTimer')
-    //:todo: static function removeTimer():Void;
+    static inline function removeTimer(id:SDLTimerID):Bool {
+        return SDL_helper.remove_timer(id);
+    }
 
     @:native('SDL_Delay')
     static function delay(ms:UInt): Void;
@@ -1189,11 +1192,80 @@ extern class SDL {
     @:native('linc::sdl::init_event_watch')
     private static function init_event_watch(func:cpp.Callable<sdl.Event.EventRef->Void>):Void;
 
+    @:native('linc::sdl::addTimer')
+    private static function add_timer(interval:UInt):SDLTimerID;
+
+    @:native('linc::sdl::removeTimer')
+    private static function remove_timer(timerid:SDLTimerID):Bool;
+
+    @:native('linc::sdl::init_timer')
+    private static function init_timer(func:cpp.Callable<Int->Int>):Void;
+
 } //SDL
+
+typedef SDLTimerCallback = UInt->Dynamic->Int;
+private typedef InternalTimerInfo = {
+    callback:SDLTimerCallback,
+    interval:UInt,
+    userdata:Dynamic,
+    timerid:SDLTimerID
+};
 
 @:allow(sdl.SDL)
 @:include('linc_sdl.h')
 private class SDL_helper {
+
+    //timer
+
+    static var timers:Map<SDLTimerID, InternalTimerInfo> = new Map();
+    static var timer_callback_set = false;
+
+    static function add_timer(interval:UInt, callback:SDLTimerCallback, userdata:Dynamic):SDLTimerID {
+
+        if(!timer_callback_set) {
+            timer_callback_set = true;
+            @:privateAccess SDL.init_timer( cpp.Callable.fromStaticFunction(timer_callback) );
+        }
+
+        var _timerid:SDLTimerID = @:privateAccess SDL.add_timer(interval);
+
+        timers.set(_timerid, {
+            callback:callback,
+            timerid:_timerid,
+            userdata:userdata,
+            interval:interval
+        });
+
+        return _timerid;
+
+    } //add_timer
+
+    static function remove_timer(_timerid:Int):Bool {
+
+        var _info = timers.get(_timerid);
+
+        if(_info == null) return false;
+
+        timers.remove(_timerid);
+
+        var _result = @:privateAccess SDL.remove_timer(_info.timerid);
+
+        _info = null;
+
+        return _result;
+
+    } //remove_timer
+
+    static function timer_callback(_timerid:Int) : Int {
+
+        var _timer = timers.get(_timerid);
+        if(_timer != null) {
+            return _timer.callback(_timer.interval, _timer.userdata);
+        }
+
+        return 0;
+
+    } //timer_callback
 
 #if ios
     //iOS animation callbacks
@@ -1277,6 +1349,7 @@ typedef SDLMouseState = { x:Int, y:Int, buttons:UInt };
 typedef SDLSize  = { w:Int, h:Int };
 typedef SDLScale = { x:Float, y:Float };
 typedef SDLRect  = { > SDLPoint, > SDLSize, } //comma is required at the end
+typedef SDLTimerID = Int;
 
 typedef SDLVersion = { major:UInt, minor:UInt, patch:UInt };
 typedef SDLRendererInfo = {
