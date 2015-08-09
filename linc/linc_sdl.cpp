@@ -378,6 +378,12 @@
 
             } //joystickGetBall
 
+            ::String joystickGetGUIDString(Array<unsigned char> guid) {
+
+                return ::String("not done");
+
+            } //joystickGetGUIDString
+
             void setModState(int modstate) {
 
                 SDL_SetModState((SDL_Keymod)modstate);

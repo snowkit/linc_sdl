@@ -63,6 +63,7 @@ namespace linc {
 			extern int renderSetViewport(SDL_Renderer* renderer, Dynamic rect);
 			extern SDL_Cursor* createSystemCursor(int id);
 			extern Dynamic joystickGetBall(SDL_Joystick* joystick, int ball, Dynamic into);
+            extern ::String joystickGetGUIDString(Array<unsigned char> guid);
 			extern void setModState(int modstate);
 			extern void setTextInputRect(Dynamic rect);
 			extern Dynamic getWindowSize(SDL_Window* window, Dynamic into);

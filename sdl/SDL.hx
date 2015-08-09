@@ -1,6 +1,7 @@
 package sdl;
 
 import haxe.io.Bytes;
+import haxe.io.BytesData;
 import sdl.Renderer;
 import sdl.Surface;
 import sdl.Cursor;
@@ -231,16 +232,16 @@ extern class SDL {
     static function RWFromFile(file:String, mode:String) : RWops;
 
     @:native('SDL_RWFromMem')
-    static function RWFromMem(source:Bytes, size:Int) : RWops;
+    static function RWFromMem(source:BytesData, size:Int) : RWops;
 
     @:native('SDL_RWclose')
     static function RWclose(context:RWops) : RWops;
 
     @:native('SDL_RWread')
-    static function RWread(context:RWops, into:Bytes, size:UInt, maxnum:UInt) : UInt;
+    static function RWread(context:RWops, into:BytesData, size:UInt, maxnum:UInt) : UInt;
 
     @:native('SDL_RWwrite')
-    static function RWwrite(context:RWops, from:Bytes, size:UInt, num:UInt) : UInt;
+    static function RWwrite(context:RWops, from:BytesData, size:UInt, num:UInt) : UInt;
 
     @:native('SDL_RWseek')
     static function RWseek(context:RWops, offset:cpp.Int64, whence:Int) : cpp.Int64;
@@ -370,7 +371,7 @@ extern class SDL {
     static function getTextureColorMod(texture:Texture, into:SDLColor):SDLColor;
 
     @:native('linc::sdl::lockTexture')
-    static function lockTexture(texture:Texture, rect:SDLRect, dest:Bytes):Int;
+    static function lockTexture(texture:Texture, rect:SDLRect, dest:BytesData):Int;
 
     @:native('linc::sdl::queryTexture')
     static function queryTexture(texture:Texture, into:SDLTextureQuery):SDLTextureQuery;
@@ -437,7 +438,7 @@ extern class SDL {
     static function renderPresent(renderer:Renderer):Int;
 
     @:native('linc::sdl::renderReadPixels')
-    static function renderReadPixels(renderer:Renderer, rect:SDLRect, format:SDLPixelFormat, dest:Bytes, pitch:Int):Int;
+    static function renderReadPixels(renderer:Renderer, rect:SDLRect, format:SDLPixelFormat, dest:BytesData, pitch:Int):Int;
 
     @:native('linc::sdl::renderSetClipRect')
     static function renderSetClipRect(renderer:Renderer, rect:SDLRect):Int;
@@ -476,10 +477,10 @@ extern class SDL {
     static function unlockTexture(texture:Texture):Void;
 
     @:native('linc::sdl::updateTexture')
-    static function updateTexture(texture:Texture, rect:SDLRect, pixels:Bytes, pitch:Int):Int;
+    static function updateTexture(texture:Texture, rect:SDLRect, pixels:BytesData, pitch:Int):Int;
 
     @:native('linc::sdl::updateYUVTexture')
-    static function updateYUVTexture(texture:Texture, rect:SDLRect, Yplane:Bytes, Ypitch:Int, Uplane:Bytes, Upitch:Int, Vplane:Bytes, Vpitch:Int):Int;
+    static function updateYUVTexture(texture:Texture, rect:SDLRect, Yplane:BytesData, Ypitch:Int, Uplane:BytesData, Upitch:Int, Vplane:BytesData, Vpitch:Int):Int;
 
 
 //SDL_cpuinfo.h
@@ -646,7 +647,7 @@ extern class SDL {
     static function createColorCursor(surface:Surface, hot_x:Int, hot_y:Int):Cursor;
 
     @:native('SDL_CreateCursor')
-    static function createCursor(data:Bytes, mask:Bytes, w:Int, h:Int, hot_x:Int, hot_y:Int):Cursor;
+    static function createCursor(data:BytesData, mask:BytesData, w:Int, h:Int, hot_x:Int, hot_y:Int):Cursor;
 
     @:native('linc::sdl::createSystemCursor')
     static function createSystemCursor(id:SDLSystemCursor):Cursor;
@@ -799,8 +800,8 @@ extern class SDL {
     // @:native('SDL_JoystickGetGUIDFromString')
     //:todo: static function joystickGetGUIDFromString(pchGUID:String):String;
 
-    // @:native('linc::sdl::joystickGetGUIDString')
-    //:todo: static function joystickGetGUIDString(guid:haxe.io.Bytes):String;
+    @:native('linc::sdl::joystickGetGUIDString')
+    static function joystickGetGUIDString(guid:BytesData):String;
 
     @:native('SDL_JoystickGetHat')
     static function joystickGetHat(joystick:Joystick, hat:SDLHatValue):Int;
