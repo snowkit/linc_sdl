@@ -17,6 +17,7 @@ import sdl.Haptic;
 @:include('linc_sdl.h')
 @:build(linc.Touch.apply())
 @:allow(SDL_helper)
+@:buildXml("<include name='${haxelib:linc_sdl}/linc/linc_sdl.xml'/>")
 extern class SDL {
 
 //:note:differences:
@@ -1845,7 +1846,3 @@ typedef SDLScancode = UInt;
     private extern class AndroidJNIEnv {}
     typedef JNIEnv = cpp.Pointer<AndroidJNIEnv>;
 #end
-
-
-@:buildXml("<include name='${haxelib:linc_sdl}/linc/linc_sdl.xml'/>")
-@:keep private class SDLLinc {}
