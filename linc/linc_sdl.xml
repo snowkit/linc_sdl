@@ -1,6 +1,4 @@
 <xml>
-    <set name='LINC_SDL_PATH' value='${haxelib:linc_sdl}'/>
-
     <set name="NATIVE_TOOLKIT_PATH" value="${LINC_SDL_PATH}/lib/" />
     <include name="${LINC_SDL_PATH}/lib/sdl/files.xml"/>
 

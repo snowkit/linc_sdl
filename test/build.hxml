@@ -2,7 +2,8 @@
 -cpp cpp/
 -cp ../
 -D no-debug
--cmd cpp/Test
+-debug
+-cmd cpp/Test-debug
 
 # pick a target
 

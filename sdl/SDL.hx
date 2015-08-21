@@ -15,9 +15,9 @@ import sdl.Haptic;
 
 @:keep
 @:include('linc_sdl.h')
-@:build(linc.Touch.apply())
 @:allow(SDL_helper)
-@:buildXml("<include name='${haxelib:linc_sdl}/linc/linc_sdl.xml'/>")
+@:build(linc.Linc.touch())
+@:build(linc.Linc.xml('sdl'))
 extern class SDL {
 
 //:note:differences:
