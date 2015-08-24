@@ -52,7 +52,7 @@ class Linc {
 
         var _define = '<set name="$_linc_lib_var" value="$_linc_lib_path/"/>';
         var _import_path = '$${$_linc_lib_var}linc/linc_${_lib}.xml';
-        var _import = '<import name="$_import_path" />';
+        var _import = '<include name="$_import_path" />';
 
         _class.get().meta.add(":buildXml", [{ expr:EConst( CString( '$_define\n$_import' ) ), pos:_pos }], _pos );
         
