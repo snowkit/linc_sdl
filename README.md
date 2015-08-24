@@ -1,5 +1,5 @@
 # linc/SDL
-Haxe/hxcpp @:native bindings for SDL.
+Haxe/hxcpp @:native bindings for [SDL](https://wiki.libsdl.org/).
 
 This is a [linc](http://snowkit.github.io/linc/) library.
 
@@ -8,6 +8,9 @@ This is a [linc](http://snowkit.github.io/linc/) library.
 This library works with the Haxe cpp target only.
 
 ---
+### Install
+
+`haxelib git linc_sdl https://github.com/snowkit/linc_sdl.git`
 
 ### Example usage
 
