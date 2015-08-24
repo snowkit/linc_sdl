@@ -53,6 +53,23 @@
             <vflag name="-framework" value="AudioUnit" />
         </section>
 
+        <section if="windows">
+            <lib name="gdi32.lib" />
+            <lib name="opengl32.lib" />
+            <lib name="user32.lib" />
+            <lib name="kernel32.lib" />
+            <lib name="advapi32.lib" />
+            <lib name="winmm.lib" />
+            <lib name="imm32.lib"  />
+            <lib name="ole32.lib" />
+            <lib name="oleaut32.lib" />
+            <lib name="version.lib" />
+            <lib name="ws2_32.lib"  />
+            <lib name="wldap32.lib" />
+            <lib name="shell32.lib" />
+            <lib name="comdlg32.lib" />
+        </section>
+
         <section if="android">
             <lib name="-Wl,--undefined=Java_org_libsdl_app_SDLActivity_nativeInit"/>
             <lib name="-ldl" />

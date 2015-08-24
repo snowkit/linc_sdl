@@ -1,6 +1,7 @@
 #ifndef _LINC_SDL_H_
 #define _LINC_SDL_H_
 
+#define SDL_MAIN_HANDLED 1
 #include "../lib/sdl/include/SDL.h"
 #include <hxcpp.h>
 
