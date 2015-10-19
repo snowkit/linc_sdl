@@ -66,7 +66,7 @@ namespace linc {
 			extern Dynamic joystickGetBall(SDL_Joystick* joystick, int ball, Dynamic into);
             extern ::String joystickGetGUIDString(Array<unsigned char> guid);
 			extern void setModState(int modstate);
-			extern void setTextInputRect(Dynamic rect);
+			extern void setTextInputRect(int x,int y, int w, int h);
 			extern Dynamic getWindowSize(SDL_Window* window, Dynamic into);
 			extern Dynamic getWindowPosition(SDL_Window* window, Dynamic into);
 			extern Dynamic GL_GetDrawableSize(SDL_Window* window, Dynamic into);
@@ -82,6 +82,13 @@ namespace linc {
             extern int waitThread(SDL_Thread* thread);
             extern int addTimer(int interval);
 			extern bool removeTimer(int timerID);
+
+            extern int RWread(SDL_RWops* context, Array<unsigned char> ptr, size_t size, size_t maxnum);
+            extern int RWwrite(SDL_RWops* context, Array<unsigned char> ptr, size_t size, size_t num);
+            extern int RWseek(SDL_RWops* context, int64_t offset, int whence);
+            extern int64_t RWsize(SDL_RWops* context);
+            extern int64_t RWtell(SDL_RWops* context);
+            extern int RWclose(SDL_RWops* context);
 
 
         //internal

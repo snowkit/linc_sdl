@@ -235,22 +235,22 @@ extern class SDL {
     @:native('SDL_RWFromMem')
     static function RWFromMem(source:BytesData, size:Int) : RWops;
 
-    @:native('SDL_RWclose')
-    static function RWclose(context:RWops) : RWops;
+    @:native('linc::sdl::RWclose')
+    static function RWclose(context:RWops) : Int;
 
-    @:native('SDL_RWread')
+    @:native('linc::sdl::RWread')
     static function RWread(context:RWops, into:BytesData, size:UInt, maxnum:UInt) : UInt;
 
-    @:native('SDL_RWwrite')
+    @:native('linc::sdl::RWwrite')
     static function RWwrite(context:RWops, from:BytesData, size:UInt, num:UInt) : UInt;
 
-    @:native('SDL_RWseek')
+    @:native('linc::sdl::RWseek')
     static function RWseek(context:RWops, offset:cpp.Int64, whence:Int) : cpp.Int64;
 
-    @:native('SDL_RWsize')
+    @:native('linc::sdl::RWsize')
     static function RWsize(context:RWops) : cpp.Int64;
 
-    @:native('SDL_RWtell')
+    @:native('linc::sdl::RWtell')
     static function RWtell(context:RWops) : cpp.Int64;
 
     @:native('SDL_ReadBE16')
@@ -629,7 +629,7 @@ extern class SDL {
     static function setModState(modstate:SDLKeymod):Void;
 
     @:native('linc::sdl::setTextInputRect')
-    static function setTextInputRect(rect:SDLRect):Void;
+    static function setTextInputRect(x:Int, y:Int, w:Int, h:Int):Void;
 
     @:native('SDL_StartTextInput')
     static function startTextInput():Void;

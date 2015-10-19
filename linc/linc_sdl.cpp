@@ -390,9 +390,14 @@
 
             } //setModState
 
-            void setTextInputRect(Dynamic rect) {
+            void setTextInputRect(int x, int y, int w, int h) {
 
-                SDL_Rect _rect = convert::get_rect_from(rect);
+                SDL_Rect _rect;
+
+                    _rect.x = x;
+                    _rect.y = y;
+                    _rect.w = w;
+                    _rect.h = h;
 
                 SDL_SetTextInputRect(&_rect);
 
@@ -668,6 +673,30 @@
 
             } //remove_timer
 
+
+            int RWread(SDL_RWops* context, Array<unsigned char> ptr, size_t size, size_t maxnum) {
+                return SDL_RWread(context, (void*)&ptr[0], size, maxnum);
+            }
+
+            int RWwrite(SDL_RWops* context, Array<unsigned char> ptr, size_t size, size_t num) {
+                return SDL_RWwrite(context, (void*)&ptr[0], size, num);
+            }
+
+            int RWseek(SDL_RWops* context, int64_t offset, int whence) {
+                return SDL_RWseek(context, offset, whence);
+            }
+
+            int64_t RWsize(SDL_RWops* context) {
+                return SDL_RWsize(context);
+            }
+
+            int64_t RWtell(SDL_RWops* context) {
+                return SDL_RWtell(context);
+            }
+
+            int RWclose(SDL_RWops* context) {
+                return SDL_RWclose(context);
+            }
 
 
         #if defined(__IPHONEOS__) || defined(IPHONE)
