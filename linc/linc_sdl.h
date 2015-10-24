@@ -83,6 +83,7 @@ namespace linc {
             extern int addTimer(int interval);
 			extern bool removeTimer(int timerID);
 
+            extern SDL_RWops* RWFromMem(Array<unsigned char> source, size_t size);
             extern int RWread(SDL_RWops* context, Array<unsigned char> ptr, size_t size, size_t maxnum);
             extern int RWwrite(SDL_RWops* context, Array<unsigned char> ptr, size_t size, size_t num);
             extern int RWseek(SDL_RWops* context, int64_t offset, int whence);

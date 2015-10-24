@@ -232,7 +232,7 @@ extern class SDL {
     @:native('SDL_RWFromFile')
     static function RWFromFile(file:String, mode:String) : RWops;
 
-    @:native('SDL_RWFromMem')
+    @:native('linc::sdl::RWFromMem')
     static function RWFromMem(source:BytesData, size:Int) : RWops;
 
     @:native('linc::sdl::RWclose')

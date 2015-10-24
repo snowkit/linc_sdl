@@ -698,6 +698,9 @@
                 return SDL_RWclose(context);
             }
 
+            SDL_RWops* RWFromMem(Array<unsigned char> source, size_t size) {
+                return SDL_RWFromMem((void*)&source[0], size);
+            }
 
         #if defined(__IPHONEOS__) || defined(IPHONE)
 
