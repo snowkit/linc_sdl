@@ -21,6 +21,8 @@ https://wiki.libsdl.org/
 
 ```haxe
 import sdl.SDL;
+import sdl.Window;
+import sdl.Renderer;
 
 class Example {
 
