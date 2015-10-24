@@ -12,6 +12,12 @@ This library works with the Haxe cpp target only.
 
 `haxelib git linc_sdl https://github.com/snowkit/linc_sdl.git`
 
+If you run into SDL build errors first try:
+
+- Get the path of the library `haxelib path linc_sdl`
+- Change directory to that path `cd <path to linc_sdl>`
+- `git submodule update --init`
+
 ### Example usage
 
 See test/Test.hx
