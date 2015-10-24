@@ -1,5 +1,6 @@
 package sdl;
 
-@:native("SDL_RWops*")
+@:native("SDL_RWops")
 @:include('linc_sdl.h')
-extern class RWops {}
+private extern class SDLRWops {}
+typedef RWops = cpp.Pointer<SDLRWops>;
