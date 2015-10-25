@@ -1086,7 +1086,7 @@ extern class SDL {
     static function setWindowGrab(window:Window, grabbed:Bool) : Void;
 
     @:native('SDL_SetWindowTitle')
-    static function setWindowTitle( title:String ) : Void;
+    static function setWindowTitle(window:Window, title:String ) : Void;
 
     @:native('SDL_SetWindowPosition')
     static function setWindowPosition(window:Window, w:Int, h:Int) : Void;
