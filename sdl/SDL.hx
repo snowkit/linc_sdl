@@ -128,7 +128,7 @@ extern class SDL {
 //SDL_error.h
 
     @:native('SDL_SetError')
-    static function setError( error:String ):Int;
+    static function setError(error:String):Int;
 
     @:native("SDL_GetError")
     private static function _getError() : cpp.ConstCharStar;
@@ -695,12 +695,10 @@ extern class SDL {
 //SDL_gamecontroller.h
 
     @:native('SDL_GameControllerAddMapping')
-    private static function _gameControllerAddMapping(mappingString:cpp.ConstCharStar):Int;
-    static inline function gameControllerAddMapping(mappingString:String):Int return _gameControllerAddMapping(cast mappingString);
+    static function gameControllerAddMapping(mappingString:String):Int;
 
     @:native('SDL_GameControllerAddMappingsFromFile')
-    private static function _gameControllerAddMappingsFromFile(filename:cpp.ConstCharStar):Int;
-    static inline function gameControllerAddMappingsFromFile(filename:String):Int return _gameControllerAddMappingsFromFile(cast filename);
+    static function gameControllerAddMappingsFromFile(filename:String):Int;
 
     @:native('SDL_GameControllerAddMappingsFromRW')
     static function gameControllerAddMappingsFromRW(rw:RWops, freerw:Int):Int;
@@ -792,9 +790,11 @@ extern class SDL {
     @:native('SDL_JoystickGetButton')
     static function joystickGetButton(joystick:Joystick, button:Int):UInt;
 
+    //:todo:
     @:native('SDL_JoystickGetDeviceGUID')
     static function joystickGetDeviceGUID(device_index:Int):String;
 
+    //:todo:
     @:native('SDL_JoystickGetGUID')
     static function joystickGetGUID(joystick:Joystick):String;
 
@@ -1028,10 +1028,7 @@ extern class SDL {
 //SDL_video.h
 
     @:native('SDL_CreateWindow')
-    private static function _createWindow(title:cpp.ConstCharStar, x:Int, y:Int, w:Int, h:Int, flags:SDLWindowFlags):Window;
-    static inline function createWindow(title:String, x:Int, y:Int, w:Int, h:Int, flags:SDLWindowFlags):Window {
-        return _createWindow((cast title:String), x,y,w,h,flags);
-    }
+    static function createWindow(title:String, x:Int, y:Int, w:Int, h:Int, flags:SDLWindowFlags):Window;
 
     @:native('SDL_DestroyWindow')
     static function destroyWindow(window:Window):Void;
@@ -1089,7 +1086,7 @@ extern class SDL {
     static function setWindowGrab(window:Window, grabbed:Bool) : Void;
 
     @:native('SDL_SetWindowTitle')
-    static function setWindowTitle(window:Window, title:String ) : Void;
+    static function setWindowTitle(window:Window, title:String) : Void;
 
     @:native('SDL_SetWindowPosition')
     static function setWindowPosition(window:Window, w:Int, h:Int) : Void;
