@@ -747,18 +747,18 @@ extern class SDL {
 
     @:native('SDL_GameControllerMapping')
     private static function _gameControllerMapping(gamecontroller:GameController):cpp.ConstCharStar;
-    static function gameControllerMapping(gamecontroller:GameController):String return cast _gameControllerMapping(gamecontroller);
+    static inline function gameControllerMapping(gamecontroller:GameController):String return cast _gameControllerMapping(gamecontroller);
 
     // @:native('SDL_GameControllerMappingForGUID')
     //:todo: static function gameControllerMappingForGUID():Int;
 
     @:native('SDL_GameControllerName')
     private static function _gameControllerName(gamecontroller:GameController):cpp.ConstCharStar;
-    static function gameControllerName(gamecontroller:GameController):String return cast _gameControllerName(gamecontroller);
+    static inline function gameControllerName(gamecontroller:GameController):String return cast _gameControllerName(gamecontroller);
 
     @:native('SDL_GameControllerNameForIndex')
     private static function _gameControllerNameForIndex(joystick_index:Int):cpp.ConstCharStar;
-    static function gameControllerNameForIndex(joystick_index:Int):String return cast _gameControllerNameForIndex(joystick_index);
+    static inline function gameControllerNameForIndex(joystick_index:Int):String return cast _gameControllerNameForIndex(joystick_index);
 
     @:native('SDL_GameControllerOpen')
     static function gameControllerOpen(joystick_index:Int):GameController;
@@ -1028,7 +1028,10 @@ extern class SDL {
 //SDL_video.h
 
     @:native('SDL_CreateWindow')
-    static function createWindow(title:String, x:Int, y:Int, w:Int, h:Int, flags:SDLWindowFlags):Window;
+    private static function _createWindow(title:cpp.ConstCharStar, x:Int, y:Int, w:Int, h:Int, flags:SDLWindowFlags):Window;
+    static inline function createWindow(title:String, x:Int, y:Int, w:Int, h:Int, flags:SDLWindowFlags):Window {
+        return _createWindow((cast title:String), x,y,w,h,flags);
+    }
 
     @:native('SDL_DestroyWindow')
     static function destroyWindow(window:Window):Void;
@@ -1137,10 +1140,16 @@ extern class SDL {
     static function GL_MakeCurrent(window:Window, context:GLContext) : Int;
 
     @:native('SDL_GL_SetAttribute')
-    static function GL_SetAttribute(attr:SDLGLAttr, value:Int) : Int;
+    private static function _GL_SetAttribute(attr:SDLGLAttr, value:Int) : Int;
+    static inline function GL_SetAttribute(attr:SDLGLAttr, value:Int) : Int {
+        return _GL_SetAttribute(untyped __cpp__('(SDL_GLattr){0}', attr), value);
+    }
 
     @:native('SDL_GL_GetAttribute')
-    static function GL_GetAttribute(attr:SDLGLAttr) : Int;
+    private static function _GL_GetAttribute(attr:SDLGLAttr) : Int;
+    static inline function GL_GetAttribute(attr:SDLGLAttr) : Int {
+        return _GL_GetAttribute(untyped __cpp__('(SDL_GLattr){0}', attr));
+    }
 
 //SDL_system.h
 
@@ -1168,11 +1177,11 @@ extern class SDL {
 
         @:native('SDL_AndroidGetExternalStoragePath')
         private static function _androidGetExternalStoragePath() : cpp.ConstCharStar;
-        static function androidGetExternalStoragePath() : String return cast _androidGetExternalStoragePath();
+        static inline function androidGetExternalStoragePath() : String return cast _androidGetExternalStoragePath();
 
         @:native('SDL_AndroidGetInternalStoragePath')
         private static function _androidGetInternalStoragePath() : cpp.ConstCharStar;
-        static function androidGetInternalStoragePath() : String return cast _androidGetInternalStoragePath();
+        static inline function androidGetInternalStoragePath() : String return cast _androidGetInternalStoragePath();
 
         @:native('SDL_AndroidGetExternalStorageState')
         static function androidGetExternalStorageState() : SDLExternalStorageState;
@@ -1584,6 +1593,13 @@ from Int to Int {
     var SDL_GL_FRAMEBUFFER_SRGB_CAPABLE     = 23;
 } //SDLGLAttr
 
+@:enum
+abstract SDLGLprofile(Int)
+from Int to Int {
+    var SDL_GL_CONTEXT_PROFILE_CORE           = 0x0001;
+    var SDL_GL_CONTEXT_PROFILE_COMPATIBILITY  = 0x0002;
+    var SDL_GL_CONTEXT_PROFILE_ES             = 0x0004;
+}
 
 @:enum
 abstract SDLGameControllerButton(Int)
