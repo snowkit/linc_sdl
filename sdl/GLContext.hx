@@ -1,6 +1,8 @@
 package sdl;
 
+@:unreflective
 @:native("SDL_GLContext")
 @:include('linc_sdl.h')
-extern private class SDL_GLContext {}
-typedef GLContext = cpp.Pointer<SDL_GLContext>;
+extern class GLContext {
+    inline function isnull():Bool return this == untyped 0;
+}
