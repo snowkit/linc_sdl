@@ -37,6 +37,7 @@ namespace linc {
 			extern ::String getBasePath();
 			extern ::String getPrefPath(::String org, ::String app);
 			extern Dynamic GL_BindTexture(SDL_Texture* texture);
+            extern int GL_GetAttribute(int attr);
 			extern int setRenderDrawBlendMode(SDL_Renderer* renderer, int blend);
 			extern int getRenderDrawBlendMode(SDL_Renderer* renderer);
 			extern Dynamic getRenderDrawColor(SDL_Renderer* renderer, Dynamic into);

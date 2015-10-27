@@ -1142,11 +1142,8 @@ extern class SDL {
         return _GL_SetAttribute(untyped __cpp__('(SDL_GLattr){0}', attr), value);
     }
 
-    @:native('SDL_GL_GetAttribute')
-    private static function _GL_GetAttribute(attr:SDLGLAttr) : Int;
-    static inline function GL_GetAttribute(attr:SDLGLAttr) : Int {
-        return _GL_GetAttribute(untyped __cpp__('(SDL_GLattr){0}', attr));
-    }
+    @:native('linc::sdl::GL_GetAttribute')
+    static function GL_GetAttribute(attr:SDLGLAttr) : Int;
 
 //SDL_system.h
 

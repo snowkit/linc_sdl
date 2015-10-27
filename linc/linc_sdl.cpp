@@ -146,6 +146,14 @@
 
             } //GL_BindTexture
 
+            int GL_GetAttribute(int attr) {
+
+                int result = -1;
+                SDL_GL_GetAttribute((SDL_GLattr)attr, &result);
+                return result;
+
+            } //GL_GetAttribute
+
             int setRenderDrawBlendMode(SDL_Renderer* renderer, int blend) {
 
                 return SDL_SetRenderDrawBlendMode(renderer, (SDL_BlendMode)blend );
