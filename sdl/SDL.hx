@@ -1077,7 +1077,7 @@ extern class SDL {
     static function setWindowMinimumSize(window:Window, max_w:Int, max_h:Int) : Void;
 
     @:native('SDL_SetWindowFullscreen')
-    static function setWindowFullscreen(window:Window, flags:UInt) : Void;
+    static function setWindowFullscreen(window:Window, flags:SDLWindowFlags) : Void;
 
     @:native('SDL_SetWindowBordered')
     static function setWindowBordered(window:Window, bordered:Bool) : Void;
