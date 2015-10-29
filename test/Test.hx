@@ -262,10 +262,11 @@ class Test {
             if(e.type == SDL_KEYDOWN) {
 
                 var ctrlormetadown = (SDL.getModState() == (KMOD_GUI | KMOD_CTRL));
+                var sym:Int = e.key.keysym.sym;
 
-                trace(SDL.getKeyName(e.key.keysym.sym));
+                trace(SDL.getKeyName(sym));
 
-                if(e.key.keysym.sym == sdl.Keycodes.key_t) {
+                if(sym == sdl.Keycodes.key_t) {
                     if(!has_timer) {
                         timer_start = SDL.getTicks();
                         var intid = 1+Std.random(4);
@@ -275,12 +276,12 @@ class Test {
                     }
                 }
 
-                if(e.key.keysym.sym == sdl.Keycodes.escape) {
+                if(sym == sdl.Keycodes.escape) {
                     reason = 'escape key';
                     return false;
                 }
 
-                if(e.key.keysym.sym == 32) {
+                if(sym == 32) {
                     var a = SDL.waitEvent();
                     trace('next event was SDL_TEXTINPUT:' + (a.type == SDL_TEXTINPUT));
                 }

@@ -33,9 +33,9 @@ private extern class SDLEvent {
 
 @:include('linc_sdl.h') @:native("::cpp::Reference<SDL_Event>")
 @:keep extern class EventRef extends SDLEvent {}
+
 @:include('linc_sdl.h') @:native("::cpp::Struct<SDL_Event>")
 @:keep extern class Event extends EventRef {}
-
 
 @:structAccess
 @:include('linc_sdl.h') @:native("::cpp::Struct<SDL_QuitEvent>")
@@ -95,7 +95,7 @@ extern class KeyboardEvent {
 }
 
 @:structAccess
-@:include('linc_sdl.h') @:native("::cpp::Struct<SDL_Keysym>")
+@:include('linc_sdl.h') @:native("SDL_Keysym")
 extern class SDLKeysym {
     var scancode: Int;
     var sym: Int;
