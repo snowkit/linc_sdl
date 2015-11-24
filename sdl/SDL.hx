@@ -680,8 +680,11 @@ extern class SDL {
     @:native('SDL_SetCursor')
     static function setCursor(cursor:Cursor):Void;
 
-    @:native('SDL_SetRelativeMouseMode')
-    static function setRelativeMouseMode(enabled:Bool):Int;
+    // @:native('SDL_SetRelativeMouseMode')
+    static inline function setRelativeMouseMode(enabled:Bool):Int {
+        var _enable = enabled ? 1 : 0;
+        return untyped __cpp__('SDL_SetRelativeMouseMode((SDL_bool){0})', _enable);
+    }
 
     @:native('SDL_ShowCursor')
     static function showCursor(toggle:Int):Int;
@@ -1077,13 +1080,15 @@ extern class SDL {
     static function setWindowMinimumSize(window:Window, max_w:Int, max_h:Int) : Void;
 
     @:native('SDL_SetWindowFullscreen')
-    static function setWindowFullscreen(window:Window, flags:SDLWindowFlags) : Void;
+    static function setWindowFullscreen(window:Window, flags:SDLWindowFlags) : Int;
 
     @:native('SDL_SetWindowBordered')
     static function setWindowBordered(window:Window, bordered:Bool) : Void;
 
-    @:native('SDL_SetWindowGrab')
-    static function setWindowGrab(window:Window, grabbed:Bool) : Void;
+    static inline function setWindowGrab(window:Window, grabbed:Bool) : Void {
+        var _enable = grabbed ? 1 : 0;
+        untyped __cpp__('SDL_SetWindowGrab({0}, (SDL_bool){1})', window, _enable);
+    }
 
     @:native('SDL_SetWindowTitle')
     static function setWindowTitle(window:Window, title:String) : Void;
@@ -1125,10 +1130,10 @@ extern class SDL {
     static function GL_SwapWindow(window:Window) : Void;
 
     @:native('SDL_GL_SetSwapInterval')
-    static function GL_SetSwapInterval(interval:Int) : Int;
+    static function GL_SetSwapInterval(interval:Bool) : Int;
 
     @:native('SDL_GL_GetSwapInterval')
-    static function GL_GetSwapInterval() : Int;
+    static function GL_GetSwapInterval() : Bool;
 
     @:native('SDL_GL_ResetAttributes')
     static function GL_ResetAttributes() : Void;
