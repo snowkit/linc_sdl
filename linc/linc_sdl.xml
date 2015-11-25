@@ -1,5 +1,6 @@
 <xml>
     <set name="NATIVE_TOOLKIT_PATH" value="${LINC_SDL_PATH}/lib/" />
+    <set name="NATIVE_TOOLKIT_SDL_STATIC" value="1" if="android"/>
     <include name="${LINC_SDL_PATH}/lib/sdl/files.xml"/>
 
     <files id='haxe'>

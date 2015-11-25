@@ -9,6 +9,13 @@
 #include <vector>
 #include <map>
 
+
+#if !defined(LINC_SDL_NO_SDL_MAIN)
+    int SDL_main(int argc, char *argv[]) {
+        return 0;
+    }
+#endif
+
     namespace linc {
 
         namespace sdl {
