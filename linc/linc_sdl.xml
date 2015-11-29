@@ -6,6 +6,8 @@
     <files id='haxe'>
 
         <compilerflag value='-DLINC_SDL'/>
+        <compilerflag value='-DLINC_SDL_WITH_SDL_MAIN'                               if="android"/>
+
         <compilerflag value='-I${LINC_SDL_PATH}/linc/'/>
         <compilerflag value='-I${LINC_SDL_PATH}/lib/sdl/include/'/>
         <compilerflag value='-I${LINC_SDL_PATH}/lib/sdl/include/configs/default/'    unless='windows || mac || linux'/>
