@@ -10,7 +10,7 @@
 #include <map>
 
 
-#if !defined(LINC_SDL_NO_SDL_MAIN)
+#if defined(LINC_SDL_SDL_MAIN)
     int SDL_main(int argc, char *argv[]) {
         return 0;
     }
@@ -730,7 +730,8 @@
                 } //InternaliOSCallback
 
                 void init_ios_callback( SDL_Window* window, int interval, InternaliOSCallbackFN fn ) {
-
+                    
+                    ios_fn = fn;
                     SDL_iPhoneSetAnimationCallback(window, interval, InternaliOSCallback, NULL);
 
                 } //init_ios_callback
