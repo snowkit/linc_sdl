@@ -211,10 +211,10 @@ extern class TouchFingerEvent {
     var timestamp: Float;
     var touchId: cpp.Int64;
     var fingerId: cpp.Int64;
-    var x: Int;
-    var y: Int;
-    var dx: Int;
-    var dy: Int;
+    var x: Float;
+    var y: Float;
+    var dx: Float;
+    var dy: Float;
     var pressure: Int;
 }
 
