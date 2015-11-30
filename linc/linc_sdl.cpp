@@ -10,7 +10,7 @@
 #include <map>
 
 
-#if defined(LINC_SDL_SDL_MAIN)
+#if defined(LINC_SDL_WITH_SDL_MAIN)
     int SDL_main(int argc, char *argv[]) {
         return 0;
     }
