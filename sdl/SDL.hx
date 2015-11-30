@@ -1307,6 +1307,7 @@ private class SDL_helper {
 
     static var event_watchs : Array<{ func:SDLEventFilter, data:Dynamic }> = [];
     static var watch_callback_set = false;
+    static var removed_watchs : Array<Int> = [];
 
     static function add_event_watch(func:SDLEventFilter, data:Dynamic) {
 
@@ -1332,7 +1333,7 @@ private class SDL_helper {
 
         if(index == -1) throw "Can't find event watch to remove, did you add it?";
 
-        event_watchs.remove( event_watchs[index] );
+        removed_watchs.push(index);
 
     } //del_event_watch
 
@@ -1343,11 +1344,21 @@ private class SDL_helper {
 
     static function event_watch_callback(event:sdl.Event.EventRef) {
 
+        clear_removed_watchs();
+
         for(e in event_watchs) {
             e.func(e.data, cast event);
         }
 
+        clear_removed_watchs();
+
     } //event_watch_callback
+
+    static inline function clear_removed_watchs() {
+        for(_removed in removed_watchs) {
+            event_watchs.remove( event_watchs[_removed] );
+        }
+    }
 
 } //SDL_helper
 
