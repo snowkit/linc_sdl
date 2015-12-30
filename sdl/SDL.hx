@@ -821,8 +821,8 @@ extern class SDL {
     static function joystickInstanceID(joystick:Joystick):UInt;
 
     @:native('SDL_JoystickName')
-    private static function _joystickName(device_index:Int) : cpp.ConstCharStar;
-    static inline function joystickName(device_index:Int):String return cast _joystickName(device_index);
+    private static function _joystickName(joystick:Joystick) : cpp.ConstCharStar;
+    static inline function joystickName(joystick:Joystick):String return cast _joystickName(joystick);
 
     @:native('SDL_JoystickNameForIndex')
     private static function _joystickNameForIndex(device_index:Int) : cpp.ConstCharStar;
@@ -1841,12 +1841,12 @@ from UInt to UInt {
     var SDL_JOYDEVICEREMOVED = 0x606; /**< An opened joystick has been removed */
 
     /* Game controller events */
-    var SDL_CONTROLLERAXISMOTION  = 0x650; /**< Game controller axis motion */
-    var SDL_CONTROLLERBUTTONDOWN  = 0x651;          /**< Game controller button pressed */
-    var SDL_CONTROLLERBUTTONUP    = 0x652;            /**< Game controller button released */
-    var SDL_CONTROLLERDEVICEADDED = 0x653;         /**< A new Game controller has been inserted into the system */
-    var SDL_CONTROLLERDEVICEREMOVED = 0x654;       /**< An opened Game controller has been removed */
-    var SDL_CONTROLLERDEVICEREMAPPED = 0x655;      /**< The controller mapping was updated */
+    var SDL_CONTROLLERAXISMOTION        = 0x650; /**< Game controller axis motion */
+    var SDL_CONTROLLERBUTTONDOWN        = 0x651; /**< Game controller button pressed */
+    var SDL_CONTROLLERBUTTONUP          = 0x652; /**< Game controller button released */
+    var SDL_CONTROLLERDEVICEADDED       = 0x653; /**< A new Game controller has been inserted into the system */
+    var SDL_CONTROLLERDEVICEREMOVED     = 0x654; /**< An opened Game controller has been removed */
+    var SDL_CONTROLLERDEVICEREMAPPED    = 0x655; /**< The controller mapping was updated */
 
     /* Touch events */
     var SDL_FINGERDOWN      = 0x700;
