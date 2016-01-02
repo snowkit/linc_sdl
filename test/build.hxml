@@ -2,15 +2,17 @@
 -cpp cpp/
 -cp ../
 -debug
--cmd cpp/Test-debug
 
-# pick a target
+# pick a target, uncomment both lines
 
 #-D mac
+#-cmd cpp/Test-debug
+
 #-D windows
+#-cmd cpp/Test-debug.exe
+
 #-D linux
-#-D ios
-#-D android
+# -cmd cpp/Test-debug
 
 # To build 32 or 64 bit
 #(if not using the default for your platform):
