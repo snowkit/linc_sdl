@@ -648,8 +648,10 @@ extern class SDL {
 //SDL_mouse.h
 
 
-    @:native('SDL_CaptureMouse')
-    static function captureMouse(enabled:Bool):Int;
+    static inline function captureMouse(enabled:Bool):Int {
+        var _enable = enabled ? 1 : 0;
+        return untyped __cpp__('SDL_CaptureMouse((SDL_bool){0})', _enable);
+    }
 
     @:native('SDL_CreateColorCursor')
     static function createColorCursor(surface:Surface, hot_x:Int, hot_y:Int):Cursor;
@@ -687,7 +689,6 @@ extern class SDL {
     @:native('SDL_SetCursor')
     static function setCursor(cursor:Cursor):Void;
 
-    // @:native('SDL_SetRelativeMouseMode')
     static inline function setRelativeMouseMode(enabled:Bool):Int {
         var _enable = enabled ? 1 : 0;
         return untyped __cpp__('SDL_SetRelativeMouseMode((SDL_bool){0})', _enable);
@@ -1089,8 +1090,10 @@ extern class SDL {
     @:native('SDL_SetWindowFullscreen')
     static function setWindowFullscreen(window:Window, flags:SDLWindowFlags) : Int;
 
-    @:native('SDL_SetWindowBordered')
-    static function setWindowBordered(window:Window, bordered:Bool) : Void;
+    static inline function setWindowBordered(window:Window, bordered:Bool) : Void {
+        var _enable = bordered ? 1 : 0;
+        untyped __cpp__('SDL_SetWindowBordered({0}, (SDL_bool){1})', window, _enable);
+    }
 
     static inline function setWindowGrab(window:Window, grabbed:Bool) : Void {
         var _enable = grabbed ? 1 : 0;
