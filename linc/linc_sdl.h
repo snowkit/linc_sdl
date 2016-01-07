@@ -3,7 +3,6 @@
 
 #define SDL_MAIN_HANDLED 1
 #include "../lib/sdl/include/SDL.h"
-#include "../lib/sdl/include/SDL_syswm.h"
 #include <hxcpp.h>
 
 namespace linc {
