@@ -9,12 +9,20 @@
 #include <vector>
 #include <map>
 
+    #if defined(LINC_SDL_WITH_SDL_MAIN)
 
-#if defined(LINC_SDL_WITH_SDL_MAIN)
-    int SDL_main(int argc, char *argv[]) {
-        return 0;
-    }
-#endif
+        extern "C" { void hxcpp_main(); }
+        int SDL_main(int argc, char *argv[]) {
+            
+            #if !defined(LINC_SDL_NO_HXCPP_MAIN_CALL) 
+                SDL_Log("Calling hxcpp_main() from SDL_main!");
+                hxcpp_main();
+            #endif
+
+            return 0;
+        }
+
+    #endif
 
     namespace linc {
 
@@ -622,71 +630,122 @@
         //internal
 
             //event watches
-                static InternalEventFilterFN event_fn = 0;
-                static bool inited_event_watch = false;
-
-                //sdl ignores the return value
-                static int InternalEventFilter(void* userdata, SDL_Event* event) {
-
-                    if(!inited_event_watch) return 0;
-
-                    event_fn(event);
-
-                    return 0;
-
-                } //InternalEventFilter
+                static InternalEventFilterFN event_watch_fn = 0;
+                static std::map<int, int*> event_watch_list;
+                static unsigned long long event_watch_seq = 0;
 
                 void init_event_watch( InternalEventFilterFN fn ) {
 
-                    if(inited_event_watch) return;
-
-                    event_fn = fn;
-
-                    SDL_AddEventWatch(InternalEventFilter, 0);
-
-                    inited_event_watch = true;
+                    event_watch_fn = fn;                    
 
                 } //init_event_watch
 
-            //timer
+                static int InternalEventWatch(void* userdata, SDL_Event* event) {
+
+                        //:todo:
+                    unsigned int type = event->type;
+                    if(
+                        type != SDL_APP_TERMINATING         &&
+                        type != SDL_APP_LOWMEMORY           &&
+                        type != SDL_APP_WILLENTERBACKGROUND &&
+                        type != SDL_APP_DIDENTERBACKGROUND  &&
+                        type != SDL_APP_WILLENTERFOREGROUND &&
+                        type != SDL_APP_DIDENTERFOREGROUND
+                    ) {
+                        return 1;
+                    }
+
+                    #if defined(ANDROID) 
+                        AutoHaxe haxe("linc::sdl::InternalEventWatch");
+                    #endif
+
+                    int* watch_id = (int*)userdata;
+                    return event_watch_fn(*watch_id, event);
+
+                } //InternalEventWatch
+
+                int addEventWatch() {
+                    
+                    int watch_id = event_watch_seq;
+                    int* watch_userdata = new int;
+                    *watch_userdata = watch_id;
+
+                    event_watch_seq++;
+
+                    SDL_AddEventWatch(InternalEventWatch, watch_userdata);
+
+                    event_watch_list[watch_id] = watch_userdata;
+
+                    return watch_id;
+
+                } //addEventWatch
+
+                void delEventWatch( int watchID ) {
+
+                    int* watch_userdata = event_watch_list[watchID];
+                        
+                        //in our case removing a null pointer 
+                        //event watch callback doesn't match our expectation
+                    if(watch_userdata) {
+
+                        SDL_DelEventWatch(InternalEventWatch, watch_userdata);
+
+                        delete watch_userdata; 
+                        watch_userdata = 0;
+
+                    }
+
+                } //delEventWatch
+
+            //timer callbacks
+
                 static InternalTimerCallbackFN timer_fn = 0;
-                static bool inited_timer = false;
+                static std::map<int, int*> timer_list;
 
-            static Uint32 InternalTimerCallback(Uint32 interval, void *param) {
+                void init_timer( InternalTimerCallbackFN fn ) {
 
-                int* timerid = (int*)param;
+                    timer_fn = fn;
 
-                int result = timer_fn(*timerid);
+                } //init_timer
 
-                return result;
+                static Uint32 InternalTimerCallback(Uint32 interval, void *param) {
 
-            } //InternalTimerCallback
+                    #if defined(ANDROID) 
+                        AutoHaxe haxe("linc::sdl::InternalTimerCallback");
+                    #endif
 
-            void init_timer( InternalTimerCallbackFN fn ) {
+                    int* timer_id = (int*)param;
 
-                if(inited_timer) return;
+                    int result = timer_fn(*timer_id);
 
-                timer_fn = fn;
+                    return result;
 
-                inited_timer = true;
+                } //InternalTimerCallback
 
-            } //init_timer
+                int addTimer( int interval ) {
 
-            int addTimer( int interval ) {
+                    int* timer_userdata = new int;
+                    int timer_id = SDL_AddTimer(interval, InternalTimerCallback, timer_userdata);
+                    *timer_userdata = timer_id;
 
-                int* _id = new int;
-                int timerid = SDL_AddTimer(interval, InternalTimerCallback, _id);
-                *_id = timerid;
+                    timer_list[timer_id] = timer_userdata;
 
-                return timerid;
+                    return timer_id;
 
-            } //add_timer
+                } //add_timer
 
-            bool removeTimer( int timerID ) {
+                bool removeTimer( int timerID ) {
 
-                return SDL_RemoveTimer(timerID);
+                    int* timer_userdata = timer_list[timerID];
+                    
+                    if(timer_userdata) {
+                        delete timer_userdata; 
+                        timer_userdata = 0;
+                    }
 
-            } //remove_timer
+                    return SDL_RemoveTimer(timerID);
+
+                } //remove_timer
 
 
             int RWread(SDL_RWops* context, Array<unsigned char> ptr, size_t size, size_t maxnum) {

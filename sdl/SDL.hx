@@ -1210,10 +1210,16 @@ extern class SDL {
 //Internal
 
     @:native('linc::sdl::init_event_watch')
-    private static function init_event_watch(func:cpp.Callable<sdl.Event.EventRef->Void>):Void;
+    private static function init_event_watch(func:cpp.Callable<Int->sdl.Event.EventRef->Int>):Void;
 
     @:native('linc::sdl::addTimer')
     private static function add_timer(interval:UInt):SDLTimerID;
+
+    @:native('linc::sdl::addEventWatch')
+    private static function add_event_watch():Int;
+
+    @:native('linc::sdl::delEventWatch')
+    private static function del_event_watch(watchid:Int):Void;
 
     @:native('linc::sdl::removeTimer')
     private static function remove_timer(timerid:SDLTimerID):Bool;
@@ -1231,61 +1237,67 @@ private typedef InternalTimerInfo = {
     timerid:SDLTimerID
 };
 
+private typedef InternalEventWatchInfo = {
+    callback: SDLEventFilter,
+    userdata: Dynamic,
+    watchid: Int
+}
+
 @:allow(sdl.SDL)
 @:include('linc_sdl.h')
 private class SDL_helper {
 
     //timer
 
-    static var timers:Map<SDLTimerID, InternalTimerInfo> = new Map();
-    static var timer_callback_set = false;
+        static var timers:Map<SDLTimerID, InternalTimerInfo> = new Map();
+        static var timer_callback_set = false;
 
-    static function add_timer(interval:UInt, callback:SDLTimerCallback, userdata:Dynamic):SDLTimerID {
+        static function add_timer(interval:UInt, callback:SDLTimerCallback, userdata:Dynamic):SDLTimerID {
 
-        if(!timer_callback_set) {
-            timer_callback_set = true;
-            @:privateAccess SDL.init_timer( cpp.Callable.fromStaticFunction(timer_callback) );
-        }
+            if(!timer_callback_set) {
+                timer_callback_set = true;
+                @:privateAccess SDL.init_timer( cpp.Callable.fromStaticFunction(timer_callback) );
+            }
 
-        var _timerid:SDLTimerID = @:privateAccess SDL.add_timer(interval);
+            var _timerid:SDLTimerID = @:privateAccess SDL.add_timer(interval);
 
-        timers.set(_timerid, {
-            callback:callback,
-            timerid:_timerid,
-            userdata:userdata,
-            interval:interval
-        });
+            timers.set(_timerid, {
+                callback:callback,
+                timerid:_timerid,
+                userdata:userdata,
+                interval:interval
+            });
 
-        return _timerid;
+            return _timerid;
 
-    } //add_timer
+        } //add_timer
 
-    static function remove_timer(_timerid:Int):Bool {
+        static function remove_timer(_timerid:Int):Bool {
 
-        var _info = timers.get(_timerid);
+            var _info = timers.get(_timerid);
 
-        if(_info == null) return false;
+            if(_info == null) return false;
 
-        timers.remove(_timerid);
+            timers.remove(_timerid);
 
-        var _result = @:privateAccess SDL.remove_timer(_info.timerid);
+            var _result = @:privateAccess SDL.remove_timer(_info.timerid);
 
-        _info = null;
+            _info = null;
 
-        return _result;
+            return _result;
 
-    } //remove_timer
+        } //remove_timer
 
-    static function timer_callback(_timerid:Int) : Int {
+        static function timer_callback(_timerid:Int) : Int {
 
-        var _timer = timers.get(_timerid);
-        if(_timer != null) {
-            return _timer.callback(_timer.interval, _timer.userdata);
-        }
+            var _timer = timers.get(_timerid);
+            if(_timer != null) {
+                return _timer.callback(_timer.interval, _timer.userdata);
+            }
 
-        return 0;
+            return 0;
 
-    } //timer_callback
+        } //timer_callback
 
 #if ios
     //iOS animation callbacks
@@ -1313,66 +1325,65 @@ private class SDL_helper {
 
 #end
 
-//Event Watch
+    //Event Watch
 
-    static var event_watchs : Array<{ func:SDLEventFilter, data:Dynamic }> = [];
-    static var watch_callback_set = false;
-    static var removed_watchs : Array<Int> = [];
+        static var event_watchs : Map<Int, InternalEventWatchInfo> = new Map();
+        static var watch_callback_set = false;
+        static var removed_watchs : Array<Int> = [];
 
-    static function add_event_watch(func:SDLEventFilter, data:Dynamic) {
+        static function add_event_watch(func:SDLEventFilter, userdata:Dynamic) {
 
-        if(!watch_callback_set) {
-            init_watch_callback();
-        }
+            if(!watch_callback_set) {
+                watch_callback_set = true;
+                @:privateAccess SDL.init_event_watch( cpp.Callable.fromStaticFunction(event_watch_callback) );
+            }
 
-        for(e in event_watchs) if(e.func == func) throw "Can't add event watch to the same callback twice";
+            var _watchid:Int = @:privateAccess SDL.add_event_watch();
 
-        event_watchs.push({ func:func, data:data });
+            event_watchs.set(_watchid, {
+                callback: func,
+                watchid: _watchid,
+                userdata: userdata
+            });
 
-    } //add_event_watch
+            return _watchid;
 
-    static function del_event_watch(func:SDLEventFilter) {
+        } //add_event_watch
 
-        var index = -1;
-        var idx = 0;
+        static function del_event_watch(func:SDLEventFilter) {
 
-        for(e in event_watchs) {
-            if(e.func == func) index = idx;
-            ++idx;
-        }
+            var _found:InternalEventWatchInfo = null;
 
-        if(index == -1) throw "Can't find event watch to remove, did you add it?";
+            for(_watch in event_watchs) {
+                if(_watch.callback == func) {
+                    _found = _watch;
+                    break;
+                }
+            }
 
-        removed_watchs.push(index);
+            if(_found == null) throw "Can't find event watch to remove, was it added?";
 
-    } //del_event_watch
+            event_watchs.remove(_found.watchid);
+            @:privateAccess SDL.del_event_watch(_found.watchid);
+            _found = null;
 
-    static function init_watch_callback() {
-        watch_callback_set = true;
-        @:privateAccess SDL.init_event_watch( cpp.Callable.fromStaticFunction(event_watch_callback) );
-    }
+        } //del_event_watch
 
-    static function event_watch_callback(event:sdl.Event.EventRef) {
+        static function event_watch_callback(_watchid:Int, _event:sdl.Event.EventRef) : Int {
 
-        clear_removed_watchs();
+            var _watch = event_watchs.get(_watchid);
+            if(_watch != null) {
+                return _watch.callback(_watch.userdata, cast _event);
+            }
 
-        for(e in event_watchs) {
-            e.func(e.data, cast event);
-        }
+            return 1;
 
-        clear_removed_watchs();
+        } //event_watch_callback
 
-    } //event_watch_callback
-
-    static inline function clear_removed_watchs() {
-        for(_removed in removed_watchs) {
-            event_watchs.remove( event_watchs[_removed] );
-        }
-    }
 
 } //SDL_helper
 
-typedef SDLEventFilter = Dynamic->sdl.Event->Void;
+typedef SDLEventFilter = Dynamic->sdl.Event->Int;
 
 typedef SDLColor = { r:UInt, g:UInt, b:UInt, a:UInt };
 typedef SDLPoint = { x:Int, y:Int };

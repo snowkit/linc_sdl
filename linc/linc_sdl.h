@@ -83,6 +83,8 @@ namespace linc {
             extern int waitThread(SDL_Thread* thread);
             extern int addTimer(int interval);
             extern bool removeTimer(int timerID);
+            extern int addEventWatch();
+            extern void delEventWatch(int watchID);
 
             extern SDL_RWops* RWFromMem(Array<unsigned char> source, size_t size);
             extern int RWread(SDL_RWops* context, Array<unsigned char> ptr, size_t size, size_t maxnum);
@@ -96,7 +98,7 @@ namespace linc {
         //internal
 
             //event watches
-            typedef ::cpp::Function < Void(::cpp::Reference<SDL_Event>) > InternalEventFilterFN;
+            typedef ::cpp::Function < int(int, ::cpp::Reference<SDL_Event>) > InternalEventFilterFN;
             extern void init_event_watch( InternalEventFilterFN fn );
 
             //timers
@@ -107,6 +109,32 @@ namespace linc {
             #if defined(__IPHONEOS__) || defined(IPHONE)
                 typedef ::cpp::Function < Void() > InternaliOSCallbackFN;
                 extern void init_ios_callback( SDL_Window* window, int interval, InternaliOSCallbackFN fn );
+            #endif
+
+        //android helpers
+
+            #if defined(ANDROID)
+
+                    //Thanks to Hugh for pointing me to this helper in NME
+                    //https://github.com/haxenme/nme/blob/b91b507a94f07d64ea7bea78dbe9092180317870/project/src/android/AndroidCommon.h#L19
+                struct AutoHaxe {
+
+                   int base;
+                   const char *message;
+                   AutoHaxe(const char *inMessage) {  
+                      base = 0;
+                      message = inMessage;
+                      ::hx::SetTopOfStack(&base, true);
+                      // SDL_Log("AutoHaxe / enter %s %p", message, pthread_self());
+                   }
+
+                   ~AutoHaxe()
+                   {
+                      // SDL_Log("AutoHaxe / leave %s %p", message, pthread_self());
+                      ::hx::SetTopOfStack((int*)0, true);
+                   }
+                };
+
             #endif
 
     } //sdl

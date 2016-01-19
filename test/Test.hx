@@ -190,17 +190,19 @@ class Test {
         }
     }
 
-    static function eventfilter(userdata:{id:Int}, e:sdl.Event) {
+    static function eventfilter(userdata:{id:Int}, e:sdl.Event) : Int {
         if(e.type == SDLEventType.SDL_MOUSEBUTTONDOWN) {
             trace('event filter 1 mouse down :' + userdata);
         }
+        return 0;
     }
 
-    static function eventfilter2(userdata:{id:Int}, e:sdl.Event) {
+    static function eventfilter2(userdata:{id:Int}, e:sdl.Event) : Int {
         if(e.type == SDLEventType.SDL_MOUSEBUTTONUP) {
             trace('event filter 2 mouse up :' + userdata);
             SDL.delEventWatch(eventfilter2);
         }
+        return 0;
     }
 
     static function init() {
