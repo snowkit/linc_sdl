@@ -1036,7 +1036,8 @@ extern class SDL {
     static function UnlockMutex(mutex:Mutex) : Int;
 
 
-//SDL_video.h
+//:todo:
+//SDL_GetClosestDisplayMode
 
     @:native('SDL_CreateWindow')
     static function createWindow(title:String, x:Int, y:Int, w:Int, h:Int, flags:SDLWindowFlags):Window;
