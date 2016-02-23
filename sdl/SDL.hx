@@ -16,10 +16,6 @@ import sdl.Haptic;
 @:keep
 @:include('linc_sdl.h')
 @:allow(SDL_helper)
-#if !display
-@:build(linc.Linc.touch())
-@:build(linc.Linc.xml('sdl'))
-#end
 extern class SDL {
 
 //:note:differences:
@@ -1246,6 +1242,10 @@ private typedef InternalEventWatchInfo = {
 
 @:allow(sdl.SDL)
 @:include('linc_sdl.h')
+#if !display
+@:build(linc.Linc.touch())
+@:build(linc.Linc.xml('sdl'))
+#end
 private class SDL_helper {
 
     //timer
