@@ -100,6 +100,8 @@ class Test {
             var query = SDL.queryTexture(texture, {format:0,access:0,w:0,h:0});
             trace('test.bmp query: ${query.w}x${query.h}, format:${pixel_format_to_string(query.format)}, access:${query.access}');
 
+            SDL.setTextureBlendMode(texture, SDL_BLENDMODE_MOD);
+
             SDL.freeSurface(image);
             image = null;
 

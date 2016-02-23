@@ -471,7 +471,7 @@ extern class SDL {
     @:native('SDL_SetTextureAlphaMod')
     static function setTextureAlphaMod(texture:Texture, alpha:UInt):Int;
 
-    @:native('SDL_SetTextureBlendMode')
+    @:native('linc::sdl::setTextureBlendMode')
     static function setTextureBlendMode(texture:Texture, mode:SDLBlendMode):Int;
 
     @:native('SDL_SetTextureColorMod')

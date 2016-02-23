@@ -240,6 +240,12 @@
 
             } //getTextureBlendMode
 
+            int setTextureBlendMode(SDL_Texture* texture, int blend) {
+
+                return SDL_SetTextureBlendMode(texture, (SDL_BlendMode)blend);
+
+            } //setTextureBlendMode
+
             Dynamic getTextureColorMod(SDL_Texture* texture, Dynamic into) {
 
                 Uint8 r, g, b;
