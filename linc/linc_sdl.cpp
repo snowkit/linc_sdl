@@ -19,6 +19,11 @@
                 hxcpp_main();
             #endif
 
+            #if !defined(LINC_SDL_NO_EXIT_CALL)
+                SDL_Log("Calling exit() from SDL_main!");
+                exit(0);
+            #endif 
+
             return 0;
         }
 
