@@ -13,10 +13,21 @@ import sdl.Thread;
 import sdl.RWops;
 import sdl.Haptic;
 
+
+@:keep
+@:allow(sdl.SDL)
+#if !display
+@:build(linc.Linc.touch())
+@:build(linc.Linc.xml('sdl'))
+#end
+private extern class SDL_linc { private inline static var LINC = 1; }
+
 @:keep
 @:include('linc_sdl.h')
 @:allow(SDL_helper)
 extern class SDL {
+
+    private inline static var LINC = SDL_linc.LINC;
 
 //:note:differences:
 // - vargs type functions : use haxe string interpolation instead
@@ -1240,12 +1251,10 @@ private typedef InternalEventWatchInfo = {
     watchid: Int
 }
 
+
+@:keep
 @:allow(sdl.SDL)
 @:include('linc_sdl.h')
-#if !display
-@:build(linc.Linc.touch())
-@:build(linc.Linc.xml('sdl'))
-#end
 private class SDL_helper {
 
     //timer
