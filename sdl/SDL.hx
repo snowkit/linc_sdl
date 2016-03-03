@@ -1168,6 +1168,8 @@ extern class SDL {
     @:native('linc::sdl::GL_GetAttribute')
     static function GL_GetAttribute(attr:SDLGLAttr) : Int;
 
+//SDL_Audio.h
+	
 //SDL_system.h
 
     #if ios
