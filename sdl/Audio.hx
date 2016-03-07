@@ -13,10 +13,10 @@ extern class SDL_AudioSpec {
 	
 	@:native("new SDL_AudioSpec")
 	public static function create():cpp.Pointer<SDL_AudioSpec>;
+	
 }
 typedef AudioSpec = cpp.Pointer<SDL_AudioSpec>;
-//can't get around to create cpp.Struct<SDL_AudioSpec>
-
+typedef ConstAudioSpec = cpp.ConstPointer<SDL_AudioSpec>;
 
 @:enum
 abstract SDLAudioFormat(UInt)
@@ -32,7 +32,7 @@ from UInt to UInt {
 	public inline function ISSIGNED()			return this & MASK_SIGNED();
 	public inline function ISINT()				return 0!=ISFLOAT();
 	public inline function ISLITTLEENDIAN()		return 0!=ISBIGENDIAN();
-	public inline function ISUNSIGNED()			return 0 != ISSIGNED();
+	public inline function ISUNSIGNED()			return 0!= ISSIGNED();
 	
 	var AUDIO_U8 		= 0x0008;  /**< Unsigned 8-bit samples */
 	var AUDIO_S8        = 0x8008;  /**< Signed 8-bit samples */
@@ -53,5 +53,18 @@ from UInt to UInt {
 	
 } //SDLAudioFormat
 
+@:enum
+abstract SDLAllowChange(UInt)
+from UInt to UInt {
+	var SDL_AUDIO_ALLOW_FREQUENCY_CHANGE 	= 0x00000001;
+	var SDL_AUDIO_ALLOW_FORMAT_CHANGE 		= 0x00000002;
+	var SDL_AUDIO_ALLOW_CHANNELS_CHANGE 	= 0x00000004;
+	var SDL_AUDIO_ALLOW_ANY_CHANGE = (0x00000001 | 0x00000002 | 0x00000004);
+}
 
+
+@:enum
+abstract SDLAudioDeviceID (Int) from Int to Int{
+	
+}
 

@@ -12,6 +12,7 @@ import sdl.GLContext;
 import sdl.Thread;
 import sdl.RWops;
 import sdl.Haptic;
+import sdl.Audio;
 
 
 @:keep
@@ -1169,6 +1170,26 @@ extern class SDL {
     static function GL_GetAttribute(attr:SDLGLAttr) : Int;
 
 //SDL_Audio.h
+	@:native('SDL_OpenAudio')
+    static function openAudio(wantedSpec:AudioSpec, spec:AudioSpec) : Int;
+	
+	@:native('SDL_OpenAudioDevice')
+    static function openAudioDevice(device:Null<cpp.ConstCharStar>, capture:Bool, desired:ConstAudioSpec, obtained:AudioSpec, allowed_changes:Int) : Int;
+	
+	@:native('SDL_GetAudioDeviceName')
+    static function getAudioDeviceName(index:Int, isCapture:Bool) : cpp.ConstCharStar;
+	
+	@:native('SDL_GetNumAudioDevices')
+    static function getNumAudioDevices(isCapture:Bool) : Int;
+	
+	@:native('SDL_LockAudioDevice')
+	static function lockAudioDevice(dev:SDLAudioDeviceID):Void;
+	
+	@:native('SDL_UnlockAudioDevice')
+	static function UnlockAudioDevice(dev:SDLAudioDeviceID):Void;
+	
+	@:native('SDL_CloseAudioDevice')
+	static function closeAudioDevice(dev:SDLAudioDeviceID):Void;
 	
 //SDL_system.h
 
