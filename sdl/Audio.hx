@@ -1,5 +1,15 @@
 package sdl;
 
+typedef SDLAudioCVT = cpp.RawPointer<cpp.Void>;
+
+typedef SDLAudioCallback = 
+	cpp.Callable <
+		cpp.RawPointer<cpp.Void> -> cpp.RawPointer<cpp.UInt8> -> Int -> cpp.Void > ;
+	
+typedef SDLAudioFilter = 
+	cpp.Callable <SDLAudioCVT -> SDLAudioFormat-> cpp.Void>;
+
+		
 @:keep @:include('linc_sdl.h') @:native("SDL_AudioSpec")
 extern class SDL_AudioSpec {
 	var freq:Int;
@@ -8,15 +18,31 @@ extern class SDL_AudioSpec {
 	var silence:cpp.UInt8;
 	var samples:cpp.UInt16;
 	var size:cpp.UInt32;
+	var callback : SDLAudioCallback;
 	var userdata : cpp.RawPointer<cpp.Void>;
-	var callback : cpp.Callable<cpp.RawPointer<cpp.Void> -> cpp.RawPointer<cpp.UInt8> -> Int -> cpp.Void>;
 	
 	@:native("new SDL_AudioSpec")
 	public static function create():cpp.Pointer<SDL_AudioSpec>;
-	
 }
 typedef AudioSpec = cpp.Pointer<SDL_AudioSpec>;
 typedef ConstAudioSpec = cpp.ConstPointer<SDL_AudioSpec>;
+
+@:keep @:native("SDL_AudioCVT")
+extern class SDL_AudioCVT {
+	/**< Set to 1 if conversion possible */
+	var needed:Int;
+	var src_format:SDLAudioFormat;
+	var dst_format:SDLAudioFormat;
+	var rate_incr:cpp.Float64;
+	var but : cpp.Pointer<cpp.UInt8>;
+	var len:Int;
+	var len_cvt:Int;
+	var len_mult:Int;
+	var len_ratio:cpp.Float64;
+	var filters:cpp.Pointer<SDLAudioFilter>;
+	var filter_index:Int;
+}
+typedef AudioCVT = cpp.Pointer<SDL_AudioCVT>;
 
 @:enum
 abstract SDLAudioFormat(UInt)
@@ -62,9 +88,15 @@ from UInt to UInt {
 	var SDL_AUDIO_ALLOW_ANY_CHANGE = (0x00000001 | 0x00000002 | 0x00000004);
 }
 
-
 @:enum
 abstract SDLAudioDeviceID (Int) from Int to Int{
 	
 }
 
+@:enum
+abstract SDLAudioStatus(UInt)
+from UInt to UInt {
+	var SDL_AUDIO_STOPPED 	= 0;
+	var SDL_AUDIO_PLAYING 	= 1;
+	var SDL_AUDIO_PAUSED 	= 2;
+}
