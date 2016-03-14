@@ -44,6 +44,8 @@ extern class SDL_AudioCVT {
 }
 typedef AudioCVT = cpp.Pointer<SDL_AudioCVT>;
 
+//@:enum abstract SDLAudioFormat(UInt) from UInt to UInt { }
+
 @:enum
 abstract SDLAudioFormat(UInt)
 from UInt to UInt {
@@ -66,6 +68,7 @@ from UInt to UInt {
 	var AUDIO_S16LSB    = 0x8010;  /**< Signed 16-bit samples */
 	var AUDIO_U16MSB    = 0x1010;  /**< As above, but big-endian byte order */
 	var AUDIO_S16MSB    = 0x9010;  /**< As above, but big-endian byte order */
+	
 	var AUDIO_U16       = AUDIO_U16LSB;
 	
 	var AUDIO_S16       = AUDIO_S16LSB;
@@ -78,6 +81,7 @@ from UInt to UInt {
 
 	
 } //SDLAudioFormat
+
 
 @:enum
 abstract SDLAllowChange(UInt)
