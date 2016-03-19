@@ -1,19 +1,22 @@
 package sdl;
 
+@:keep
 typedef SDLAudioCVT = cpp.RawPointer<cpp.Void>;
 
+@:keep
 typedef SDLAudioCallback = 
 	cpp.Callable <
 		cpp.RawPointer<cpp.Void> -> cpp.RawPointer<cpp.UInt8> -> Int -> cpp.Void > ;
 	
+@:keep
 typedef SDLAudioFilter = 
-	cpp.Callable <SDLAudioCVT -> SDLAudioFormat-> cpp.Void>;
+	cpp.Callable <SDLAudioCVT -> _SDL_AudioFormat-> cpp.Void>;
 
 		
 @:keep @:include('linc_sdl.h') @:native("SDL_AudioSpec")
 extern class SDL_AudioSpec {
 	var freq:Int;
-	var format:SDLAudioFormat;
+	var format:_SDL_AudioFormat;
 	var channels:cpp.UInt8;
 	var silence:cpp.UInt8;
 	var samples:cpp.UInt16;
@@ -27,12 +30,12 @@ extern class SDL_AudioSpec {
 typedef AudioSpec = cpp.Pointer<SDL_AudioSpec>;
 typedef ConstAudioSpec = cpp.ConstPointer<SDL_AudioSpec>;
 
-@:keep @:native("SDL_AudioCVT")
+@:keep @:native("SDL_AudioCVT") @:include('linc_sdl.h')
 extern class SDL_AudioCVT {
 	/**< Set to 1 if conversion possible */
 	var needed:Int;
-	var src_format:SDLAudioFormat;
-	var dst_format:SDLAudioFormat;
+	var src_format:_SDL_AudioFormat;
+	var dst_format:_SDL_AudioFormat;
 	var rate_incr:cpp.Float64;
 	var but : cpp.Pointer<cpp.UInt8>;
 	var len:Int;
@@ -46,38 +49,45 @@ typedef AudioCVT = cpp.Pointer<SDL_AudioCVT>;
 
 //@:enum abstract SDLAudioFormat(UInt) from UInt to UInt { }
 
-@:enum
-abstract SDLAudioFormat(UInt)
-from UInt to UInt {
-	inline function MASK_BITSIZE() 				return 0xFF;
-	inline function MASK_DATATYPE()				return 1<<8;
-	inline function MASK_ENDIAN() 				return 1<<12;
-	inline function MASK_SIGNED() 				return 1 << 15;
+@:keep @:include('linc_sdl.h') @:native("SDL_AudioFormat")	
+extern class _SDL_AudioFormat { }
+
+@:keep @:include('linc_sdl.h')
+class AudioFormat {
+	/*
+	function MASK_BITSIZE() 				return 0xFF;
+	function MASK_DATATYPE()				return 1<<8;
+	function MASK_ENDIAN() 					return 1<<12;
+	function MASK_SIGNED() 					return 1 << 15;
 	
-	public inline function BITSIZE() 			return this & MASK_BITSIZE();
-	public inline function ISFLOAT() 			return this & MASK_DATATYPE();
-	public inline function ISBIGENDIAN()		return this & MASK_ENDIAN();
-	public inline function ISSIGNED()			return this & MASK_SIGNED();
-	public inline function ISINT()				return 0!=ISFLOAT();
-	public inline function ISLITTLEENDIAN()		return 0!=ISBIGENDIAN();
-	public inline function ISUNSIGNED()			return 0!= ISSIGNED();
+	public function BITSIZE() 				return this & MASK_BITSIZE();
+	public function ISFLOAT() 				return this & MASK_DATATYPE();
+	public function ISBIGENDIAN()			return this & MASK_ENDIAN();
+	public function ISSIGNED()				return this & MASK_SIGNED();
+	       
+	public function ISINT()					return 0!=ISFLOAT();
+	public function ISLITTLEENDIAN()		return 0!=ISBIGENDIAN();
+	public function ISUNSIGNED()			return 0 != ISSIGNED();
+	*/
+	public static inline var af_u8 		= 0x0008;  		/**< Unsigned 8-bit samples */
+	public static inline var af_s8        	= 0x8008;  		/**< Signed 8-bit samples */
+	public static inline var af_u16lsb    	= 0x0010; 		/**< Unsigned 16-bit samples */
+	public static inline var af_s16lsb    	= 0x8010;  		/**< Signed 16-bit samples */
+	public static inline var af_u16msb    	= 0x1010;  		/**< As above, but big-endian byte order */
+	public static inline var af_s16msb    	= 0x9010;  		/**< As above, but big-endian byte order */
+	//public var AUDIO_U16      	() AUDIO_U16LSB();
+	//public var AUDIO_S16      	() AUDIO_S16LSB();
+	public static var af_s32lsb    	= 0x8020;  		/**< 32-bit integer samples */
+	public static var af_s32msb    	= 0x9020;  		/**< As above, but big-endian byte order */
+	//public var AUDIO_S32      	() AUDIO_S32LSB();
+	public static var af_f32lsb    	= 0x8120;  		/**< 32-bit floating point samples */
+	public static var af_f32msb    	= 0x9120; 		/**< As above, but big-endian byte order */
+	//public var AUDIO_F32       	() AUDIO_F32LSB();
 	
-	var AUDIO_U8 		= 0x0008;  /**< Unsigned 8-bit samples */
-	var AUDIO_S8        = 0x8008;  /**< Signed 8-bit samples */
-	var AUDIO_U16LSB    = 0x0010;  /**< Unsigned 16-bit samples */
-	var AUDIO_S16LSB    = 0x8010;  /**< Signed 16-bit samples */
-	var AUDIO_U16MSB    = 0x1010;  /**< As above, but big-endian byte order */
-	var AUDIO_S16MSB    = 0x9010;  /**< As above, but big-endian byte order */
-	
-	var AUDIO_U16       = AUDIO_U16LSB;
-	
-	var AUDIO_S16       = AUDIO_S16LSB;
-	var AUDIO_S32LSB    = 0x8020;  /**< 32-bit integer samples */
-	var AUDIO_S32MSB    = 0x9020;  /**< As above, but big-endian byte order */
-	var AUDIO_S32       = AUDIO_S32LSB;
-	var AUDIO_F32LSB    = 0x8120;  /**< 32-bit floating point samples */
-	var AUDIO_F32MSB    = 0x9120 ; /**< As above, but big-endian byte order */
-	var AUDIO_F32       = AUDIO_F32LSB;
+	@:unreflective
+	public static function toNative(v:Int) : _SDL_AudioFormat {
+		return untyped __cpp__("((SDL_AudioFormat)({0}))",v);
+	}
 
 	
 } //SDLAudioFormat
