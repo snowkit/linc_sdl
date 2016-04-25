@@ -33,7 +33,7 @@
 
         namespace sdl {
 
-                // return { window:cpp.Pointer<SDL_Window>, renderer:cpp.Pointer<SDL_Renderer> }
+                // return { window:cpp.RawPointer<SDL_Window>, renderer:cpp.RawPointer<SDL_Renderer> }
             Dynamic createWindowAndRenderer(int x, int y, int flags) {
 
                 SDL_Window* window = 0;
@@ -41,14 +41,10 @@
 
                 int res = SDL_CreateWindowAndRenderer(x, y, flags, &window, &renderer );
                 if(res == 0) {
-
-                    ::cpp::Pointer<SDL_Window> window_p(window);
-                    ::cpp::Pointer<SDL_Renderer> renderer_p(renderer);
-
                     hx::Anon out = hx::Anon_obj::Create();
 
-                        out->Add(HX_CSTRING("window"), window_p);
-                        out->Add(HX_CSTRING("renderer"), renderer_p);
+                        out->Add(HX_CSTRING("window"), window);
+                        out->Add(HX_CSTRING("renderer"), renderer);
 
                     return out;
 
