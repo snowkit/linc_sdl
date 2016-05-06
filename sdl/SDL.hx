@@ -1266,7 +1266,9 @@ private class SDL_helper {
         static function quit() {
             timers = new Map();
             timer_callback_set = false;
-            iOS_callback_data = null;
+            #if ios
+                iOS_callback_data = null;
+            #end
         }
 
     //timer
