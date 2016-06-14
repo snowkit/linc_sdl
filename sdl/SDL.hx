@@ -48,7 +48,11 @@ extern class SDL {
     static function wasInit(flags:SDLInitFlags):UInt;
 
     @:native('SDL_Quit')
-    static function quit():Void;
+    private static function _quit():Void;
+    static inline function quit():Void {
+        SDL_helper.quit();
+        _quit();
+    }
 
 //SDL_events.h
 
@@ -1308,6 +1312,16 @@ private typedef InternalEventWatchInfo = {
 @:allow(sdl.SDL)
 @:include('linc_sdl.h')
 private class SDL_helper {
+
+    //shutdown
+
+        static function quit() {
+            timers = new Map();
+            timer_callback_set = false;
+            #if ios
+                iOS_callback_data = null;
+            #end
+        }
 
     //timer
 
