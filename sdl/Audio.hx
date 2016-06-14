@@ -3,15 +3,17 @@ package sdl;
 @:keep
 typedef SDLAudioCVT = cpp.RawPointer<cpp.Void>;
 
+/*
 @:keep
 typedef SDLAudioCallback = 
 	cpp.Callable <
-		cpp.RawPointer<cpp.Void> -> cpp.RawPointer<cpp.UInt8> -> Int -> cpp.Void > ;
-	
+		cpp.RawPointer<cpp.Void> -> cpp.RawPointer<cpp.UInt8> -> Int -> Void > ;
+*/	
+/*
 @:keep
 typedef SDLAudioFilter = 
 	cpp.Callable <SDLAudioCVT -> _SDL_AudioFormat-> cpp.Void>;
-
+*/
 		
 @:keep @:include('linc_sdl.h') @:native("SDL_AudioSpec")
 extern class SDL_AudioSpec {
@@ -21,7 +23,8 @@ extern class SDL_AudioSpec {
 	var silence:cpp.UInt8;
 	var samples:cpp.UInt16;
 	var size:cpp.UInt32;
-	var callback : SDLAudioCallback;
+	var callback : cpp.Callable <
+		cpp.RawPointer<cpp.Void> -> cpp.RawPointer<cpp.UInt8> -> Int -> Void >;
 	var userdata : cpp.RawPointer<cpp.Void>;
 	
 	@:native("new SDL_AudioSpec")
@@ -42,7 +45,7 @@ extern class SDL_AudioCVT {
 	var len_cvt:Int;
 	var len_mult:Int;
 	var len_ratio:cpp.Float64;
-	var filters:cpp.Pointer<SDLAudioFilter>;
+	//var filters:cpp.Pointer<SDLAudioFilter>;
 	var filter_index:Int;
 }
 typedef AudioCVT = cpp.Pointer<SDL_AudioCVT>;
