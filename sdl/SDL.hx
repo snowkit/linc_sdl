@@ -767,18 +767,18 @@ extern class SDL {
 
     @:native('SDL_GameControllerMapping')
     private static function _gameControllerMapping(gamecontroller:GameController):cpp.ConstCharStar;
-    static inline function gameControllerMapping(gamecontroller:GameController):String return cast _gameControllerMapping(gamecontroller);
+    static inline function gameControllerMapping(gamecontroller:GameController):String return _gameControllerMapping(gamecontroller).toString();
 
     // @:native('SDL_GameControllerMappingForGUID')
     //:todo: static function gameControllerMappingForGUID():Int;
 
     @:native('SDL_GameControllerName')
     private static function _gameControllerName(gamecontroller:GameController):cpp.ConstCharStar;
-    static inline function gameControllerName(gamecontroller:GameController):String return cast _gameControllerName(gamecontroller);
+    static inline function gameControllerName(gamecontroller:GameController):String return _gameControllerName(gamecontroller).toString();
 
     @:native('SDL_GameControllerNameForIndex')
     private static function _gameControllerNameForIndex(joystick_index:Int):cpp.ConstCharStar;
-    static inline function gameControllerNameForIndex(joystick_index:Int):String return cast _gameControllerNameForIndex(joystick_index);
+    static inline function gameControllerNameForIndex(joystick_index:Int):String return _gameControllerNameForIndex(joystick_index).toString();
 
     @:native('SDL_GameControllerOpen')
     static function gameControllerOpen(joystick_index:Int):GameController;
@@ -834,11 +834,11 @@ extern class SDL {
 
     @:native('SDL_JoystickName')
     private static function _joystickName(joystick:Joystick) : cpp.ConstCharStar;
-    static inline function joystickName(joystick:Joystick):String return cast _joystickName(joystick);
+    static inline function joystickName(joystick:Joystick):String return _joystickName(joystick).toString();
 
     @:native('SDL_JoystickNameForIndex')
     private static function _joystickNameForIndex(device_index:Int) : cpp.ConstCharStar;
-    static inline function joystickNameForIndex(device_index:Int):String return cast _joystickNameForIndex(device_index);
+    static inline function joystickNameForIndex(device_index:Int):String return _joystickNameForIndex(device_index).toString();
 
     @:native('SDL_JoystickNumAxes')
     static function joystickNumAxes(joystick:Joystick):Int;
@@ -1166,7 +1166,7 @@ extern class SDL {
     @:native('SDL_GL_SetAttribute')
     private static function _GL_SetAttribute(attr:SDLGLAttr, value:Int) : Int;
     static inline function GL_SetAttribute(attr:SDLGLAttr, value:Int) : Int {
-        return _GL_SetAttribute(untyped __cpp__('(SDL_GLattr){0}', attr), value);
+        return untyped __cpp__('SDL_GL_SetAttribute((SDL_GLattr){0}, {1})', attr, value);
     }
 
     @:native('linc::sdl::GL_GetAttribute')
