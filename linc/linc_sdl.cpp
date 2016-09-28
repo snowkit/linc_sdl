@@ -397,6 +397,14 @@
 
             } //renderSetViewport
 
+            SDL_Surface* createRGBSurfaceFrom(Array<unsigned char> pixels, 
+                int width, int height, int depth, int pitch, 
+                int Rmask, int Gmask, int Bmask, int Amask) {
+
+                return SDL_CreateRGBSurfaceFrom((void*)&pixels[0], width, height, depth, pitch, Rmask, Gmask, Bmask, Amask);
+
+            } //createRGBSurfaceFrom
+
             SDL_Cursor* createSystemCursor(int id) {
 
                 return SDL_CreateSystemCursor((SDL_SystemCursor)id);

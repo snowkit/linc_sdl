@@ -327,6 +327,9 @@ extern class SDL {
     @:native('SDL_UpdateWindowSurface')
     static function updateWindowSurface(window:Window) : Int;
 
+    @:native('linc::sdl::createRGBSurfaceFrom')
+    static function createRGBSurfaceFrom(pixels:BytesData, width:Int, height:Int, depth:Int, pitch:Int, Rmask:Int, Gmask:Int, Bmask:Int, Amask:Int) : Surface;
+
 //SDL_render.h
 
     @:native('SDL_CreateRenderer')
