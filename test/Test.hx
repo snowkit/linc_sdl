@@ -12,6 +12,7 @@ class Test {
     static var state : { window:Window, renderer:Renderer };
     static var cursor : sdl.Cursor;
     static var hand_cursor : sdl.Cursor;
+    static var haxe_cursor : sdl.Cursor;
     static var reason : String = '';
 
     static function main() {
@@ -21,9 +22,15 @@ class Test {
         renderinfo();
         blends();
 
-
         cursor = SDL.getDefaultCursor();
         hand_cursor = SDL.createSystemCursor(SDL_SYSTEM_CURSOR_HAND);
+
+        //create colored cursor
+
+            var haxe_file = SDL.RWFromFile("haxe.bmp", "rb");
+            var haxe_image = SDL.loadBMP_RW(haxe_file, 1);
+
+            haxe_cursor = SDL.createColorCursor(haxe_image, 1, 1);
 
         //clear to white
             SDL.setRenderDrawColor(state.renderer, 255,255,255,255);
@@ -295,9 +302,16 @@ class Test {
 
                 var gp = SDL.getGlobalMouseState({x:0,y:0,buttons:0});
                 trace('motion ' + e.motion.x + ',' + e.motion.y + ' / global / ' + gp.x + ',' + gp.y + ' b:' + gp.buttons);
+                    
+                    //within the bottom image bounds
                 if(e.motion.x >= 112 && e.motion.x <= 208 && e.motion.y >= 192 && e.motion.y <= 288) {
                     if(!hover) {
                         SDL.setCursor(hand_cursor);
+                        hover = true;
+                    }
+                } else if(e.motion.x > 0 && e.motion.x < 512 && e.motion.y > 0 && e.motion.y < 128) {
+                    if(!hover) {
+                        SDL.setCursor(haxe_cursor);
                         hover = true;
                     }
                 } else {
