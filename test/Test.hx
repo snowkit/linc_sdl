@@ -109,6 +109,8 @@ class Test {
 
             SDL.setTextureBlendMode(texture, SDL_BLENDMODE_MOD);
 
+            trace('test.bmp surface properties ${image.value.w}x${image.value.h} pitch:${image.value.pitch}');
+
             SDL.freeSurface(image);
             image = null;
 
