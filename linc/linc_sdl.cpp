@@ -405,6 +405,35 @@
 
             } //createRGBSurfaceFrom
 
+            int blitSurface(SDL_Surface* src, Dynamic srcrect, SDL_Surface* dst, Dynamic dstrect) {
+
+                bool has_src = srcrect != null();
+                bool has_dst = dstrect != null();
+
+                    //neither?
+                if(!has_src && !has_dst) {
+                    return SDL_BlitSurface(src, NULL, dst, NULL);
+                }
+
+                    //just src?
+                if(has_src && !has_dst) {
+                    SDL_Rect _srcrect = convert::get_rect_from(srcrect);
+                    return SDL_BlitSurface(src, &_srcrect, dst, NULL);
+                }
+
+                    //just dst?
+                if(has_dst && !has_src) {
+                    SDL_Rect _dstrect = convert::get_rect_from(dstrect);
+                    return SDL_BlitSurface(src, NULL, dst, &_dstrect);
+                }
+
+                SDL_Rect _srcrect = convert::get_rect_from(srcrect);
+                SDL_Rect _dstrect = convert::get_rect_from(dstrect);
+
+                return SDL_BlitSurface(src, &_srcrect, dst, &_dstrect);
+
+            } //blitSurface
+
             SDL_Cursor* createSystemCursor(int id) {
 
                 return SDL_CreateSystemCursor((SDL_SystemCursor)id);

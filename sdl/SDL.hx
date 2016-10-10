@@ -318,8 +318,8 @@ extern class SDL {
     @:native('SDL_FreeSurface')
     static function freeSurface(surface:Surface) : Void;
 
-    @:native('SDL_BlitSurface')
-    static function blitSurface(src:Surface, srcrect:SDLRect, dst:Surface, dstrect:SDLRect ) : Int;
+    @:native('linc::sdl::blitSurface')
+    static function blitSurface(src:Surface, srcrect:SDLRect, dst:Surface, dstrect:SDLRect) : Int;
 
     @:native('SDL_GetWindowSurface')
     static function getWindowSurface(window:Window) : Surface;
