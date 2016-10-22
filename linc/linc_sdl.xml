@@ -44,6 +44,7 @@
         <!-- <lib name="${LINC_SDL_PATH}/lib/sdl/lib/${BINDIR}/libsdl${LIBEXTRA}.a" if="linc_sdl_prebuilt"/> -->
 
         <section if="mac">
+            <vflag name="" value="-mmacosx-version-min=10.6"/>
             <vflag name="-l" value="iconv"/>
             <vflag name="-framework" value="Carbon" />
             <vflag name="-framework" value="Cocoa" />
@@ -54,6 +55,7 @@
             <vflag name="-framework" value="IOKit" />
             <vflag name="-framework" value="CoreAudio" />
             <vflag name="-framework" value="AudioUnit" />
+            <vflag name="-framework" value="AudioToolbox" />
         </section>
 
         <section if="windows">
