@@ -1177,7 +1177,7 @@ extern class SDL {
 
 //SDL_system.h
 
-    #if ios
+    #if (ios || tvos)
 
         static inline function iPhoneSetAnimationCallback(window:Window, interval:Int, callback:Dynamic->Void, userdata:Dynamic) : Void {
 
@@ -1187,7 +1187,7 @@ extern class SDL {
 
         //internal
         @:native('linc::sdl::init_ios_callback')
-        private static function init_ios_callback(window:Window, interval:Int, func:cpp.Callable<Void->Void>):Void;
+        private static function init_ios_callback(window:Window, interval:Int, func: cpp.Callable<Void->Void>):Void;
 
     #end
 
@@ -1269,7 +1269,7 @@ private class SDL_helper {
         static function quit() {
             timers = new Map();
             timer_callback_set = false;
-            #if ios
+            #if (ios || tvos)
                 iOS_callback_data = null;
             #end
         }
@@ -1326,7 +1326,7 @@ private class SDL_helper {
 
         } //timer_callback
 
-#if ios
+#if (ios || tvos)
     //iOS animation callbacks
 
     static var iOS_callback_data: { fn:Dynamic->Void, userdata:Dynamic } = null;
