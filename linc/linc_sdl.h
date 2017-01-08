@@ -1,9 +1,9 @@
-#ifndef _LINC_SDL_H_
-#define _LINC_SDL_H_
+#pragma once
+
+#include <hxcpp.h>
 
 #define SDL_MAIN_HANDLED 1
 #include "../lib/sdl/include/SDL.h"
-#include <hxcpp.h>
 
 namespace linc {
 
@@ -124,7 +124,7 @@ namespace linc {
 
                    int base;
                    const char *message;
-                   AutoHaxe(const char *inMessage) {  
+                   AutoHaxe(const char *inMessage) {
                       base = 0;
                       message = inMessage;
                       ::hx::SetTopOfStack(&base, true);
@@ -143,5 +143,3 @@ namespace linc {
     } //sdl
 
 } //linc
-
-#endif //_LINC_SDL_H_
