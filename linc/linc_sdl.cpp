@@ -1,7 +1,3 @@
-//This file is included, so this is required!
-#ifndef _LINC_SDL_CPP_
-#define _LINC_SDL_CPP_
-
 #include <hxcpp.h>
 #include "./linc_sdl.h"
 
@@ -9,1003 +5,1001 @@
 #include <vector>
 #include <map>
 
-    #if defined(LINC_SDL_WITH_SDL_MAIN)
+#if defined(LINC_SDL_WITH_SDL_MAIN)
 
-        extern "C" { void hxcpp_main(); }
-        int SDL_main(int argc, char *argv[]) {
-            
-            #if !defined(LINC_SDL_NO_HXCPP_MAIN_CALL) 
-                SDL_Log("Calling hxcpp_main() from SDL_main!");
-                hxcpp_main();
-            #endif
+    extern "C" { void hxcpp_main(); }
+    int SDL_main(int argc, char *argv[]) {
+        
+        #if !defined(LINC_SDL_NO_HXCPP_MAIN_CALL) 
+            SDL_Log("Calling hxcpp_main() from SDL_main!");
+            hxcpp_main();
+        #endif
 
-            #if !defined(LINC_SDL_NO_EXIT_CALL)
-                SDL_Log("Calling exit() from SDL_main!");
-                exit(0);
-            #endif 
+        #if !defined(LINC_SDL_NO_EXIT_CALL)
+            SDL_Log("Calling exit() from SDL_main!");
+            exit(0);
+        #endif 
 
-            return 0;
-        }
+        return 0;
+    }
 
-    #endif
+#endif
 
-    namespace linc {
+namespace linc {
 
-        namespace sdl {
+    namespace sdl {
 
-                // return { window:cpp.Pointer<SDL_Window>, renderer:cpp.Pointer<SDL_Renderer> }
-            Dynamic createWindowAndRenderer(int x, int y, int flags) {
+            // return { window:cpp.Pointer<SDL_Window>, renderer:cpp.Pointer<SDL_Renderer> }
+        Dynamic createWindowAndRenderer(int x, int y, int flags) {
 
-                SDL_Window* window = 0;
-                SDL_Renderer* renderer = 0;
+            SDL_Window* window = 0;
+            SDL_Renderer* renderer = 0;
 
-                int res = SDL_CreateWindowAndRenderer(x, y, flags, &window, &renderer );
-                if(res == 0) {
+            int res = SDL_CreateWindowAndRenderer(x, y, flags, &window, &renderer );
+            if(res == 0) {
 
-                    ::cpp::Pointer<SDL_Window> window_p(window);
-                    ::cpp::Pointer<SDL_Renderer> renderer_p(renderer);
-
-                    hx::Anon out = hx::Anon_obj::Create();
-
-                        out->Add(HX_CSTRING("window"), window_p);
-                        out->Add(HX_CSTRING("renderer"), renderer_p);
-
-                    return out;
-
-                } //res == 0
-
-                return null();
-
-            } //createWindowAndRenderer
-
-                //needed because the macro has no ()
-            ::String REVISION() {
-
-                return ::String(SDL_REVISION);
-
-            } //REVISION
-
-
-                // return { major:UInt, minor:UInt, patch:UInt }
-            Dynamic VERSION() {
-
-                    SDL_version ver;
-                    SDL_VERSION(&ver);
+                ::cpp::Pointer<SDL_Window> window_p(window);
+                ::cpp::Pointer<SDL_Renderer> renderer_p(renderer);
 
                 hx::Anon out = hx::Anon_obj::Create();
 
-                    out->Add(HX_CSTRING("major"), ver.major);
-                    out->Add(HX_CSTRING("minor"), ver.minor);
-                    out->Add(HX_CSTRING("patch"), ver.patch);
+                    out->Add(HX_CSTRING("window"), window_p);
+                    out->Add(HX_CSTRING("renderer"), renderer_p);
 
                 return out;
 
-            } //VERSION
+            } //res == 0
 
-                //return { major:UInt, minor:UInt, patch:UInt }
-            Dynamic getVersion() {
+            return null();
 
-                    SDL_version ver;
-                    SDL_GetVersion(&ver);
+        } //createWindowAndRenderer
 
-                hx::Anon out = hx::Anon_obj::Create();
-                    out->Add(HX_CSTRING("major"), ver.major);
-                    out->Add(HX_CSTRING("minor"), ver.minor);
-                    out->Add(HX_CSTRING("patch"), ver.patch);
-                return out;
+            //needed because the macro has no ()
+        ::String REVISION() {
 
-            } //getVersion
+            return ::String(SDL_REVISION);
 
-            ::cpp::Struct<SDL_Event> pollEvent() {
+        } //REVISION
 
-                SDL_Event event;
-                SDL_PollEvent(&event);
-                return event;
 
-            } //pollEvent
+            // return { major:UInt, minor:UInt, patch:UInt }
+        Dynamic VERSION() {
 
-            ::cpp::Struct<SDL_Event> waitEvent() {
+                SDL_version ver;
+                SDL_VERSION(&ver);
 
-                SDL_Event event;
-                SDL_WaitEvent(&event);
-                return event;
+            hx::Anon out = hx::Anon_obj::Create();
 
-            } //waitEvent
+                out->Add(HX_CSTRING("major"), ver.major);
+                out->Add(HX_CSTRING("minor"), ver.minor);
+                out->Add(HX_CSTRING("patch"), ver.patch);
 
-            ::cpp::Struct<SDL_Event> waitEventTimeout(int _timeout) {
+            return out;
 
-                SDL_Event event;
-                SDL_WaitEventTimeout(&event, _timeout);
-                return event;
+        } //VERSION
 
-            } //waitEventTimeout
+            //return { major:UInt, minor:UInt, patch:UInt }
+        Dynamic getVersion() {
 
-            ::String getBasePath() {
+                SDL_version ver;
+                SDL_GetVersion(&ver);
 
-                char *base_path = SDL_GetBasePath();
+            hx::Anon out = hx::Anon_obj::Create();
+                out->Add(HX_CSTRING("major"), ver.major);
+                out->Add(HX_CSTRING("minor"), ver.minor);
+                out->Add(HX_CSTRING("patch"), ver.patch);
+            return out;
 
-                if (base_path) {
-                    ::String res(base_path);
-                    SDL_free(base_path);
-                    return res;
-                }
+        } //getVersion
 
-                return null();
+        ::cpp::Struct<SDL_Event> pollEvent() {
 
-            } //getBasePath
+            SDL_Event event;
+            SDL_PollEvent(&event);
+            return event;
 
-            ::String getPrefPath(::String org, ::String app) {
+        } //pollEvent
 
-                char *pref_path = SDL_GetPrefPath(org.c_str(), app.c_str());
+        ::cpp::Struct<SDL_Event> waitEvent() {
 
-                if (pref_path) {
-                    ::String res(pref_path);
-                    SDL_free(pref_path);
-                    return res;
-                }
+            SDL_Event event;
+            SDL_WaitEvent(&event);
+            return event;
 
-                return null();
+        } //waitEvent
 
-            } //getPrefPath
+        ::cpp::Struct<SDL_Event> waitEventTimeout(int _timeout) {
 
+            SDL_Event event;
+            SDL_WaitEventTimeout(&event, _timeout);
+            return event;
 
-                //return { texw:Float, texh:Float }
-            Dynamic GL_BindTexture(SDL_Texture* texture) {
+        } //waitEventTimeout
 
-                float texw, texh;
-                SDL_GL_BindTexture(texture, &texw, &texh);
+        ::String getBasePath() {
 
-                printf("%f %f\n", texw, texh);
+            char *base_path = SDL_GetBasePath();
 
-                hx::Anon out = hx::Anon_obj::Create();
+            if (base_path) {
+                ::String res(base_path);
+                SDL_free(base_path);
+                return res;
+            }
 
-                    out->Add(HX_CSTRING("texw"), texw);
-                    out->Add(HX_CSTRING("texh"), texh);
+            return null();
 
-                return out;
+        } //getBasePath
 
-            } //GL_BindTexture
+        ::String getPrefPath(::String org, ::String app) {
 
-            int GL_GetAttribute(int attr) {
+            char *pref_path = SDL_GetPrefPath(org.c_str(), app.c_str());
 
-                int result = -1;
-                SDL_GL_GetAttribute((SDL_GLattr)attr, &result);
-                return result;
+            if (pref_path) {
+                ::String res(pref_path);
+                SDL_free(pref_path);
+                return res;
+            }
 
-            } //GL_GetAttribute
+            return null();
 
-            int setRenderDrawBlendMode(SDL_Renderer* renderer, int blend) {
+        } //getPrefPath
 
-                return SDL_SetRenderDrawBlendMode(renderer, (SDL_BlendMode)blend );
 
-            } //setRenderDrawBlendMode
+            //return { texw:Float, texh:Float }
+        Dynamic GL_BindTexture(SDL_Texture* texture) {
 
+            float texw, texh;
+            SDL_GL_BindTexture(texture, &texw, &texh);
 
-            int getRenderDrawBlendMode(SDL_Renderer* renderer) {
+            printf("%f %f\n", texw, texh);
 
-                SDL_BlendMode mode;
-                SDL_GetRenderDrawBlendMode(renderer, &mode);
+            hx::Anon out = hx::Anon_obj::Create();
 
-                return (int)mode;
+                out->Add(HX_CSTRING("texw"), texw);
+                out->Add(HX_CSTRING("texh"), texh);
 
-            } //getRenderDrawBlendMode
+            return out;
 
-            Dynamic getRenderDrawColor(SDL_Renderer* renderer, Dynamic into) {
+        } //GL_BindTexture
 
-                Uint8 r, g, b, a;
+        int GL_GetAttribute(int attr) {
 
-                SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
+            int result = -1;
+            SDL_GL_GetAttribute((SDL_GLattr)attr, &result);
+            return result;
 
-                return convert::set_color_into(into, r, g, b, a);
+        } //GL_GetAttribute
 
-            } //getRenderDrawColor
+        int setRenderDrawBlendMode(SDL_Renderer* renderer, int blend) {
 
-            Dynamic getRenderDriverInfo(int index) {
+            return SDL_SetRenderDrawBlendMode(renderer, (SDL_BlendMode)blend );
 
-                SDL_RendererInfo info;
-                SDL_GetRenderDriverInfo(index, &info);
+        } //setRenderDrawBlendMode
 
-                return convert::render_info_to_hx(info);
 
-            } //getRenderDriverInfo
+        int getRenderDrawBlendMode(SDL_Renderer* renderer) {
 
-            Dynamic getRendererInfo(SDL_Renderer* renderer) {
+            SDL_BlendMode mode;
+            SDL_GetRenderDrawBlendMode(renderer, &mode);
 
-                SDL_RendererInfo info;
-                SDL_GetRendererInfo(renderer, &info);
+            return (int)mode;
 
-                return convert::render_info_to_hx(info);
+        } //getRenderDrawBlendMode
 
-            } //getRendererInfo
+        Dynamic getRenderDrawColor(SDL_Renderer* renderer, Dynamic into) {
 
-            Dynamic getRendererOutputSize(SDL_Renderer* renderer, Dynamic into) {
+            Uint8 r, g, b, a;
 
-                int w, h;
-                SDL_GetRendererOutputSize(renderer, &w, &h);
+            SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
 
-                return convert::set_size_into(into, w, h);
+            return convert::set_color_into(into, r, g, b, a);
 
-            } //getRendererOutputSize
+        } //getRenderDrawColor
 
-            Uint8 getTextureAlphaMod(SDL_Texture* texture) {
+        Dynamic getRenderDriverInfo(int index) {
 
-                Uint8 alpha;
-                SDL_GetTextureAlphaMod(texture, &alpha);
+            SDL_RendererInfo info;
+            SDL_GetRenderDriverInfo(index, &info);
 
-                return alpha;
+            return convert::render_info_to_hx(info);
 
-            } //getTextureAlphaMod
+        } //getRenderDriverInfo
 
-            int getTextureBlendMode(SDL_Texture* texture) {
+        Dynamic getRendererInfo(SDL_Renderer* renderer) {
 
-                SDL_BlendMode blend;
-                SDL_GetTextureBlendMode(texture, &blend);
+            SDL_RendererInfo info;
+            SDL_GetRendererInfo(renderer, &info);
 
-                return (int)blend;
+            return convert::render_info_to_hx(info);
 
-            } //getTextureBlendMode
+        } //getRendererInfo
 
-            int setTextureBlendMode(SDL_Texture* texture, int blend) {
+        Dynamic getRendererOutputSize(SDL_Renderer* renderer, Dynamic into) {
 
-                return SDL_SetTextureBlendMode(texture, (SDL_BlendMode)blend);
+            int w, h;
+            SDL_GetRendererOutputSize(renderer, &w, &h);
 
-            } //setTextureBlendMode
+            return convert::set_size_into(into, w, h);
 
-            Dynamic getTextureColorMod(SDL_Texture* texture, Dynamic into) {
+        } //getRendererOutputSize
 
-                Uint8 r, g, b;
-                SDL_GetTextureColorMod(texture, &r, &g, &b);
+        Uint8 getTextureAlphaMod(SDL_Texture* texture) {
 
-                return convert::set_color_into(into, r, g, b, 0);
+            Uint8 alpha;
+            SDL_GetTextureAlphaMod(texture, &alpha);
 
-            } //getTextureColorMod
+            return alpha;
 
-            int lockTexture(SDL_Texture* texture, Dynamic rect, Array<unsigned char> dest) {
+        } //getTextureAlphaMod
 
-                int pitch = -1;
+        int getTextureBlendMode(SDL_Texture* texture) {
 
-                if(rect != null()) {
-                    SDL_Rect _rect = convert::get_rect_from(rect);
-                    SDL_LockTexture(texture, &_rect, (void**)&dest[0], &pitch);
-                }
+            SDL_BlendMode blend;
+            SDL_GetTextureBlendMode(texture, &blend);
 
-                return pitch;
+            return (int)blend;
 
-            } //lockTexture
+        } //getTextureBlendMode
 
-            Dynamic queryTexture(SDL_Texture* texture, Dynamic into) {
+        int setTextureBlendMode(SDL_Texture* texture, int blend) {
 
-                Uint32 format;
-                int access, w, h;
+            return SDL_SetTextureBlendMode(texture, (SDL_BlendMode)blend);
 
-                SDL_QueryTexture(texture, &format, &access, &w, &h);
+        } //setTextureBlendMode
 
-                return convert::set_texture_query_into(into, format, access, w, h);
+        Dynamic getTextureColorMod(SDL_Texture* texture, Dynamic into) {
 
-            } //queryTexture
+            Uint8 r, g, b;
+            SDL_GetTextureColorMod(texture, &r, &g, &b);
 
-            int updateTexture(SDL_Texture* texture, Dynamic rect, Array<unsigned char> pixels, int pitch) {
+            return convert::set_color_into(into, r, g, b, 0);
 
-                if(rect != null()) {
-                    SDL_Rect _rect = convert::get_rect_from(rect);
-                    return SDL_UpdateTexture(texture, &_rect, (const void*)&pixels[0], pitch);
-                } else {
-                    return SDL_UpdateTexture(texture, NULL, (const void*)&pixels[0], pitch);
-                }
+        } //getTextureColorMod
 
-            } //updateTexture
+        int lockTexture(SDL_Texture* texture, Dynamic rect, Array<unsigned char> dest) {
 
-            int updateYUVTexture(SDL_Texture* texture, Dynamic rect,
-                                 Array<unsigned char> Yplane, int Ypitch,
-                                 Array<unsigned char> Uplane, int Upitch,
-                                 Array<unsigned char> Vplane, int Vpitch)
-            {
+            int pitch = -1;
 
-                if(rect != null()) {
-                    SDL_Rect _rect = convert::get_rect_from(rect);
-                    return SDL_UpdateYUVTexture( texture, &_rect,
-                                                 (const Uint8*)&Yplane[0], Ypitch,
-                                                 (const Uint8*)&Uplane[0], Upitch,
-                                                 (const Uint8*)&Vplane[0], Vpitch );
-
-                } else {
-                    return SDL_UpdateYUVTexture( texture, NULL,
-                                                 (const Uint8*)&Yplane[0], Ypitch,
-                                                 (const Uint8*)&Uplane[0], Upitch,
-                                                 (const Uint8*)&Vplane[0], Vpitch );
-                }
-
-            } //updateYUVTexture
-
-
-            int renderDrawRect(SDL_Renderer* renderer, Dynamic rect) {
-
+            if(rect != null()) {
                 SDL_Rect _rect = convert::get_rect_from(rect);
+                SDL_LockTexture(texture, &_rect, (void**)&dest[0], &pitch);
+            }
 
-                return SDL_RenderDrawRect(renderer, &_rect);
+            return pitch;
 
-            } //renderDrawRect
+        } //lockTexture
 
-            int renderFillRect(SDL_Renderer* renderer, Dynamic rect) {
+        Dynamic queryTexture(SDL_Texture* texture, Dynamic into) {
 
+            Uint32 format;
+            int access, w, h;
+
+            SDL_QueryTexture(texture, &format, &access, &w, &h);
+
+            return convert::set_texture_query_into(into, format, access, w, h);
+
+        } //queryTexture
+
+        int updateTexture(SDL_Texture* texture, Dynamic rect, Array<unsigned char> pixels, int pitch) {
+
+            if(rect != null()) {
                 SDL_Rect _rect = convert::get_rect_from(rect);
+                return SDL_UpdateTexture(texture, &_rect, (const void*)&pixels[0], pitch);
+            } else {
+                return SDL_UpdateTexture(texture, NULL, (const void*)&pixels[0], pitch);
+            }
 
-                return SDL_RenderFillRect(renderer, &_rect);
+        } //updateTexture
 
-            } //renderFillRect
+        int updateYUVTexture(SDL_Texture* texture, Dynamic rect,
+                             Array<unsigned char> Yplane, int Ypitch,
+                             Array<unsigned char> Uplane, int Upitch,
+                             Array<unsigned char> Vplane, int Vpitch)
+        {
 
-            Dynamic renderGetClipRect(SDL_Renderer* renderer, Dynamic into) {
-
-                SDL_Rect from;
-                SDL_RenderGetClipRect(renderer, &from);
-
-                return convert::set_rect_into(into, from);
-
-            } //renderGetClipRect
-
-            Dynamic renderGetLogicalSize(SDL_Renderer* renderer, Dynamic into) {
-
-                int w, h;
-                SDL_RenderGetLogicalSize(renderer, &w, &h);
-
-                return convert::set_size_into(into, w, h);
-
-            } //renderGetLogicalSize
-
-            Dynamic renderGetScale(SDL_Renderer* renderer, Dynamic into) {
-
-                float x, y;
-                SDL_RenderGetScale(renderer, &x, &y);
-
-                return convert::set_scale_into(into, x, y);
-
-            } //renderGetLogicalSize
-
-            Dynamic renderGetViewport(SDL_Renderer* renderer, Dynamic into) {
-
-                SDL_Rect from;
-                SDL_RenderGetViewport(renderer, &from);
-
-                return convert::set_rect_into(into, from);
-
-            } //renderGetViewport
-
-            int renderReadPixels(SDL_Renderer* renderer, Dynamic rect, int format, Array<unsigned char> dest, int pitch) {
-
-                if(rect != null()) {
-                    SDL_Rect _rect = convert::get_rect_from(rect);
-                    return SDL_RenderReadPixels(renderer, &_rect, format, (void*)&dest[0], pitch);
-                } else {
-                    return SDL_RenderReadPixels(renderer, NULL, format, (void*)&dest[0], pitch);
-                }
-
-            } //renderReadPixels
-
-            int renderSetClipRect(SDL_Renderer* renderer, Dynamic rect) {
-
+            if(rect != null()) {
                 SDL_Rect _rect = convert::get_rect_from(rect);
+                return SDL_UpdateYUVTexture( texture, &_rect,
+                                             (const Uint8*)&Yplane[0], Ypitch,
+                                             (const Uint8*)&Uplane[0], Upitch,
+                                             (const Uint8*)&Vplane[0], Vpitch );
 
-                return SDL_RenderSetClipRect(renderer, &_rect);
+            } else {
+                return SDL_UpdateYUVTexture( texture, NULL,
+                                             (const Uint8*)&Yplane[0], Ypitch,
+                                             (const Uint8*)&Uplane[0], Upitch,
+                                             (const Uint8*)&Vplane[0], Vpitch );
+            }
 
-            } //renderSetClipRect
+        } //updateYUVTexture
 
-            int renderSetViewport(SDL_Renderer* renderer, Dynamic rect) {
 
+        int renderDrawRect(SDL_Renderer* renderer, Dynamic rect) {
+
+            SDL_Rect _rect = convert::get_rect_from(rect);
+
+            return SDL_RenderDrawRect(renderer, &_rect);
+
+        } //renderDrawRect
+
+        int renderFillRect(SDL_Renderer* renderer, Dynamic rect) {
+
+            SDL_Rect _rect = convert::get_rect_from(rect);
+
+            return SDL_RenderFillRect(renderer, &_rect);
+
+        } //renderFillRect
+
+        Dynamic renderGetClipRect(SDL_Renderer* renderer, Dynamic into) {
+
+            SDL_Rect from;
+            SDL_RenderGetClipRect(renderer, &from);
+
+            return convert::set_rect_into(into, from);
+
+        } //renderGetClipRect
+
+        Dynamic renderGetLogicalSize(SDL_Renderer* renderer, Dynamic into) {
+
+            int w, h;
+            SDL_RenderGetLogicalSize(renderer, &w, &h);
+
+            return convert::set_size_into(into, w, h);
+
+        } //renderGetLogicalSize
+
+        Dynamic renderGetScale(SDL_Renderer* renderer, Dynamic into) {
+
+            float x, y;
+            SDL_RenderGetScale(renderer, &x, &y);
+
+            return convert::set_scale_into(into, x, y);
+
+        } //renderGetLogicalSize
+
+        Dynamic renderGetViewport(SDL_Renderer* renderer, Dynamic into) {
+
+            SDL_Rect from;
+            SDL_RenderGetViewport(renderer, &from);
+
+            return convert::set_rect_into(into, from);
+
+        } //renderGetViewport
+
+        int renderReadPixels(SDL_Renderer* renderer, Dynamic rect, int format, Array<unsigned char> dest, int pitch) {
+
+            if(rect != null()) {
                 SDL_Rect _rect = convert::get_rect_from(rect);
+                return SDL_RenderReadPixels(renderer, &_rect, format, (void*)&dest[0], pitch);
+            } else {
+                return SDL_RenderReadPixels(renderer, NULL, format, (void*)&dest[0], pitch);
+            }
 
-                return SDL_RenderSetViewport(renderer, &_rect);
+        } //renderReadPixels
 
-            } //renderSetViewport
+        int renderSetClipRect(SDL_Renderer* renderer, Dynamic rect) {
 
-            SDL_Surface* createRGBSurfaceFrom(Array<unsigned char> pixels, 
-                int width, int height, int depth, int pitch, 
-                int Rmask, int Gmask, int Bmask, int Amask) {
+            SDL_Rect _rect = convert::get_rect_from(rect);
 
-                return SDL_CreateRGBSurfaceFrom((void*)&pixels[0], width, height, depth, pitch, Rmask, Gmask, Bmask, Amask);
+            return SDL_RenderSetClipRect(renderer, &_rect);
 
-            } //createRGBSurfaceFrom
+        } //renderSetClipRect
 
-            int blitSurface(SDL_Surface* src, Dynamic srcrect, SDL_Surface* dst, Dynamic dstrect) {
+        int renderSetViewport(SDL_Renderer* renderer, Dynamic rect) {
 
-                bool has_src = srcrect != null();
-                bool has_dst = dstrect != null();
+            SDL_Rect _rect = convert::get_rect_from(rect);
 
-                    //neither?
-                if(!has_src && !has_dst) {
-                    return SDL_BlitSurface(src, NULL, dst, NULL);
-                }
+            return SDL_RenderSetViewport(renderer, &_rect);
 
-                    //just src?
-                if(has_src && !has_dst) {
-                    SDL_Rect _srcrect = convert::get_rect_from(srcrect);
-                    return SDL_BlitSurface(src, &_srcrect, dst, NULL);
-                }
+        } //renderSetViewport
 
-                    //just dst?
-                if(has_dst && !has_src) {
-                    SDL_Rect _dstrect = convert::get_rect_from(dstrect);
-                    return SDL_BlitSurface(src, NULL, dst, &_dstrect);
-                }
+        SDL_Surface* createRGBSurfaceFrom(Array<unsigned char> pixels, 
+            int width, int height, int depth, int pitch, 
+            int Rmask, int Gmask, int Bmask, int Amask) {
 
+            return SDL_CreateRGBSurfaceFrom((void*)&pixels[0], width, height, depth, pitch, Rmask, Gmask, Bmask, Amask);
+
+        } //createRGBSurfaceFrom
+
+        int blitSurface(SDL_Surface* src, Dynamic srcrect, SDL_Surface* dst, Dynamic dstrect) {
+
+            bool has_src = srcrect != null();
+            bool has_dst = dstrect != null();
+
+                //neither?
+            if(!has_src && !has_dst) {
+                return SDL_BlitSurface(src, NULL, dst, NULL);
+            }
+
+                //just src?
+            if(has_src && !has_dst) {
                 SDL_Rect _srcrect = convert::get_rect_from(srcrect);
+                return SDL_BlitSurface(src, &_srcrect, dst, NULL);
+            }
+
+                //just dst?
+            if(has_dst && !has_src) {
                 SDL_Rect _dstrect = convert::get_rect_from(dstrect);
+                return SDL_BlitSurface(src, NULL, dst, &_dstrect);
+            }
 
-                return SDL_BlitSurface(src, &_srcrect, dst, &_dstrect);
+            SDL_Rect _srcrect = convert::get_rect_from(srcrect);
+            SDL_Rect _dstrect = convert::get_rect_from(dstrect);
 
-            } //blitSurface
+            return SDL_BlitSurface(src, &_srcrect, dst, &_dstrect);
 
-            SDL_Cursor* createSystemCursor(int id) {
+        } //blitSurface
 
-                return SDL_CreateSystemCursor((SDL_SystemCursor)id);
+        SDL_Cursor* createSystemCursor(int id) {
 
-            } //createSystemCursor
+            return SDL_CreateSystemCursor((SDL_SystemCursor)id);
 
-            Dynamic joystickGetBall(SDL_Joystick* joystick, int ball, Dynamic into) {
+        } //createSystemCursor
 
-                int dx,dy;
-                SDL_JoystickGetBall(joystick, ball, &dx, &dy);
+        Dynamic joystickGetBall(SDL_Joystick* joystick, int ball, Dynamic into) {
 
-                return convert::set_point_into(into, dx, dy);
+            int dx,dy;
+            SDL_JoystickGetBall(joystick, ball, &dx, &dy);
 
-            } //joystickGetBall
+            return convert::set_point_into(into, dx, dy);
 
-            ::String joystickGetGUIDString(Array<unsigned char> guid) {
+        } //joystickGetBall
 
-                return ::String("not done");
+        ::String joystickGetGUIDString(Array<unsigned char> guid) {
 
-            } //joystickGetGUIDString
+            return ::String("not done");
 
-            void setModState(int modstate) {
+        } //joystickGetGUIDString
 
-                SDL_SetModState((SDL_Keymod)modstate);
+        void setModState(int modstate) {
 
-            } //setModState
+            SDL_SetModState((SDL_Keymod)modstate);
 
-            void setTextInputRect(int x, int y, int w, int h) {
+        } //setModState
 
-                SDL_Rect _rect;
+        void setTextInputRect(int x, int y, int w, int h) {
 
-                    _rect.x = x;
-                    _rect.y = y;
-                    _rect.w = w;
-                    _rect.h = h;
+            SDL_Rect _rect;
 
-                SDL_SetTextInputRect(&_rect);
+                _rect.x = x;
+                _rect.y = y;
+                _rect.w = w;
+                _rect.h = h;
 
-            } //setTextInputRect
+            SDL_SetTextInputRect(&_rect);
 
-            Dynamic getWindowSize(SDL_Window* window, Dynamic into) {
+        } //setTextInputRect
 
-                int w, h;
-                SDL_GetWindowSize(window, &w, &h);
+        Dynamic getWindowSize(SDL_Window* window, Dynamic into) {
 
-                return convert::set_size_into(into, w, h);
+            int w, h;
+            SDL_GetWindowSize(window, &w, &h);
 
-            } //getWindowSize
+            return convert::set_size_into(into, w, h);
 
-            Dynamic getWindowPosition(SDL_Window* window, Dynamic into) {
+        } //getWindowSize
 
-                int x, y;
-                SDL_GetWindowPosition(window, &x, &y);
+        Dynamic getWindowPosition(SDL_Window* window, Dynamic into) {
 
-                return convert::set_point_into(into, x, y);
+            int x, y;
+            SDL_GetWindowPosition(window, &x, &y);
 
-            } //getWindowPosition
+            return convert::set_point_into(into, x, y);
 
-
-            Dynamic GL_GetDrawableSize(SDL_Window* window, Dynamic into) {
-
-                int w, h;
-                SDL_GL_GetDrawableSize(window, &w, &h);
-
-                return convert::set_size_into(into, w, h);
-
-            } //GL_GetDrawableSize
+        } //getWindowPosition
 
 
-            Dynamic getDisplayBounds(int display_index, Dynamic into) {
+        Dynamic GL_GetDrawableSize(SDL_Window* window, Dynamic into) {
 
-                SDL_Rect from;
-                SDL_GetDisplayBounds(display_index, &from);
+            int w, h;
+            SDL_GL_GetDrawableSize(window, &w, &h);
 
-                return convert::set_rect_into(into, from);
+            return convert::set_size_into(into, w, h);
 
-            } //getDisplayBounds
+        } //GL_GetDrawableSize
 
-            int renderCopy(SDL_Renderer* renderer, SDL_Texture* texture, Dynamic srcrect, Dynamic dstrect) {
 
-                bool has_src = srcrect != null();
-                bool has_dst = dstrect != null();
+        Dynamic getDisplayBounds(int display_index, Dynamic into) {
 
-                    //neither?
-                if(!has_src && !has_dst) {
-                    return SDL_RenderCopy(renderer, texture, NULL, NULL);
-                }
+            SDL_Rect from;
+            SDL_GetDisplayBounds(display_index, &from);
 
-                    //just src?
-                if(has_src && !has_dst) {
-                    SDL_Rect _src = convert::get_rect_from(srcrect);
-                    return SDL_RenderCopy(renderer, texture, &_src, NULL);
-                }
+            return convert::set_rect_into(into, from);
 
-                    //just dst?
-                if(has_dst && !has_src) {
-                    SDL_Rect _dst = convert::get_rect_from(dstrect);
-                    return SDL_RenderCopy(renderer, texture, NULL, &_dst);
-                }
+        } //getDisplayBounds
 
+        int renderCopy(SDL_Renderer* renderer, SDL_Texture* texture, Dynamic srcrect, Dynamic dstrect) {
+
+            bool has_src = srcrect != null();
+            bool has_dst = dstrect != null();
+
+                //neither?
+            if(!has_src && !has_dst) {
+                return SDL_RenderCopy(renderer, texture, NULL, NULL);
+            }
+
+                //just src?
+            if(has_src && !has_dst) {
+                SDL_Rect _src = convert::get_rect_from(srcrect);
+                return SDL_RenderCopy(renderer, texture, &_src, NULL);
+            }
+
+                //just dst?
+            if(has_dst && !has_src) {
+                SDL_Rect _dst = convert::get_rect_from(dstrect);
+                return SDL_RenderCopy(renderer, texture, NULL, &_dst);
+            }
+
+            SDL_Rect _src = convert::get_rect_from(srcrect);
+            SDL_Rect _dst = convert::get_rect_from(dstrect);
+
+            return SDL_RenderCopy(renderer, texture, &_src, &_dst);
+
+        } //renderCopy
+
+            //:note: silly structs and nulls, these conditions...
+        int renderCopyEx(SDL_Renderer* renderer, SDL_Texture* texture,
+                         Dynamic srcrect, Dynamic dstrect, Float angle,
+                         Dynamic center, int flip )
+        {
+            bool has_src = srcrect != null();
+            bool has_dst = dstrect != null();
+            bool has_center = center != null();
+
+            SDL_RendererFlip _flip = (SDL_RendererFlip)flip;
+
+                //none
+            if(!has_src && !has_dst && !has_center) {
+                return SDL_RenderCopyEx(renderer, texture, NULL, NULL, angle, NULL, _flip);
+            }
+
+
+                //src dst
+            if(has_src && has_dst && !has_center) {
                 SDL_Rect _src = convert::get_rect_from(srcrect);
                 SDL_Rect _dst = convert::get_rect_from(dstrect);
+                return SDL_RenderCopyEx(renderer, texture, &_src, &_dst, angle, NULL, _flip);
+            }
 
-                return SDL_RenderCopy(renderer, texture, &_src, &_dst);
-
-            } //renderCopy
-
-                //:note: silly structs and nulls, these conditions...
-            int renderCopyEx(SDL_Renderer* renderer, SDL_Texture* texture,
-                             Dynamic srcrect, Dynamic dstrect, Float angle,
-                             Dynamic center, int flip )
-            {
-                bool has_src = srcrect != null();
-                bool has_dst = dstrect != null();
-                bool has_center = center != null();
-
-                SDL_RendererFlip _flip = (SDL_RendererFlip)flip;
-
-                    //none
-                if(!has_src && !has_dst && !has_center) {
-                    return SDL_RenderCopyEx(renderer, texture, NULL, NULL, angle, NULL, _flip);
-                }
-
-
-                    //src dst
-                if(has_src && has_dst && !has_center) {
-                    SDL_Rect _src = convert::get_rect_from(srcrect);
-                    SDL_Rect _dst = convert::get_rect_from(dstrect);
-                    return SDL_RenderCopyEx(renderer, texture, &_src, &_dst, angle, NULL, _flip);
-                }
-
-                    //src
-                if(has_src && !has_dst && !has_center) {
-                    SDL_Rect _src = convert::get_rect_from(srcrect);
-                    return SDL_RenderCopyEx(renderer, texture, &_src, NULL, angle, NULL, _flip);
-                }
-
-                    //dst
-                if(!has_src && has_dst && !has_center) {
-                    SDL_Rect _dst = convert::get_rect_from(dstrect);
-                    return SDL_RenderCopyEx(renderer, texture, NULL, &_dst, angle, NULL, _flip);
-                }
-
-                    //center
-                if(!has_src && !has_dst && has_center) {
-                    SDL_Point _center = convert::get_point_from(center);
-                    return SDL_RenderCopyEx(renderer, texture, NULL, NULL, angle, &_center, _flip);
-                }
-
-                    //src center
-                if(has_src && !has_dst && has_center) {
-                    SDL_Rect _src = convert::get_rect_from(srcrect);
-                    SDL_Point _center = convert::get_point_from(center);
-                    return SDL_RenderCopyEx(renderer, texture, &_src, NULL, angle, &_center, _flip);
-                }
-
-                    //dst center
-                if(!has_src && has_dst && has_center) {
-                    SDL_Rect _dst = convert::get_rect_from(dstrect);
-                    SDL_Point _center = convert::get_point_from(center);
-                    return SDL_RenderCopyEx(renderer, texture, NULL, &_dst, angle, &_center, _flip);
-                }
-
+                //src
+            if(has_src && !has_dst && !has_center) {
                 SDL_Rect _src = convert::get_rect_from(srcrect);
+                return SDL_RenderCopyEx(renderer, texture, &_src, NULL, angle, NULL, _flip);
+            }
+
+                //dst
+            if(!has_src && has_dst && !has_center) {
+                SDL_Rect _dst = convert::get_rect_from(dstrect);
+                return SDL_RenderCopyEx(renderer, texture, NULL, &_dst, angle, NULL, _flip);
+            }
+
+                //center
+            if(!has_src && !has_dst && has_center) {
+                SDL_Point _center = convert::get_point_from(center);
+                return SDL_RenderCopyEx(renderer, texture, NULL, NULL, angle, &_center, _flip);
+            }
+
+                //src center
+            if(has_src && !has_dst && has_center) {
+                SDL_Rect _src = convert::get_rect_from(srcrect);
+                SDL_Point _center = convert::get_point_from(center);
+                return SDL_RenderCopyEx(renderer, texture, &_src, NULL, angle, &_center, _flip);
+            }
+
+                //dst center
+            if(!has_src && has_dst && has_center) {
                 SDL_Rect _dst = convert::get_rect_from(dstrect);
                 SDL_Point _center = convert::get_point_from(center);
+                return SDL_RenderCopyEx(renderer, texture, NULL, &_dst, angle, &_center, _flip);
+            }
 
-                return SDL_RenderCopyEx(renderer, texture, &_src, &_dst, angle, &_center, _flip);
+            SDL_Rect _src = convert::get_rect_from(srcrect);
+            SDL_Rect _dst = convert::get_rect_from(dstrect);
+            SDL_Point _center = convert::get_point_from(center);
 
-            } //renderCopyEx
+            return SDL_RenderCopyEx(renderer, texture, &_src, &_dst, angle, &_center, _flip);
 
-            Dynamic getDisplayMode(int display_index, int mode_index) {
+        } //renderCopyEx
 
-                SDL_DisplayMode mode;
-                int res = SDL_GetDisplayMode(display_index, mode_index, &mode);
+        Dynamic getDisplayMode(int display_index, int mode_index) {
 
-                if(res != 0) return null();
+            SDL_DisplayMode mode;
+            int res = SDL_GetDisplayMode(display_index, mode_index, &mode);
 
-                return convert::display_mode_to_hx(mode);
+            if(res != 0) return null();
 
-            } //getDisplayMode
+            return convert::display_mode_to_hx(mode);
 
-            Dynamic getDesktopDisplayMode(int display_index) {
+        } //getDisplayMode
 
-                SDL_DisplayMode mode;
-                int res = SDL_GetDesktopDisplayMode(display_index, &mode);
+        Dynamic getDesktopDisplayMode(int display_index) {
 
-                if(res != 0) return null();
+            SDL_DisplayMode mode;
+            int res = SDL_GetDesktopDisplayMode(display_index, &mode);
 
-                return convert::display_mode_to_hx(mode);
+            if(res != 0) return null();
 
-            } //getDesktopDisplayMode
+            return convert::display_mode_to_hx(mode);
 
-            Dynamic getCurrentDisplayMode(int display_index) {
+        } //getDesktopDisplayMode
 
-                SDL_DisplayMode mode;
-                int res = SDL_GetCurrentDisplayMode(display_index, &mode);
+        Dynamic getCurrentDisplayMode(int display_index) {
 
-                if(res != 0) return null();
+            SDL_DisplayMode mode;
+            int res = SDL_GetCurrentDisplayMode(display_index, &mode);
 
-                return convert::display_mode_to_hx(mode);
+            if(res != 0) return null();
 
-            } //getCurrentDisplayMode
+            return convert::display_mode_to_hx(mode);
 
-            Dynamic getGlobalMouseState(Dynamic into) {
+        } //getCurrentDisplayMode
 
-                int x, y;
-                Uint32 buttons = SDL_GetGlobalMouseState(&x, &y);
+        Dynamic getGlobalMouseState(Dynamic into) {
 
-                return convert::set_mouse_state_into(into, x, y, buttons);
+            int x, y;
+            Uint32 buttons = SDL_GetGlobalMouseState(&x, &y);
 
-            } //getGlobalMouseState
+            return convert::set_mouse_state_into(into, x, y, buttons);
 
-            Dynamic getMouseState(Dynamic into) {
+        } //getGlobalMouseState
 
-                int x, y;
-                Uint32 buttons = SDL_GetMouseState(&x, &y);
+        Dynamic getMouseState(Dynamic into) {
 
-                return convert::set_mouse_state_into(into, x, y, buttons);
+            int x, y;
+            Uint32 buttons = SDL_GetMouseState(&x, &y);
 
-            } //getMouseState
+            return convert::set_mouse_state_into(into, x, y, buttons);
 
-            Dynamic getRelativeMouseState(Dynamic into) {
+        } //getMouseState
 
-                int x, y;
-                Uint32 buttons = SDL_GetRelativeMouseState(&x, &y);
+        Dynamic getRelativeMouseState(Dynamic into) {
 
-                return convert::set_mouse_state_into(into, x, y, buttons);
+            int x, y;
+            Uint32 buttons = SDL_GetRelativeMouseState(&x, &y);
 
-            } //getMouseState
+            return convert::set_mouse_state_into(into, x, y, buttons);
 
-            int waitThread(SDL_Thread* thread) {
+        } //getMouseState
 
-                int result = -1;
+        int waitThread(SDL_Thread* thread) {
 
-                SDL_WaitThread(thread, &result);
+            int result = -1;
+
+            SDL_WaitThread(thread, &result);
+
+            return result;
+
+        } //waitThread
+
+    //internal
+
+        //event watches
+            static InternalEventFilterFN event_watch_fn = 0;
+            static std::map<int, int*> event_watch_list;
+            static unsigned long long event_watch_seq = 0;
+
+            void init_event_watch( InternalEventFilterFN fn ) {
+
+                event_watch_fn = fn;                    
+
+            } //init_event_watch
+
+            static int InternalEventWatch(void* userdata, SDL_Event* event) {
+
+                    //:todo:
+                unsigned int type = event->type;
+                if(
+                    type != SDL_APP_TERMINATING         &&
+                    type != SDL_APP_LOWMEMORY           &&
+                    type != SDL_APP_WILLENTERBACKGROUND &&
+                    type != SDL_APP_DIDENTERBACKGROUND  &&
+                    type != SDL_APP_WILLENTERFOREGROUND &&
+                    type != SDL_APP_DIDENTERFOREGROUND
+                ) {
+                    return 1;
+                }
+
+                #if defined(ANDROID) 
+                    AutoHaxe haxe("linc::sdl::InternalEventWatch");
+                #endif
+
+                int* watch_id = (int*)userdata;
+                return event_watch_fn(*watch_id, event);
+
+            } //InternalEventWatch
+
+            int addEventWatch() {
+                
+                int watch_id = event_watch_seq;
+                int* watch_userdata = new int;
+                *watch_userdata = watch_id;
+
+                event_watch_seq++;
+
+                SDL_AddEventWatch(InternalEventWatch, watch_userdata);
+
+                event_watch_list[watch_id] = watch_userdata;
+
+                return watch_id;
+
+            } //addEventWatch
+
+            void delEventWatch( int watchID ) {
+
+                int* watch_userdata = event_watch_list[watchID];
+                    
+                    //in our case removing a null pointer 
+                    //event watch callback doesn't match our expectation
+                if(watch_userdata) {
+
+                    SDL_DelEventWatch(InternalEventWatch, watch_userdata);
+
+                    delete watch_userdata; 
+                    watch_userdata = 0;
+
+                }
+
+            } //delEventWatch
+
+        //timer callbacks
+
+            static InternalTimerCallbackFN timer_fn = 0;
+            static std::map<int, int*> timer_list;
+
+            void init_timer( InternalTimerCallbackFN fn ) {
+
+                timer_fn = fn;
+
+            } //init_timer
+
+            static Uint32 InternalTimerCallback(Uint32 interval, void *param) {
+
+                #if defined(ANDROID) 
+                    AutoHaxe haxe("linc::sdl::InternalTimerCallback");
+                #endif
+
+                int* timer_id = (int*)param;
+
+                int result = timer_fn(*timer_id);
 
                 return result;
 
-            } //waitThread
+            } //InternalTimerCallback
 
-        //internal
+            int addTimer( int interval ) {
 
-            //event watches
-                static InternalEventFilterFN event_watch_fn = 0;
-                static std::map<int, int*> event_watch_list;
-                static unsigned long long event_watch_seq = 0;
+                int* timer_userdata = new int;
+                int timer_id = SDL_AddTimer(interval, InternalTimerCallback, timer_userdata);
+                *timer_userdata = timer_id;
 
-                void init_event_watch( InternalEventFilterFN fn ) {
+                timer_list[timer_id] = timer_userdata;
 
-                    event_watch_fn = fn;                    
+                return timer_id;
 
-                } //init_event_watch
+            } //add_timer
 
-                static int InternalEventWatch(void* userdata, SDL_Event* event) {
+            bool removeTimer( int timerID ) {
 
-                        //:todo:
-                    unsigned int type = event->type;
-                    if(
-                        type != SDL_APP_TERMINATING         &&
-                        type != SDL_APP_LOWMEMORY           &&
-                        type != SDL_APP_WILLENTERBACKGROUND &&
-                        type != SDL_APP_DIDENTERBACKGROUND  &&
-                        type != SDL_APP_WILLENTERFOREGROUND &&
-                        type != SDL_APP_DIDENTERFOREGROUND
-                    ) {
-                        return 1;
-                    }
+                int* timer_userdata = timer_list[timerID];
+                
+                if(timer_userdata) {
+                    delete timer_userdata; 
+                    timer_userdata = 0;
+                }
 
-                    #if defined(ANDROID) 
-                        AutoHaxe haxe("linc::sdl::InternalEventWatch");
-                    #endif
+                return SDL_RemoveTimer(timerID);
 
-                    int* watch_id = (int*)userdata;
-                    return event_watch_fn(*watch_id, event);
+            } //remove_timer
 
-                } //InternalEventWatch
 
-                int addEventWatch() {
-                    
-                    int watch_id = event_watch_seq;
-                    int* watch_userdata = new int;
-                    *watch_userdata = watch_id;
+        int RWread(SDL_RWops* context, Array<unsigned char> ptr, size_t size, size_t maxnum) {
+            return SDL_RWread(context, (void*)&ptr[0], size, maxnum);
+        }
 
-                    event_watch_seq++;
+        int RWwrite(SDL_RWops* context, Array<unsigned char> ptr, size_t size, size_t num) {
+            return SDL_RWwrite(context, (void*)&ptr[0], size, num);
+        }
 
-                    SDL_AddEventWatch(InternalEventWatch, watch_userdata);
+        int RWseek(SDL_RWops* context, int64_t offset, int whence) {
+            return SDL_RWseek(context, offset, whence);
+        }
 
-                    event_watch_list[watch_id] = watch_userdata;
+        int64_t RWsize(SDL_RWops* context) {
+            return SDL_RWsize(context);
+        }
 
-                    return watch_id;
+        int64_t RWtell(SDL_RWops* context) {
+            return SDL_RWtell(context);
+        }
 
-                } //addEventWatch
+        int RWclose(SDL_RWops* context) {
+            return SDL_RWclose(context);
+        }
 
-                void delEventWatch( int watchID ) {
+        SDL_RWops* RWFromMem(Array<unsigned char> source, size_t size) {
+            return SDL_RWFromMem((void*)&source[0], size);
+        }
 
-                    int* watch_userdata = event_watch_list[watchID];
-                        
-                        //in our case removing a null pointer 
-                        //event watch callback doesn't match our expectation
-                    if(watch_userdata) {
+    #if defined(__IPHONEOS__) || defined(IPHONE)
 
-                        SDL_DelEventWatch(InternalEventWatch, watch_userdata);
+        //iOS callback
 
-                        delete watch_userdata; 
-                        watch_userdata = 0;
+            static InternaliOSCallbackFN ios_fn;
 
-                    }
+            static void InternaliOSCallback(void* userdata) {
 
-                } //delEventWatch
+                ios_fn();
 
-            //timer callbacks
+            } //InternaliOSCallback
 
-                static InternalTimerCallbackFN timer_fn = 0;
-                static std::map<int, int*> timer_list;
+            void init_ios_callback( SDL_Window* window, int interval, InternaliOSCallbackFN fn ) {
+                
+                ios_fn = fn;
+                SDL_iPhoneSetAnimationCallback(window, interval, InternaliOSCallback, NULL);
 
-                void init_timer( InternalTimerCallbackFN fn ) {
+            } //init_ios_callback
 
-                    timer_fn = fn;
+    #endif //iOS
 
-                } //init_timer
+    //conversions
 
-                static Uint32 InternalTimerCallback(Uint32 interval, void *param) {
+        namespace convert {
 
-                    #if defined(ANDROID) 
-                        AutoHaxe haxe("linc::sdl::InternalTimerCallback");
-                    #endif
+            Dynamic render_info_to_hx(SDL_RendererInfo info) {
 
-                    int* timer_id = (int*)param;
+                hx::Anon out = hx::Anon_obj::Create();
 
-                    int result = timer_fn(*timer_id);
+                    //array of texture formats
+                Array< int > arr = Array_obj< int >::__new();
 
-                    return result;
+                for(int i = 0; i < (int)info.num_texture_formats; ++i) {
+                    arr.Add( (int)info.texture_formats[i] );
+                }
 
-                } //InternalTimerCallback
+                //fill the object
 
-                int addTimer( int interval ) {
+                    out->Add(HX_CSTRING("name"), ::String(info.name));
+                    out->Add(HX_CSTRING("flags"), (int)info.flags);
+                    out->Add(HX_CSTRING("num_texture_formats"), (int)info.num_texture_formats);
+                    out->Add(HX_CSTRING("texture_formats"), arr);
+                    out->Add(HX_CSTRING("max_texture_width"), info.max_texture_width);
+                    out->Add(HX_CSTRING("max_texture_height"), info.max_texture_height);
 
-                    int* timer_userdata = new int;
-                    int timer_id = SDL_AddTimer(interval, InternalTimerCallback, timer_userdata);
-                    *timer_userdata = timer_id;
+                return out;
 
-                    timer_list[timer_id] = timer_userdata;
+                // returns {
+                //     var name:String;
+                //     var flags:UInt;
+                //     var num_texture_formats:UInt;
+                //     var texture_formats:Array<UInt>;
+                //     var max_texture_width:Int;
+                //     var max_texture_height:Int;
+                // }
 
-                    return timer_id;
+            } //render_info_to_hx
 
-                } //add_timer
+            Dynamic display_mode_to_hx(SDL_DisplayMode mode) {
 
-                bool removeTimer( int timerID ) {
+                hx::Anon out = hx::Anon_obj::Create();
 
-                    int* timer_userdata = timer_list[timerID];
-                    
-                    if(timer_userdata) {
-                        delete timer_userdata; 
-                        timer_userdata = 0;
-                    }
+                    out->Add(HX_CSTRING("w"), mode.w);
+                    out->Add(HX_CSTRING("h"), mode.h);
+                        //:note: this was UInt32, but the ranges appear to fit in int and Dynamic hates unsigned int
+                    out->Add(HX_CSTRING("format"), (int)mode.format);
+                    out->Add(HX_CSTRING("refresh_rate"), mode.refresh_rate);
 
-                    return SDL_RemoveTimer(timerID);
+                return out;
 
-                } //remove_timer
+            } //display_mode_to_hx
 
+            Dynamic set_color_into(Dynamic into, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
 
-            int RWread(SDL_RWops* context, Array<unsigned char> ptr, size_t size, size_t maxnum) {
-                return SDL_RWread(context, (void*)&ptr[0], size, maxnum);
-            }
+                    into->__FieldRef(HX_CSTRING("r")) = r;
+                    into->__FieldRef(HX_CSTRING("g")) = g;
+                    into->__FieldRef(HX_CSTRING("b")) = b;
+                    into->__FieldRef(HX_CSTRING("a")) = a;
 
-            int RWwrite(SDL_RWops* context, Array<unsigned char> ptr, size_t size, size_t num) {
-                return SDL_RWwrite(context, (void*)&ptr[0], size, num);
-            }
+                return into;
 
-            int RWseek(SDL_RWops* context, int64_t offset, int whence) {
-                return SDL_RWseek(context, offset, whence);
-            }
+            } //set_color_into
 
-            int64_t RWsize(SDL_RWops* context) {
-                return SDL_RWsize(context);
-            }
+            Dynamic set_texture_query_into(Dynamic into, Uint32 format, int access, int w, int h) {
 
-            int64_t RWtell(SDL_RWops* context) {
-                return SDL_RWtell(context);
-            }
+                    into->__FieldRef(HX_CSTRING("format")) = (int)format;
+                    into->__FieldRef(HX_CSTRING("access")) = access;
+                    into->__FieldRef(HX_CSTRING("w")) = w;
+                    into->__FieldRef(HX_CSTRING("h")) = h;
 
-            int RWclose(SDL_RWops* context) {
-                return SDL_RWclose(context);
-            }
+                return into;
 
-            SDL_RWops* RWFromMem(Array<unsigned char> source, size_t size) {
-                return SDL_RWFromMem((void*)&source[0], size);
-            }
+            } //set_texture_query_into
 
-        #if defined(__IPHONEOS__) || defined(IPHONE)
+            Dynamic set_size_into(Dynamic into, int w, int h) {
 
-            //iOS callback
+                    into->__FieldRef(HX_CSTRING("w")) = w;
+                    into->__FieldRef(HX_CSTRING("h")) = h;
 
-                static InternaliOSCallbackFN ios_fn;
+                return into;
 
-                static void InternaliOSCallback(void* userdata) {
+            } //set_size_into
 
-                    ios_fn();
+            Dynamic set_scale_into(Dynamic into, float x, float y) {
 
-                } //InternaliOSCallback
+                    into->__FieldRef(HX_CSTRING("x")) = x;
+                    into->__FieldRef(HX_CSTRING("y")) = y;
 
-                void init_ios_callback( SDL_Window* window, int interval, InternaliOSCallbackFN fn ) {
-                    
-                    ios_fn = fn;
-                    SDL_iPhoneSetAnimationCallback(window, interval, InternaliOSCallback, NULL);
+                return into;
 
-                } //init_ios_callback
+            } //set_scale_into
 
-        #endif //iOS
+            Dynamic set_rect_into(Dynamic into, int x, int y, int w, int h) {
 
-        //conversions
+                    into->__FieldRef(HX_CSTRING("x")) = x;
+                    into->__FieldRef(HX_CSTRING("y")) = y;
+                    into->__FieldRef(HX_CSTRING("w")) = w;
+                    into->__FieldRef(HX_CSTRING("h")) = h;
 
-            namespace convert {
+                return into;
 
-                Dynamic render_info_to_hx(SDL_RendererInfo info) {
+            } //set_rect_into
 
-                    hx::Anon out = hx::Anon_obj::Create();
+            Dynamic set_point_into(Dynamic into, int x, int y) {
 
-                        //array of texture formats
-                    Array< int > arr = Array_obj< int >::__new();
+                    into->__FieldRef(HX_CSTRING("x")) = x;
+                    into->__FieldRef(HX_CSTRING("y")) = y;
 
-                    for(int i = 0; i < (int)info.num_texture_formats; ++i) {
-                        arr.Add( (int)info.texture_formats[i] );
-                    }
+                return into;
 
-                    //fill the object
+            } //set_point_into
 
-                        out->Add(HX_CSTRING("name"), ::String(info.name));
-                        out->Add(HX_CSTRING("flags"), (int)info.flags);
-                        out->Add(HX_CSTRING("num_texture_formats"), (int)info.num_texture_formats);
-                        out->Add(HX_CSTRING("texture_formats"), arr);
-                        out->Add(HX_CSTRING("max_texture_width"), info.max_texture_width);
-                        out->Add(HX_CSTRING("max_texture_height"), info.max_texture_height);
+            Dynamic set_mouse_state_into(Dynamic into, int x, int y, Uint32 buttons) {
 
-                    return out;
+                    into->__FieldRef(HX_CSTRING("x")) = x;
+                    into->__FieldRef(HX_CSTRING("y")) = y;
+                    into->__FieldRef(HX_CSTRING("buttons")) = (int)buttons;
 
-                    // returns {
-                    //     var name:String;
-                    //     var flags:UInt;
-                    //     var num_texture_formats:UInt;
-                    //     var texture_formats:Array<UInt>;
-                    //     var max_texture_width:Int;
-                    //     var max_texture_height:Int;
-                    // }
+                return into;
 
-                } //render_info_to_hx
+            } //set_mouse_state_into
 
-                Dynamic display_mode_to_hx(SDL_DisplayMode mode) {
+            Dynamic set_rect_into(Dynamic into, SDL_Rect from) {
 
-                    hx::Anon out = hx::Anon_obj::Create();
+                    into->__FieldRef(HX_CSTRING("x")) = from.x;
+                    into->__FieldRef(HX_CSTRING("y")) = from.y;
+                    into->__FieldRef(HX_CSTRING("w")) = from.w;
+                    into->__FieldRef(HX_CSTRING("h")) = from.h;
 
-                        out->Add(HX_CSTRING("w"), mode.w);
-                        out->Add(HX_CSTRING("h"), mode.h);
-                            //:note: this was UInt32, but the ranges appear to fit in int and Dynamic hates unsigned int
-                        out->Add(HX_CSTRING("format"), (int)mode.format);
-                        out->Add(HX_CSTRING("refresh_rate"), mode.refresh_rate);
+                return into;
 
-                    return out;
+            } //set_rect_into
 
-                } //display_mode_to_hx
+            SDL_Rect get_rect_from(Dynamic from) {
 
-                Dynamic set_color_into(Dynamic into, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+                SDL_Rect r;
 
-                        into->__FieldRef(HX_CSTRING("r")) = r;
-                        into->__FieldRef(HX_CSTRING("g")) = g;
-                        into->__FieldRef(HX_CSTRING("b")) = b;
-                        into->__FieldRef(HX_CSTRING("a")) = a;
+                    r.x = from->__FieldRef(HX_CSTRING("x"));
+                    r.y = from->__FieldRef(HX_CSTRING("y"));
+                    r.w = from->__FieldRef(HX_CSTRING("w"));
+                    r.h = from->__FieldRef(HX_CSTRING("h"));
 
-                    return into;
+                return r;
 
-                } //set_color_into
+            } //get_rect_from
 
-                Dynamic set_texture_query_into(Dynamic into, Uint32 format, int access, int w, int h) {
+            SDL_Point get_point_from(Dynamic from) {
 
-                        into->__FieldRef(HX_CSTRING("format")) = (int)format;
-                        into->__FieldRef(HX_CSTRING("access")) = access;
-                        into->__FieldRef(HX_CSTRING("w")) = w;
-                        into->__FieldRef(HX_CSTRING("h")) = h;
+                SDL_Point p;
 
-                    return into;
+                    p.x = from->__FieldRef(HX_CSTRING("x"));
+                    p.y = from->__FieldRef(HX_CSTRING("y"));
 
-                } //set_texture_query_into
+                return p;
 
-                Dynamic set_size_into(Dynamic into, int w, int h) {
+            } //get_point_from
 
-                        into->__FieldRef(HX_CSTRING("w")) = w;
-                        into->__FieldRef(HX_CSTRING("h")) = h;
+        } //convert namespace
 
-                    return into;
 
-                } //set_size_into
+    } //sdl namespace
 
-                Dynamic set_scale_into(Dynamic into, float x, float y) {
-
-                        into->__FieldRef(HX_CSTRING("x")) = x;
-                        into->__FieldRef(HX_CSTRING("y")) = y;
-
-                    return into;
-
-                } //set_scale_into
-
-                Dynamic set_rect_into(Dynamic into, int x, int y, int w, int h) {
-
-                        into->__FieldRef(HX_CSTRING("x")) = x;
-                        into->__FieldRef(HX_CSTRING("y")) = y;
-                        into->__FieldRef(HX_CSTRING("w")) = w;
-                        into->__FieldRef(HX_CSTRING("h")) = h;
-
-                    return into;
-
-                } //set_rect_into
-
-                Dynamic set_point_into(Dynamic into, int x, int y) {
-
-                        into->__FieldRef(HX_CSTRING("x")) = x;
-                        into->__FieldRef(HX_CSTRING("y")) = y;
-
-                    return into;
-
-                } //set_point_into
-
-                Dynamic set_mouse_state_into(Dynamic into, int x, int y, Uint32 buttons) {
-
-                        into->__FieldRef(HX_CSTRING("x")) = x;
-                        into->__FieldRef(HX_CSTRING("y")) = y;
-                        into->__FieldRef(HX_CSTRING("buttons")) = (int)buttons;
-
-                    return into;
-
-                } //set_mouse_state_into
-
-                Dynamic set_rect_into(Dynamic into, SDL_Rect from) {
-
-                        into->__FieldRef(HX_CSTRING("x")) = from.x;
-                        into->__FieldRef(HX_CSTRING("y")) = from.y;
-                        into->__FieldRef(HX_CSTRING("w")) = from.w;
-                        into->__FieldRef(HX_CSTRING("h")) = from.h;
-
-                    return into;
-
-                } //set_rect_into
-
-                SDL_Rect get_rect_from(Dynamic from) {
-
-                    SDL_Rect r;
-
-                        r.x = from->__FieldRef(HX_CSTRING("x"));
-                        r.y = from->__FieldRef(HX_CSTRING("y"));
-                        r.w = from->__FieldRef(HX_CSTRING("w"));
-                        r.h = from->__FieldRef(HX_CSTRING("h"));
-
-                    return r;
-
-                } //get_rect_from
-
-                SDL_Point get_point_from(Dynamic from) {
-
-                    SDL_Point p;
-
-                        p.x = from->__FieldRef(HX_CSTRING("x"));
-                        p.y = from->__FieldRef(HX_CSTRING("y"));
-
-                    return p;
-
-                } //get_point_from
-
-            } //convert namespace
-
-
-        } //sdl namespace
-
-    } //linc namespace
-
-#endif //_LINC_SDL_CPP_
+} //linc namespace
