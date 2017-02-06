@@ -110,7 +110,14 @@ namespace linc {
 
             //iOS callbacks
             #if defined(__IPHONEOS__) || defined(IPHONE)
-                typedef ::cpp::Function < Void() > InternaliOSCallbackFN;
+
+            #if (HXCPP_API_LEVEL>=330)
+                typedef void LincVoid;
+            #else
+                typedef Void LincVoid;
+            #endif
+
+                typedef ::cpp::Function < LincVoid() > InternaliOSCallbackFN;
                 extern void init_ios_callback( SDL_Window* window, int interval, InternaliOSCallbackFN fn );
             #endif
 
