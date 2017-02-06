@@ -34,13 +34,15 @@ class Example {
 
     static var state : { window:Window, renderer:Renderer };
 
-        //Haxe entry point
+    //Haxe entry point
     static function main() {
 
         SDL.init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
         state = SDL.createWindowAndRenderer(320, 320, SDL_WINDOW_RESIZABLE);
-        update();
-
+ 
+        while(update()) {
+            SDL.delay(4);
+        }
     }
 
     static function update() {
@@ -49,12 +51,12 @@ class Example {
             var e = SDL.pollEvent();
             if(e.type == SDL_QUIT) return false;
 
-            SDL.setRenderDrawColor(state.renderer, 255,255,255,255);
+            SDL.setRenderDrawColor(state.renderer, 255, 255, 255, 255);
             SDL.renderClear(state.renderer);
             SDL.renderPresent(state.renderer);
-            SDL.delay(4);
-
         }
+        
+        return true;
     }
 
 }
