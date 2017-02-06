@@ -18,9 +18,13 @@ If you run into SDL build errors first try:
 - Change directory to that path `cd <path to linc_sdl>`
 - `git submodule update --init`
 
+### Reporting errors
+
+If you run into any issues compiling or using a function, [please report it](https://github.com/snowkit/linc_sdl/issues/new) since there are many endpoints, there are inevitably places with minor oversight. Thanks!
+
 ### Example usage
 
-See test/Test.hx
+See test/Test.hx for more (messy) example usage.
 
 Be sure to read the SDL documentation
 https://wiki.libsdl.org/
@@ -34,18 +38,20 @@ class Example {
 
     static var state : { window:Window, renderer:Renderer };
 
-    //Haxe entry point
+        //Haxe entry point
     static function main() {
 
         SDL.init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
         state = SDL.createWindowAndRenderer(320, 320, SDL_WINDOW_RESIZABLE);
- 
+
         while(update()) {
-            SDL.delay(4);
+            SDL.delay(33);
         }
-    }
+
+    } //main
 
     static function update() {
+
         while(SDL.hasAnEvent()) {
 
             var e = SDL.pollEvent();
@@ -55,9 +61,10 @@ class Example {
             SDL.renderClear(state.renderer);
             SDL.renderPresent(state.renderer);
         }
-        
-        return true;
-    }
 
-}
+        return true;
+
+    } //update
+
+} //Example
 ```
