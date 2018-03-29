@@ -1,6 +1,8 @@
 #pragma once
 
+#ifndef HXCPP_H
 #include <hxcpp.h>
+#endif
 
 #define SDL_MAIN_HANDLED 1
 #include "../lib/sdl/include/SDL.h"
