@@ -1,6 +1,4 @@
-#ifndef HXCPP_H
 #include <hxcpp.h>
-#endif
 #include "./linc_sdl.h"
 
 #include "../lib/sdl/include/SDL_revision.h"
