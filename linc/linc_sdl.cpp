@@ -1,6 +1,5 @@
-#ifndef HXCPP_H
+//hxcpp include should be first
 #include <hxcpp.h>
-#endif
 #include "./linc_sdl.h"
 
 #include "../lib/sdl/include/SDL_revision.h"
