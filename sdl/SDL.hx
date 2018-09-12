@@ -12,6 +12,7 @@ import sdl.GLContext;
 import sdl.Thread;
 import sdl.RWops;
 import sdl.Haptic;
+import sdl.Audio;
 
 
 @:keep
@@ -1175,6 +1176,57 @@ extern class SDL {
     @:native('linc::sdl::GL_GetAttribute')
     static function GL_GetAttribute(attr:SDLGLAttr) : Int;
 
+//SDL_Audio.h
+	@:native('SDL_OpenAudio')
+    static function openAudio(wantedSpec:AudioSpec, spec:AudioSpec) : Int;
+	
+	@:native('SDL_OpenAudioDevice')
+    static function openAudioDevice(device:Null<cpp.ConstCharStar>, capture:Bool, desired:ConstAudioSpec, obtained:AudioSpec, allowed_changes:Int) : Int;
+	
+	@:native('SDL_GetAudioDeviceName')
+    static function getAudioDeviceName(index:Int, isCapture:Bool) : cpp.ConstCharStar;
+	
+	@:native('SDL_GetNumAudioDevices')
+    static function getNumAudioDevices(isCapture:Bool) : Int;
+	
+	@:native('SDL_LockAudio')
+	static function lockAudio():Void;
+	
+	@:native('SDL_UnlockAudio')
+	static function unlockAudio():Void;
+	
+	@:native('SDL_LockAudioDevice')
+	static function lockAudioDevice(dev:SDLAudioDeviceID):Void;
+	
+	@:native('SDL_UnlockAudioDevice')
+	static function UnlockAudioDevice(dev:SDLAudioDeviceID):Void;
+	
+	@:native('SDL_CloseAudio')
+	static function closeAudio():Void;
+	
+	@:native('SDL_CloseAudioDevice')
+	static function closeAudioDevice(dev:SDLAudioDeviceID):Void;
+	
+	@:native('SDL_GetAudioStatus')
+	static function getAudioStatus():Void;
+	
+	@:native('SDL_PauseAudio')
+	static function pauseAudio(pause_on:Int):Void;
+	
+	@:native('SDL_PauseAudioDevice')
+	static function pauseAudioDevice(dev:SDLAudioDeviceID, pause_on:Int):Void;
+	
+	@:native('SDL_QueueAudio')
+	static function queueAudio(dev:SDLAudioDeviceID, data:cpp.RawConstPointer<cpp.Void>, len:cpp.UInt32):Int;
+	
+	@:native('SDL_GetQueuedAudioSize')
+	static function getQueuedAudioSize(dev:SDLAudioDeviceID):cpp.UInt32;
+	
+	@:native('SDL_ClearQueuedAudio')
+	static function clearQueuedAudio(dev:SDLAudioDeviceID):Void;
+	
+	
+	
 //SDL_system.h
 
     #if (ios || tvos)
